@@ -30,7 +30,7 @@ Basierend auf Schichtenmodel
 - siehe Todos
 - Treffen Montag 10:45 Uhr 
 
-### Todos bis nächse Woche Montagabend
+### Todos bis nächse Woche (Montagabend)
 - Sensorik (Schemata für Daten und Intervalle, Parameter-Schemata) 
 - Testgenerator (Team Middleware mit Hilfe Sensor Team)
 - Database (Datenbank Schemata von Rene) 
