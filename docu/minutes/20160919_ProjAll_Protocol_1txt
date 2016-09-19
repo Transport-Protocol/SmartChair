@@ -8,11 +8,11 @@ Teilnehmer: Lukas, Michel, Ralf, Nico, Hauke, Simon, Fabian, Julia, Rene
 - Sitzhaltung/Aufmerksamkeit erfassen
 - Raumtemperatur
 - Sauerstoffgehalt der Luft
-- Geräuschpegel
+- GerÃ¤uschpegel
 
 #Phase 2: Aktorik
 
-- Einstellen der Raumtemperatur (Mittelwert aller Stühle im Raum)
+- Einstellen der Raumtemperatur (Mittelwert aller StÃ¼hle im Raum)
 - Benutzerschnittstellen (Eingabe, sowie Feedback des Stuhls)
 - Licht am Stuhl (Beispiel: Aufmerksamkeit des Nutzers mit verschiedenen Lichtfarben anzeigen)
 
