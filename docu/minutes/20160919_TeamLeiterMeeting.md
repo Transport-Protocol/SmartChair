@@ -1,17 +1,17 @@
-Michel (M) 
-Julia  (D)
-Hauke  (S)
+Michel (M)    
+Julia  (D)    
+Hauke  (S)    
 
-== Agenda
+==Agenda
  RFCs     
  Interface     
  Zeitplan     
-== 
 
-=== RFC
+
+===RFC
 Atmega ca 5 Euro x 4 Stück    
 
-=== Interface
+===Interface
 Basierend auf Schichtenmodel    
 
 
