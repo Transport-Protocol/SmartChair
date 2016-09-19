@@ -22,9 +22,9 @@ Teilnehmer: Lukas, Michel, Ralf, Nico, Hauke, Simon, Fabian, Julia, Rene, Martin
 Dauer: 5 Wochen
 Ziel: Ausprobieren eines ersten Prototyps
 
-#Gruppenaufteilung:
-Gruppe Sensorik: Simon, Hauke, Lukas
-Gruppe Middleware: Michel, Nico, Fabian
-Gruppe Datenbank: Julia, Rene, Ralf
+#Gruppenaufteilung:    
+Gruppe Sensorik: Simon, Hauke, Lukas     
+Gruppe Middleware: Michel, Nico, Fabian     
+Gruppe Datenbank: Julia, Rene, Ralf    
 
 
