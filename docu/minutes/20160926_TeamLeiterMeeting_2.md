@@ -13,7 +13,7 @@ Hauke  (S)
 ##RFC
 Neue Hardware: Neue Box (nicht so teuer)
 
-##Review letzten
+##Review 19.09
 - Sensorik (Schemata für Daten und Intervalle, Parameter-Schemata) 
 Auswertung läuft. Ergebnisse können erwartet werden.   
 
