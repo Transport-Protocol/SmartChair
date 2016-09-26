@@ -36,3 +36,5 @@ Fritzbox bringe ich
 - Funktionaler Prototyp Sensoren.     
 - Ablaufsematik für Middleware    
 - Prototyp Gui     
+
+- Ziel: 11:30 einen Demodurchlauf!
