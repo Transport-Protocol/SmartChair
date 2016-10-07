@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/home/nico/stuhlgang/Protostuhl03/lib/rabbitmq-java-client-bin-3.6.5/commons-cli-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/nico/stuhlgang/Protostuhl03/lib/rabbitmq-java-client-bin-3.6.5/commons-io-1.2.jar"/>
-	<classpathentry kind="lib" path="/home/nico/stuhlgang/Protostuhl03/lib/rabbitmq-java-client-bin-3.6.5/hamcrest-core.jar"/>
-	<classpathentry kind="lib" path="/home/nico/stuhlgang/Protostuhl03/lib/rabbitmq-java-client-bin-3.6.5/rabbitmq-client.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
