@@ -4,11 +4,11 @@ import java.util.List;
 
 public class SensorMessage {
 	
-	Integer version;
+	private Integer version;
 	
-	String sensor;
+	private String sensor;
 	
-	List<Value> values;
+	private List<Value> values;
 	
 	public SensorMessage() {}
 	
