@@ -16,3 +16,6 @@ hs_err_pid*
 /bin/
 /.settings/
 /lib/
+
+#Config Files
+/mwrp.properties

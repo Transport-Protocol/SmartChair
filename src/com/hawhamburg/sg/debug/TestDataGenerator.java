@@ -1,4 +1,4 @@
-package exampleDataGenerator;
+package com.hawhamburg.sg.debug;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -8,12 +8,11 @@ import java.util.concurrent.TimeoutException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hawhamburg.sg.data.SensorMessage;
+import com.hawhamburg.sg.data.Value;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-
-import valueTypes.SensorMessage;
-import valueTypes.Value;
 
 public class TestDataGenerator {
 	
