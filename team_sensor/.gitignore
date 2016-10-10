@@ -1,0 +1,49 @@
+### .gitignore for BeaconRoomLocation
+### ==========================
+### v1.0  150926  by Hauke Buhr
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# untracked files:
+#=================
+
+# exclude annoying stuff
+#
+# DOSe
+Thumbs.db
+#
+# Mac OS X
+.DS_Store
+
+
+# exclude just everything - only the wanted stuff is included afterwards by !....
+*
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# except / tracked files: -> !...
+#================================
+
+# include GIT related files
+!.gitignore
+
+# include python files
+!*.py
+
+# include project description related files
+!readme.md
+!ReadMe.txt
+
+!arduino/*
+!arduino
+
+!pi_python/*
+!pi_python
+pi_python/.DS_Store
+pi_python/.idea
+
+!files/*
+!files
