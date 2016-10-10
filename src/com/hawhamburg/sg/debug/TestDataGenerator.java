@@ -14,6 +14,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+import com.hawhamburg.sg.mwrp.RabbitMqConstants;
+
 public class TestDataGenerator {
 	
 	private static final int MAXVALUESPERDATA = 10;
@@ -30,7 +32,7 @@ public class TestDataGenerator {
 			
 			for(int i=0; i<NUMDATA; i++)
 			{
-				channel.basicPublish("my-exchange", "my-routing-key", null, getExampleData().getBytes());
+				channel.basicPublish(RabbitMqConstants.MQ1_EXCHANGE_NAME, RabbitMqConstants.MQ1_ROUTING_KEY, null, getExampleData().getBytes());
 			}
 			
 			channel.close();
