@@ -40,10 +40,13 @@ Thumbs.db
 !arduino/*
 !arduino
 
-!pi_python/*
-!pi_python
-pi_python/.DS_Store
-pi_python/.idea
+pi_python/*
+!pi_python/*.py
 
-!files/*
-!files
+files/*
+files/datasheets/*
+#!files/datasheets/
+files/pdfs/*
+!files/pdfs/*.pdf
+files/schematics/*
+!files/schematics/*.xml
