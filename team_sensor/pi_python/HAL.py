@@ -47,6 +47,16 @@ def sound_sensor():
     json_list.append(msg_gen.pack_to_json(1, "sound", [0], value))
     return json_list
 
+def location():
+    json_list = []
+    print("sound_sensor()")
+    # get Values
+    value = [1]
+    # Validation
+
+    # get json
+    json_list.append(msg_gen.pack_to_json(1, "location", [0], value))
+    return json_list
 
 def serial_sensors():
 
