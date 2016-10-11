@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Value {
 	
 	private int id;
-	private int value;
+	private double value;
 	
 	@JsonCreator
-	public Value(@JsonProperty("id") int id, @JsonProperty("value") int value){
+	public Value(@JsonProperty("id") int id, @JsonProperty("value") double value){
 		this.id = id;
 		this.value = value;
 	}
@@ -18,7 +18,7 @@ public class Value {
 		return id;
 	}
 	
-	public int getValue() {
+	public double getValue() {
 		return value;
 	}
 	
