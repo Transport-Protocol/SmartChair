@@ -2,13 +2,14 @@ import MessageGenerator as msg_gen
 import serial
 import io
 import time
+import gyroscope
 
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
 port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
 
 pressure_sensor_ids = list(range(0, 10))
-acceleration_sensor_ids = list(range(0, 2))
+acceleration_sensor_ids = list(range(0, 3))
 test = list(range(0, 16))
 
 
@@ -25,14 +26,16 @@ def distance_sensor():
 
 
 def acceleration_sensor():
-    json_list = []
     print("acceleration_sensor")
-    # get Values
-    values = [1,2]
-    # Validation
+    json_list = []
+    gyro_values = []
+    gyro_values.append(gyroscope.get_accelerator_values())
+    gyro_values.append(gyroscope.get_gyro_values())
 
     # get json
-    json_list.append(msg_gen.pack_to_json(1, "acceleration", acceleration_sensor_ids, values))
+    json_list.append(msg_gen.pack_to_json(1, "acceleration", acceleration_sensor_ids, gyro_values[0]))
+    json_list.append(msg_gen.pack_to_json(1, "gyroscope", acceleration_sensor_ids, gyro_values[1]))
+
     return json_list
 
 

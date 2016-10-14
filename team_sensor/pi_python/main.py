@@ -9,7 +9,7 @@ import HAL
 
 # Define here all supported sensors.
 sensors = ["pressure"]
-sensor = ["temperature", "location"]
+sensor = ["temperature", "location", "acceleration"]
 
 parser = OptionParser()
 
@@ -48,13 +48,16 @@ if options.test:
         threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 1, json_queue, HAL.serial_sensors))
     if options.temperature:
         threads.append(own_threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2,  30, json_queue, HAL.serial_sensors))
+    if options.acceleration:
+        threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
     if options.location:
-        # threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 5, json_queue, HAL.serial_sensors))
+        # threads.append(own_threads.SensorEvaluator(4, "SensorEvaluator_location", 4, 5, json_queue, HAL.serial_sensors))
         print("location is currently not supported!")
 else:
     threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 1, json_queue, HAL.serial_sensors))
     # threads.append(own_threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2,  30, json_queue, HAL.serial_sensors))
-    # threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 5, json_queue, HAL.serial_sensors))
+    # threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
+    # threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_location", 4, 5, json_queue, HAL.serial_sensors))
 
 # get right communication medium
 if options.rabbit:
