@@ -3,10 +3,16 @@ import serial
 import io
 import time
 import gyroscope
+import sys
+
+sys.path.append('/home/chair/git/pi_python/py_beacon_master')
+from proximity import Scanner
+scanner = Scanner(loops=3)
 
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
-port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
+# port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
+port = False
 
 pressure_sensor_ids = list(range(0, 10))
 acceleration_sensor_ids = list(range(0, 3))
@@ -48,6 +54,26 @@ def sound_sensor():
 
     # get json
     json_list.append(msg_gen.pack_to_json(1, "sound", [0], value))
+    return json_list
+
+
+def location():
+    json_list = []
+    print("location()")
+    # get Values
+
+    while True:
+        for beacon in scanner.scan():
+            # get values
+            splitArr = beacon.split(',')
+
+            # build json string
+            json = '{"uuid" : "' + str(splitArr[1]) + '", "major" : "' + str(splitArr[2]) + '", "minor" : "' + str(
+                splitArr[3]) + '", "dB" : "' + str(splitArr[5]) + '", "time" : ' + time.time() + '}'
+
+            # add to queue
+            json_list.append(json)
+
     return json_list
 
 
