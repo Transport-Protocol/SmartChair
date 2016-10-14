@@ -5,7 +5,7 @@ import time
 import gyroscope
 import sys
 
-sys.path.append('/home/chair/git/pi_python/py_beacon_master')
+sys.path.append('/home/chair/git/SmartChair/pi_python/py-beacon')
 from proximity import Scanner
 scanner = Scanner(loops=3)
 
