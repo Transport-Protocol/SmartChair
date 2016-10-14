@@ -15,4 +15,5 @@ public final class MwrpConstants {
 	public static final String DEFVAL_MQ_PORT="5672";
 	public static final String DEFVAL_MQ_USER="guest";
 	public static final String DEFVAL_MQ_PASSW="guest";
+	
 }
