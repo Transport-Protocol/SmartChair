@@ -10,21 +10,24 @@ public class SensorMessage {
 	
 	private final static int DATA_VERSION = 1;
 
+	private long timestamp;
 	private int version;
-	private String sensortype;
+	private SensorType sensortype;
 	private List<Value> values;
 
 	//private SensorMessage() {}
 	@JsonCreator(mode=Mode.PROPERTIES)
 	public SensorMessage(@JsonProperty("version") int version,
-						@JsonProperty("sensortype") String sensortype,
-						@JsonProperty("values") List<Value> values) {
+						@JsonProperty("sensortype") SensorType sensortype,
+						@JsonProperty("values") List<Value> values,
+						@JsonProperty("timestamp") long timestamp) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.version = version;
+		this.timestamp=timestamp;
 	}
 	
-	public SensorMessage(String sensortype,
+	public SensorMessage(SensorType sensortype,
 						List<Value> values) {
 		this.sensortype = sensortype;
 		this.values = values;
@@ -35,11 +38,16 @@ public class SensorMessage {
 		return version;
 	}
 
-	public String getSensortype() {
+	public SensorType getSensortype() {
 		return sensortype;
 	}
 
 	public List<Value> getValues() {
 		return values;
+	}
+	
+	public long getTimestamp()
+	{
+		return timestamp;
 	}
 }

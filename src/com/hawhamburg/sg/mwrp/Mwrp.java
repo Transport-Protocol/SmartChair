@@ -90,10 +90,10 @@ public class Mwrp {
 			}
 			if (useGui) {
 				switch (sensm.getSensortype()) {
-				case "temperature":
+				case temperature:
 					frame.setTemperatureValue(sensm.getValues().get(0).getValue());
 					break;
-				case "pressure":
+				case pressure:
 					frame.setPressureValues(sensm.getValues());
 					break;
 				}

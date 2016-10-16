@@ -9,6 +9,7 @@ import java.util.concurrent.TimeoutException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.SensorMessage;
+import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.Value;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -47,34 +48,17 @@ public class TestDataGenerator {
 	
 	public static String getExampleData()
 	{
+		Random rng=new Random();
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Value> values = new LinkedList<>();
-		for(int i = 0; i < new Random().nextInt(MAXVALUESPERDATA); i++)
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA); i++)
 		{
-			Value value = new Value(valueId++,new Random().nextInt(1024));
+			Value value = new Value(valueId++,rng.nextInt(1024));
 			values.add(value);
 		}
-		
-		String type = "";
-		switch (new Random().nextInt(5))
-		{
-		case 0:
-			type = "pressure";
-			break;
-		case 1:
-			type = "temperature";
-			break;
-		case 2:
-			type = "accelerometer";
-			break;
-		case 3:
-			type = "microphone";
-			break;
-		case 4:
-			type = "distance_sensor";
-			break;
-		}
-		SensorMessage msg = new SensorMessage(1,type, values);
+		int o=rng.nextInt(SensorType.values().length);
+		SensorType type = SensorType.values()[o];
+		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis());
 		String json = "";
 		try {
 			json = objectMapper.writeValueAsString(msg);

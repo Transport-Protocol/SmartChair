@@ -47,7 +47,7 @@ public class DBConnector {
 //		
 	 private Point chairMessageToPoint(ChairMessage msg){
 		 
-		 Builder pointBuilder = Point.measurement(msg.getSensortype()).time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+		 Builder pointBuilder = Point.measurement(msg.getSensortype().name()).time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
                  for (Value v : msg.getValues()) {
 					pointBuilder.addField(String.valueOf(v.getId()), v.getValue());
 				}

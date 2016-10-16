@@ -8,23 +8,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ChairMessage {
 	private final static int DATA_VERSION = 1;
 
+	private long timestamp;
 	private int version;
-	private String sensortype;
+	private SensorType sensortype;
 	private List<Value> values;
 	private String deviceUuid;
 
 	@JsonCreator
 	public ChairMessage(@JsonProperty("deviceUuid") String deviceUuid, 
 						@JsonProperty("version") int version,
-						@JsonProperty("sensortype") String sensortype,
-						@JsonProperty("values") List<Value> values) {
+						@JsonProperty("sensortype") SensorType sensortype,
+						@JsonProperty("values") List<Value> values,
+						@JsonProperty("timestamp") long timestamp) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.deviceUuid = deviceUuid;
 		this.version = version;
+		this.timestamp=timestamp;
 	}
 	
-	public ChairMessage(String deviceUuid, String sensortype, List<Value> values) {
+	public ChairMessage(String deviceUuid, SensorType sensortype, List<Value> values) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.deviceUuid = deviceUuid;
@@ -35,7 +38,7 @@ public class ChairMessage {
 		return version;
 	}
 
-	public String getSensortype() {
+	public SensorType getSensortype() {
 		return sensortype;
 	}
 
@@ -43,8 +46,12 @@ public class ChairMessage {
 		return deviceUuid;
 	}
 
-
 	public List<Value> getValues() {
 		return values;
+	}
+	
+	public long getTimestamp()
+	{
+		return timestamp;
 	}
 }
