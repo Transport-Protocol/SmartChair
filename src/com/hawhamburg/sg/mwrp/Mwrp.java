@@ -18,8 +18,10 @@ import com.rabbitmq.client.ConnectionFactory;
 public class Mwrp {
 
 	public static void main(String... args) throws IOException, TimeoutException {
+		
 		boolean useGui = false;
 		boolean noServer = false;
+		
 		for (String s : args) {
 			switch (s) {
 			case "-gui":
@@ -44,7 +46,7 @@ public class Mwrp {
 	private Mq1Consumer mq1Consumer;
 	private Mq2Publisher mq2Publisher;
 	private MwrpProperties properties;
-	private boolean useGui, noServer;
+	private boolean useGui, winCtrl, noServer;
 	private MwrpFrame frame;
 
 	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer) throws IOException, TimeoutException {

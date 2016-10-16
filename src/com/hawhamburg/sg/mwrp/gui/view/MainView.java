@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -29,13 +30,14 @@ public class MainView implements IView {
     private static final int absBackP89Y=160;
 
 	private Image img;
-	
+	private Image statsButton;
     private final MwrpCanvas canvas;
     public MainView(MwrpCanvas canvas)
     {
     	this.canvas=canvas;
 		try {
-			img=ImageIO.read(Paths.get("mwrpbg.png").toFile());
+			img=ImageIO.read(getClass().getClassLoader().getResourceAsStream("resources/mwrpbg.png"));
+			statsButton=ImageIO.read(getClass().getClassLoader().getResourceAsStream("resources/btn_statistics.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,8 +45,11 @@ public class MainView implements IView {
     
 	@Override
 	public void draw(Graphics2D g, FontMetrics fm, int width, int height) {
-	    g.drawString(String.format("Temp: %1$,.2f °C", canvas.t0), 5, 17);
 
+	    g.drawImage(img, 0, 0, width, height, 0, 0, width, height, null);
+
+	    g.setColor(fontColor);
+	    g.drawString(String.format("Temp: %1$,.2f °C", canvas.t0), 5, 17);
 		String[] str=new String[canvas.p0.length];
 	    for(int i=0;i<str.length;i++)
 	    	str[i]=Integer.toString(canvas.p0[i]);
@@ -61,6 +66,16 @@ public class MainView implements IView {
 	    g.drawString(str[8], absBackP468X-fm.stringWidth(str[8])/2, absBackP89Y);
 	    g.drawString(str[9], absBackP579X-fm.stringWidth(str[9])/2, absBackP89Y);
 	    
+	    g.drawImage(statsButton, 5, 195, 45, 235, 0, 0, 40, 40, null);
+	}
+
+	@Override
+	public void mouseClick(MouseEvent e) {
+		e.consume();
+		if(MathHelper.geoIntersect(5, 195, 45, 235, e.getX(), e.getY()))
+		{
+			canvas.pushView(new DiagramView(canvas));
+		}
 	}
 
 }

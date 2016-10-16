@@ -8,6 +8,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.print.Printable;
 import java.io.IOException;
@@ -23,11 +26,9 @@ import com.hawhamburg.sg.data.Value;
 import com.hawhamburg.sg.mwrp.gui.view.IView;
 import com.hawhamburg.sg.mwrp.gui.view.MainView;
 
-public final class MwrpCanvas extends Canvas {
+public final class MwrpCanvas extends Canvas implements MouseListener {
 	private static final Color bgColor=new Color(0xffe9e5fc);
 	private static final Color fontColor=Color.black;
-	
-	private Image img;
 	
 	public volatile double t0;
 	public final int[] p0=new int[10];
@@ -38,15 +39,11 @@ public final class MwrpCanvas extends Canvas {
 	private Deque<IView> views=new LinkedList<IView>();
 	
 	public MwrpCanvas() {
-		try {
-			img=ImageIO.read(Paths.get("mwrpbg.png").toFile());
-			views.push(new MainView(this));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		views.push(new MainView(this));
 	}
 	public void startRenderer()
 	{
+		addMouseListener(this);
 		new Thread(this::rLoop).start();
 	}
 	
@@ -69,9 +66,8 @@ public final class MwrpCanvas extends Canvas {
 		{	
 			
 		    g = (Graphics2D)bs.getDrawGraphics();
-		    g.drawImage(img, 0, 0, width, height, 0, 0, img.getWidth(null), img.getHeight(null), null);
-
-		    
+		    g.setColor(Color.white);
+		    g.fillRect(0, 0, width, height);
 		    views.peek().draw(g, fm, width, height);
 		    
 		    g.setColor(fontColor);
@@ -100,9 +96,39 @@ public final class MwrpCanvas extends Canvas {
 		}
 	}
 	
-	private void popView()
+	public void popView()
 	{
 		if(views.size()>1)
 			views.pop();
+	}
+	
+	public void pushView(IView view)
+	{
+		views.push(view);
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		views.peek().mouseClick(e);
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
