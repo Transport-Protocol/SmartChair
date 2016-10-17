@@ -70,9 +70,7 @@ def location(timestamp):
             splitArr = beacon.split(',')
 
             # build json string
-            json = msg_gen.pack_location_to_json(1, (time.time()*1000), "location", str(splitArr[1]), str(splitArr[2]), splitArr[3]), str(splitArr[5]))
-
-
+            json = msg_gen.pack_location_to_json(1, (time.time()*1000), "location", str(splitArr[1]), str(splitArr[2]), str(splitArr[3]), str(splitArr[5]))
 
             # add to queue
             json_list.append(json)
