@@ -2,10 +2,13 @@
 
 int sensorPin0 = A0;    // select the input pin for the potentiometer
 int sensorPin1 = A1;    // select the input pin for the potentiometer
+int sensorPin2 = A2;    // select the input pin for the potentiometer
 int addPin0   = 8;
 int addPin1   = 9;
 int addPin2   = 10;
 
+#define BUFFER_SIZE 8
+#define MESUREMENT_DELAY 10
 /* uint8_t readByte(int,bool*)
  * parameters:
  *  signalPin : The Pin for the ZACWire Data Line
@@ -99,25 +102,32 @@ void setup() {
     pinMode(12,INPUT);
 }
 
-/* bool needToSend(void)
+/* void snedData(void)
  * returns : 
  *  Checks if there is a data waiting in the serial buffer, if so, the Functions removes all waiting date and returns true
  *  if there was no data waiting, it returnes false.
  * 
  *  
  */
-bool needToSend(){
-  bool toret =  Serial.available();
-  if(toret)
-    while(Serial.available())
-      Serial.read();
-  return toret;
+void sendData(){
+  while(Serial.available()){
+    switch(Serial.read()){
+      case 'D':
+        sendDistanceData();
+        break;
+      case 'P':
+        sendPressureData();
+        break;
+      case 'T':
+        sendThemperatureData();
+        break;
+    }
+  }
 }
 
-
-
-float temperature   [16];
-int sensorValues[16][16];
+float temperature;
+int sensorValues[17][BUFFER_SIZE];
+int hoehe[BUFFER_SIZE];
 int sensorIndex=0;
 
 /* void readSensors(void)
@@ -136,12 +146,15 @@ void readSensors(){
     address+=1;
   }
   // read temperature from sensor
+  
+  sensorValues[16][sensorIndex] = analogRead(sensorPin2);
+  
   float temp = readTemperature(11,12);
   if(!isnan(temp)) {
-      temperature[sensorIndex]=temp;
+      temperature=temp;
   }
   sensorIndex++;
-  if(sensorIndex==16)sensorIndex=0;
+  if(sensorIndex==BUFFER_SIZE)sensorIndex=0;
   
 }
 
@@ -153,37 +166,53 @@ void readSensors(){
  */
 int avarage(int index){
   int toret=0;
-  for(int i = -1;i<16;toret+=sensorValues[index][i++]);
-  return toret>>4;
+  for(int i = -1;i<BUFFER_SIZE;toret+=sensorValues[index][i++]);
+  return toret/BUFFER_SIZE;
 }
 
 
-
-/* void sendData(void)
+/* void sendPressureData(void)
  * Calculates the  avarage value of all the Connected sensors and sends it over serial
  */
-void sendData(){
-  Serial.println("G");
+void sendPressureData(){
+  Serial.println("P");
   float avr=0;
   for(int i = 0;i<16;i++){
     Serial.println(avarage(i));
-    avr+=temperature[i];
-  }
-  avr/=16;
-  Serial.println(avr);
+  }    
+}
+
+/* void sendDistanceData(void)
+ * Calculates the  avarage value of all the Connected sensors and sends it over serial
+ */
+void sendDistanceData(){
+  Serial.println("D");
+  Serial.println(avarage(16));
   Serial.flush();
     
 }
+
+
+/* void sendThemperatureData(void)
+ * Calculates the  avarage value of all the Connected sensors and sends it over serial
+ */
+void sendThemperatureData(){
+  Serial.println("T");  
+  Serial.println(temperature);
+  Serial.flush();
+    
+}
+
 
 /* void loop(void)
  * the Main loop, reads all sensors, and checks if it needs to send, if so, it sends 
  */
 
-int cycle=16;
+int cycle=BUFFER_SIZE;
 void loop() {
     if(cycle)cycle--;
     readSensors();
-    if(!cycle&&needToSend())sendData();
-    delay(10);
+    sendData();
+    delay(MESUREMENT_DELAY);
 }
 

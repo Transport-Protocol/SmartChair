@@ -12,6 +12,6 @@ def pack_to_json(version, sensor_type, id_nr, values):
             value_string += ', '
 
     value_string += "]}"
-    json_msg = '{"version": ' + str(version) + '", sensortype": "' + sensor_type + '", ' + value_string
+    json_msg = '{"version": ' + str(version) + ', "sensortype": "' + sensor_type + '", ' + value_string
 
     return json_msg
