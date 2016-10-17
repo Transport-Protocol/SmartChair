@@ -25,3 +25,5 @@ Timestamp unterstützung (Ohne Cache)
 NTP auf PIs (Offline Unterstützung)    
 Plan MW   
 Plan DB-GUI   
+
+Ziel Signalanzeige innerhalb 75ms
