@@ -79,7 +79,7 @@ def location():
 
 def serial_sensors():
 
-    print("port is open: ", port.is_open)
+    #print("port is open: ", port.is_open)
     json_list = []
 
     port.write(b'ss')
