@@ -6,9 +6,9 @@ import sys
 
 import find_serialport
 
-
 sys.path.append('/home/chair/git/SmartChair/pi_python/py-beacon')
 from proximity import Scanner
+
 scanner = Scanner(loops=3)
 
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
@@ -21,7 +21,7 @@ acceleration_sensor_ids = list(range(0, 3))
 test = list(range(0, 16))
 
 
-def distance_sensor():
+def distance_sensor(timestamp):
     json_list = []
     print("distance_sensor()")
     # get Values
@@ -29,11 +29,11 @@ def distance_sensor():
     # Validation
 
     # get json
-    json_list.append(msg_gen.pack_to_json(1, "distance", [0], value))
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "distance", [0], value))
     return json_list
 
 
-def acceleration_sensor():
+def acceleration_sensor(timestamp):
     print("acceleration_sensor")
     json_list = []
     gyro_values = []
@@ -41,13 +41,13 @@ def acceleration_sensor():
     gyro_values.append(gyroscope.get_gyro_values())
 
     # get json
-    json_list.append(msg_gen.pack_to_json(1, "acceleration", acceleration_sensor_ids, gyro_values[0]))
-    json_list.append(msg_gen.pack_to_json(1, "gyroscope", acceleration_sensor_ids, gyro_values[1]))
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "acceleration", acceleration_sensor_ids, gyro_values[0]))
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "gyroscope", acceleration_sensor_ids, gyro_values[1]))
 
     return json_list
 
 
-def sound_sensor():
+def sound_sensor(timestamp):
     json_list = []
     print("sound_sensor()")
     # get Values
@@ -55,11 +55,11 @@ def sound_sensor():
     # Validation
 
     # get json
-    json_list.append(msg_gen.pack_to_json(1, "sound", [0], value))
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "sound", [0], value))
     return json_list
 
 
-def location():
+def location(timestamp):
     json_list = []
     print("location()")
     # get Values
@@ -70,8 +70,9 @@ def location():
             splitArr = beacon.split(',')
 
             # build json string
-            json = '{"uuid" : "' + str(splitArr[1]) + '", "major" : "' + str(splitArr[2]) + '", "minor" : "' + str(
-                splitArr[3]) + '", "dB" : "' + str(splitArr[5]) + '", "time" : ' + time.time() + '}'
+            json = msg_gen.pack_location_to_json(1, (time.time()*1000), "location", str(splitArr[1]), str(splitArr[2]), splitArr[3]), str(splitArr[5]))
+
+
 
             # add to queue
             json_list.append(json)
@@ -79,9 +80,8 @@ def location():
     return json_list
 
 
-def serial_sensors():
-
-    #print("port is open: ", port.is_open)
+def serial_sensors(timestamp):
+    # print("port is open: ", port.is_open)
     json_list = []
 
     port.write(b'ss')
@@ -92,16 +92,16 @@ def serial_sensors():
         # print("waiting for lines")
 
     start_sequence = port.read()
-    print(start_sequence)
+    # print(start_sequence)
 
     while not start_sequence == b'G':
-        print("start_sequence not valid")
+        # print("start_sequence not valid")
         time.sleep(0.001)
         start_sequence = port.read()
 
     port.read(2)
 
-    print("start_sequence valid")
+    # print("start_sequence valid")
     analogs = []
     analog_values = []
 
@@ -124,13 +124,11 @@ def serial_sensors():
         analog_values.append(int(analogs[j]))
         j += 1
 
+    temperature_value = [float(temperature)]
 
-    temperature_value = []
-    temperature_value.append(float(temperature))
-
-    print("analogs: ", analog_values)
-    print("temperature: ", temperature_value)
-    json_list.append(msg_gen.pack_to_json(1, "pressure", pressure_sensor_ids, analog_values))
-    json_list.append(msg_gen.pack_to_json(1, "temperature", [0], temperature_value))
+    # print("analogs: ", analog_values)
+    # print("temperature: ", temperature_value)
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "pressure", pressure_sensor_ids, analog_values))
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], temperature_value))
 
     return json_list
