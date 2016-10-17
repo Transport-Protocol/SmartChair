@@ -16,6 +16,8 @@ hs_err_pid*
 /bin/
 /.settings/
 /lib/
+.project
+.classpath
 
 #Config Files
 /mwrp.properties
