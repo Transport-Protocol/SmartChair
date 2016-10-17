@@ -2,14 +2,8 @@ package de.hawhamburg.sg.db;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.ChairMessage;
-import com.hawhamburg.sg.data.SensorMessage;
-import com.hawhamburg.sg.mwrp.Mq1Consumer;
-import com.hawhamburg.sg.mwrp.Mq2Publisher;
 import com.hawhamburg.sg.mwrp.RabbitMqConstants;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
@@ -56,9 +50,13 @@ public class MqConsumer implements Consumer {
 
 		try {
 			ChairMessage msg = mapper.readValue(arg3, ChairMessage.class);
-
-			dbConnector.write(msg);
-			
+				System.out.println(msg.toString());
+			if (!msg.getValues().isEmpty()){
+				dbConnector.write(msg);
+			} else{
+				
+			}
+				
 			channel.basicAck(arg1.getDeliveryTag(), false);
 		} catch (Exception e) {
 			e.printStackTrace();

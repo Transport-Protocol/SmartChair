@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.Value;
@@ -17,7 +18,7 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import com.hawhamburg.sg.mwrp.RabbitMqConstants;
 
-public class TestDataGenerator {
+public class DebugDataGenerator {
 	
 	private static final int MAXVALUESPERDATA = 10;
 	private static final int NUMDATA = 10;
@@ -68,5 +69,21 @@ public class TestDataGenerator {
 		}
 		return json;
 	}
+	
+	public static ChairMessage getChairMessage()
+	{
+		Random rng=new Random();
+		List<Value> values = new LinkedList<>();
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA); i++)
+		{
+			Value value = new Value(valueId++,rng.nextInt(1024));
+			values.add(value);
+		}
+		int o=rng.nextInt(SensorType.values().length);
+		SensorType type = SensorType.values()[o];
+		ChairMessage msg = new ChairMessage("1", 1, type, values, System.currentTimeMillis());
+		return msg;
+	}
+
 
 }
