@@ -25,9 +25,10 @@ io.sockets.on('connection', function (socket) {
     var dataIntervalId;
     // When the server receives a “message” type signal from the client   
     socket.on('data', function () {
-    	console.log('received data');
+    	console.log('received "data"');
     	dataIntervalId = setInterval(function() {
-    		socket.emit('data', JSON.stringify(generateData()));
+    		socket.emit('pressure', JSON.stringify(generatePressure()));
+            socket.emit('temperature', JSON.stringify(generateTemperature()));
     	}, 50);
 	});
     socket.on('stop', function() {
@@ -36,11 +37,15 @@ io.sockets.on('connection', function (socket) {
     }); 
 });
 
-function generateData() {
-	var data = {};
+function generatePressure() {
+	var pressure = { p: {} };
 	for(var i = 0; i < 10; i++) {
-		data["p"+i] = Math.floor(Math.random()*(20-5+1)+5);
+		pressure.p[i] = Math.floor(Math.random()*(20-5+1)+5);
 	}
-	data.t1 = Math.floor(Math.random()*(20-5+1)+5);
-	return data;
+    return pressure;
+}
+function generateTemperature() {
+    temperature = { t: {}};
+    temperature.t[0] = Math.floor(Math.random()*(20-5+1)+5);
+    return temperature;
 }

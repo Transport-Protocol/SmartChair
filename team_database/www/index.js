@@ -6,22 +6,26 @@ socket.on('connect', function() {
     socket.emit('data');
 });
 
-socket.on('data', function(message) {
-    updateData(JSON.parse(message));
+socket.on('pressure', function(message) {
+    updatePressure(JSON.parse(message));
 });
 
-function updateData(data) {
-    for(var i in data) {
-    	var dom = document.querySelector('#'+i) //&& document.querySelector('#'+i).innerHTML = 'x'//data[i];
-    	if(dom) {
-    		dom.innerHTML = data[i];
-    	}
-    }
-    updateTemperatureData(count, generateTestData());
-}
+socket.on('temperature', function(message) {
+    updateTemperature(count, JSON.parse(message));
+    count++;
+});
 
 function disconnect() {
     socket.emit('stop');
+}
+
+function updatePressure(pressureJSON) {
+	for(var i in pressureJSON.p) {
+    	var dom = document.querySelector('#p'+i) //&& document.querySelector('#'+i).innerHTML = 'x'//data[i];
+    	if(dom) {
+    		dom.innerHTML = pressureJSON.p[i];
+    	}
+    }
 }
 
 
@@ -55,14 +59,14 @@ function initializeDataChart() {
 	chart = new google.charts.Line(document.getElementById('chart_div'));
 }
 
-function updateTemperatureData(time, value) {
+function updateTemperature(time, temperatureJSON) {
 	if(!(data && chart)) return;
 
 	if(data.getNumberOfRows() == MAX_DATA_POINTS) {
 		data.removeRow(0);
 	} 
-
-	data.addRow([time, value]);
+	console.log(temperatureJSON)
+	data.addRow([time, temperatureJSON.t[0]]);
 
 	if(data.getNumberOfRows() > 0) {
     	chart.draw(data, options);
@@ -75,6 +79,6 @@ var count = 0;
 function generateTestData() {
 	count++;
 	//floor(rnd*(max-min+1)+min)
-	var res = Math.random()*(30+5+1)-5
+	var res = { 0: Math.random()*(30+5+1)-5 }
 	return res;
 }
