@@ -2,9 +2,10 @@
 
 ## process:
 
-client: connect to server
-server: on connect start sending
-server: send data every x seconds (format of message see "data format")
+client: send 'connection'-message
+server: on connection send 'connect'-message
+client: on 'connect' send 'data'-message
+server: server starts sending data (format of message see "data format")
 
 ## data format
 
