@@ -1,16 +1,18 @@
 import MessageGenerator as msg_gen
 import serial
-import io
 import time
 import gyroscope
 import sys
+
+import find_serialport
+
 
 sys.path.append('/home/chair/git/SmartChair/pi_python/py-beacon')
 from proximity import Scanner
 scanner = Scanner(loops=3)
 
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
-# port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
+port = serial.Serial(find_serialport.get_serial_port(), 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
 port = False
 
@@ -86,7 +88,7 @@ def serial_sensors():
     port.flush()
 
     while not port.inWaiting():
-        time.sleep(0.01)
+        time.sleep(0.001)
         # print("waiting for lines")
 
     start_sequence = port.read()
@@ -94,7 +96,7 @@ def serial_sensors():
 
     while not start_sequence == b'G':
         print("start_sequence not valid")
-        time.sleep(0.01)
+        time.sleep(0.001)
         start_sequence = port.read()
 
     port.read(2)
