@@ -28,7 +28,7 @@ io.sockets.on('connection', function (socket) {
     	console.log('received data');
     	dataIntervalId = setInterval(function() {
     		socket.emit('data', JSON.stringify(generateData()));
-    	}, 1000);
+    	}, 50);
 	});
     socket.on('stop', function() {
     		clearInterval(dataIntervalId);

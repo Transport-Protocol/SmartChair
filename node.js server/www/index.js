@@ -30,7 +30,7 @@ function disconnect() {
 google.charts.load('current', {'packages':['line']});
 google.charts.setOnLoadCallback(initializeDataChart);
 
-var MAX_DATA_POINTS = 10;
+var MAX_DATA_POINTS = 20;
 var data; 
 var chart;
 var options = {
@@ -41,6 +41,7 @@ var options = {
 		count: MAX_DATA_POINTS,
 		
 	},
+	legend: 'none',
 	width: 900,
 	height: 500
 };
@@ -66,6 +67,7 @@ function updateTemperatureData(time, value) {
 	if(data.getNumberOfRows() > 0) {
     	chart.draw(data, options);
 	}
+	console.log(data);
 }
 
 //test data stuff
@@ -74,6 +76,5 @@ function generateTestData() {
 	count++;
 	//floor(rnd*(max-min+1)+min)
 	var res = Math.random()*(30+5+1)-5
-	console.log(!isNaN(res));
 	return res;
 }
