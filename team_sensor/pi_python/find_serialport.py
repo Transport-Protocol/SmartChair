@@ -8,15 +8,15 @@ def get_serial_port():
     print(output)
     print(type(output))
 
-    outputLines = output.splitlines()
-    print(outputLines)
-    print(type(outputLines))
+    output_lines = output.splitlines()
+    print(output_lines)
+    print(type(output_lines))
 
-    outputLines.sort()
+    output_lines.sort()
 
-    print(outputLines)
+    print(output_lines)
 
-    if len(outputLines) > 0 :
-        return outputLines[-1]
+    if len(output_lines) > 0:
+        return output_lines[-1]
     else:
         return False

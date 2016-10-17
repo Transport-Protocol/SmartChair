@@ -3,7 +3,7 @@ import HAL
 import time
 
 
-class MQ_Communicator (threading.Thread):
+class MQCommunicator (threading.Thread):
     def __init__(self, thread_id, name, counter, json_queue, communicator):
         threading.Thread.__init__(self)
         self.thread_id = thread_id
