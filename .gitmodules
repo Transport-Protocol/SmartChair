@@ -1,3 +1,3 @@
 [submodule "team_sensor/pi_python/py-beacon"]
 	path = team_sensor/pi_python/py-beacon
-	url = git@github.com:taka-wang/py-beacon.git
+	url = https://github.com/taka-wang/py-beacon.git
