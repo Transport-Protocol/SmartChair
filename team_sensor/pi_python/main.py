@@ -45,7 +45,7 @@ if args.test:
 
     if args.pressure:
         print("pressure active!")
-        threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 1, json_queue, HAL.serial_sensors))
+        threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
 
     if args.temperature:
         print("temperature active!")
@@ -61,7 +61,7 @@ if args.test:
         print("location active!")
         threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.serial_sensors))
 else:
-    threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 1, json_queue, HAL.serial_sensors))
+    threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
     # threads.append(own_threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2,  30, json_queue, HAL.serial_sensors))
     threads.append(
         own_threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
