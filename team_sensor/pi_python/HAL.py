@@ -34,15 +34,14 @@ def distance_sensor(timestamp):
 
 
 def acceleration_sensor(timestamp):
-    print("acceleration_sensor")
     json_list = []
-    gyro_values = []
-    gyro_values.append(gyroscope.get_accelerator_values())
-    gyro_values.append(gyroscope.get_gyro_values())
+    print("acceleration_sensor")
 
     # get json
-    json_list.append(msg_gen.pack_to_json(1, timestamp, "acceleration", acceleration_sensor_ids, gyro_values[0]))
-    json_list.append(msg_gen.pack_to_json(1, timestamp, "gyroscope", acceleration_sensor_ids, gyro_values[1]))
+    json_list.append(
+        msg_gen.pack_to_json(1, timestamp, "acceleration", acceleration_sensor_ids, gyroscope.get_accelerator_values()))
+    json_list.append(
+        msg_gen.pack_to_json(1, timestamp, "gyroscope", acceleration_sensor_ids, gyroscope.get_gyro_values()))
 
     return json_list
 
@@ -67,10 +66,11 @@ def location(timestamp):
     while True:
         for beacon in scanner.scan():
             # get values
-            splitArr = beacon.split(',')
+            split_arr = beacon.split(',')
 
             # build json string
-            json = msg_gen.pack_location_to_json(1, (time.time()*1000), "location", str(splitArr[1]), str(splitArr[2]), str(splitArr[3]), str(splitArr[5]))
+            json = msg_gen.pack_location_to_json(1, (time.time() * 1000), "location", str(split_arr[1]),
+                                                 str(split_arr[2]), str(split_arr[3]), str(split_arr[5]))
 
             # add to queue
             json_list.append(json)

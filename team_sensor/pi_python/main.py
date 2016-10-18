@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
 import argparse
-import queue as queue_package
+import queue
 
-import Communicators as communicators
+import Communicators
 import HAL
-import Threads as own_threads
+import Threads
 
 # Define here all supported sensors.
 sensors = ["pressure"]
@@ -38,49 +38,49 @@ for entry in sensor:
 args = parser.parse_args()
 
 # get collect all needed sensor threads
-json_queue = queue_package.Queue()
+json_queue = queue.Queue()
 threads = []
 if args.test:
     print("Test mode active!")
 
     if args.pressure:
         print("pressure active!")
-        threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
+        threads.append(Threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
 
     if args.temperature:
         print("temperature active!")
         threads.append(
-            own_threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2, 30, json_queue, HAL.serial_sensors))
+            Threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2, 30, json_queue, HAL.serial_sensors))
 
     if args.acceleration:
         print("acceleration active!")
         threads.append(
-            own_threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
+            Threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
 
     if args.location:
         print("location active!")
-        threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.serial_sensors))
+        threads.append(Threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.serial_sensors))
 else:
-    threads.append(own_threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
+    threads.append(Threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
     # threads.append(own_threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2,  30, json_queue, HAL.serial_sensors))
     threads.append(
-        own_threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
-    threads.append(own_threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.serial_sensors))
+        Threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
+    threads.append(Threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.serial_sensors))
 
 # get right communication medium
 if args.rabbit:
     print("rabbit active!")
-    communicator = communicator = communicators.RabbitMQCommunicator("127.0.0.1", "sg.ex.sensor_values",
+    communicator = communicator = Communicators.RabbitMQCommunicator("127.0.0.1", "sg.ex.sensor_values",
                                                                      "sg.rk.sensor_values", json_queue)
 elif args.socket:
     print("socket active!")
-    communicator = communicators.SocketCommunicator("141.22.80.72", 15000)
+    communicator = Communicators.SocketCommunicator("141.22.80.72", 15000)
 
 else:
-    communicator = communicators.CommunicatorDummy()
+    communicator = Communicators.CommunicatorDummy()
 
 communicator.setup_connection()
-threads.append(own_threads.MQCommunicator(10, "MQ_Communicator", 10, json_queue, communicator))
+threads.append(Threads.MQCommunicator(10, "MQ_Communicator", 10, json_queue, communicator))
 
 # start the communicator thread
 for thread in threads:
