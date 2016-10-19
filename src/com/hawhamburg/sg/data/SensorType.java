@@ -2,5 +2,10 @@ package com.hawhamburg.sg.data;
 
 public enum SensorType {
 	pressure,
-	temperature
+	temperature,
+	acceleration,
+	gyroscope,
+	location,
+	distance,
+	microphone
 }
