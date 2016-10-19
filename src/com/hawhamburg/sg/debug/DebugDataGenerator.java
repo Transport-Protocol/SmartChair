@@ -132,7 +132,10 @@ public class DebugDataGenerator {
 		    
 		    for(int i = 0; i<numData; i++)
 		    {
-		    	connector.write(getChairMessage());
+		    	ChairMessage msg = getChairMessage();
+		    	if (!msg.getValues().isEmpty())
+		    		connector.write(msg);
+		    	
 				Thread.sleep(delay);
 		    }
 		    
