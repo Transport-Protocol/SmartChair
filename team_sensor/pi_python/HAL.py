@@ -64,17 +64,16 @@ def location(timestamp):
     print("location()")
     # get Values
 
-    while True:
-        for beacon in scanner.scan():
-            # get values
-            split_arr = beacon.split(',')
+    for beacon in scanner.scan():
+        # get values
+        split_arr = beacon.split(',')
 
-            # build json string
-            json = msg_gen.pack_location_to_json(1, timestamp, "location", str(split_arr[1]),
-                                                 str(split_arr[2]), str(split_arr[3]), str(split_arr[5]))
+        # build json string
+        json = msg_gen.pack_location_to_json(1, timestamp, "location", str(split_arr[1]),
+                                             str(split_arr[2]), str(split_arr[3]), str(split_arr[5]))
 
-            # add to queue
-            json_list.append(json)
+        # add to queue
+        json_list.append(json)
 
     return json_list
 
