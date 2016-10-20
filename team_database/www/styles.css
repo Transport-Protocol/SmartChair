@@ -1,0 +1,39 @@
+
+.chair {
+	width: 10%;
+    height: auto;
+    background: #e6e6e6;
+    border: solid 2px black;
+}
+
+.left {
+    width: 50%;
+    height: auto;
+    float: left;
+    border: solid 1px grey;
+}
+.right {
+	width: 50%;
+    margin-left: 50%;
+    height: auto;
+    border: solid 1px grey;
+}
+.top {
+	height: 60%;
+    border: solid 1px grey;
+}
+
+.bottom {
+    float: bottom;
+    height: 40%;
+    border: solid 1px grey;
+}
+
+.pressure {
+	padding: 10px;
+	text-align: center
+}
+
+.p1 {
+
+}

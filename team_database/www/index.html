@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript" src="temperatureChart.js"></script>
+    </head>
+ 
+    <body>
+        <h1>Communication with socket.io!</h1>
+        <p id='info'>Hi there!<p>
+        <div class='chair'> 
+            <div class='left'>
+                <div class='top'>
+                    <div class='pressure' id='p0'>10</div>
+                    <div class='pressure' id='p1'>3</div>
+                    <div class='pressure' id='p2'>8</div>
+                </div>
+                <div class='bottom'>
+                    <div class='pressure' id='p3'>12</div>
+                    <div class='pressure' id='p4'>5</div>
+                </div>
+            </div>
+
+            <div class='right'>
+                <div class='top'>
+                    <div class='pressure' id='p5'>18</div>
+                    <div class='pressure' id='p6'>3</div>
+                    <div class='pressure' id='p7'>2</div> 
+                </div>
+                <div class='bottom'>
+                    <div class='pressure' id='p8'>8</div>
+                    <div class='pressure' id='p9'>9</div>
+                </div>
+            </div> 
+        </div>
+
+        <div>current Temperature: <span id='t1'></span></div>
+        <div id="chart_div"></div>
+
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script src="/index.js"></script>
+
+
+    </body>
+</html>
