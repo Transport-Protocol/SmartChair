@@ -3,6 +3,7 @@ import serial
 import time
 import gyroscope
 import sys
+import threading
 
 import find_serialport
 
@@ -19,7 +20,7 @@ port = False
 pressure_sensor_ids = list(range(0, 10))
 acceleration_sensor_ids = list(range(0, 3))
 test = list(range(0, 16))
-
+serial_mutex = threading.RLock()
 
 def distance_sensor(timestamp):
     json_list = []
@@ -69,7 +70,7 @@ def location(timestamp):
             split_arr = beacon.split(',')
 
             # build json string
-            json = msg_gen.pack_location_to_json(1, (time.time() * 1000), "location", str(split_arr[1]),
+            json = msg_gen.pack_location_to_json(1, timestamp, "location", str(split_arr[1]),
                                                  str(split_arr[2]), str(split_arr[3]), str(split_arr[5]))
 
             # add to queue
@@ -81,6 +82,8 @@ def location(timestamp):
 def serial_sensors(timestamp):
     # print("port is open: ", port.is_open)
     json_list = []
+
+    serial_mutex.acquire()
 
     port.write(b'ss')
     port.flush()
@@ -109,6 +112,8 @@ def serial_sensors(timestamp):
         i += 1
 
     temperature = port.read(6)
+
+    serial_mutex.release()
 
     j = 0
     while j < 16:
