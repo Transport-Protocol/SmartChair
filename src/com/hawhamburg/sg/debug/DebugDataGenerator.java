@@ -133,8 +133,7 @@ public class DebugDataGenerator {
 		    for(int i = 0; i<numData; i++)
 		    {
 		    	ChairMessage msg = getChairMessage();
-		    	if (!msg.getValues().isEmpty())
-		    		connector.write(msg);
+		    	connector.write(msg);
 		    	
 				Thread.sleep(delay);
 		    }
@@ -151,7 +150,7 @@ public class DebugDataGenerator {
 		Random rng=new Random();
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Value> values = new LinkedList<>();
-		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA); i++)
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
 			Value value = new Value(valueId++,rng.nextInt(1024));
 			values.add(value);
@@ -187,7 +186,7 @@ public class DebugDataGenerator {
 	{
 		Random rng=new Random();
 		List<Value> values = new LinkedList<>();
-		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA); i++)
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
 			Value value = new Value(valueId++,rng.nextInt(1024));
 			values.add(value);
