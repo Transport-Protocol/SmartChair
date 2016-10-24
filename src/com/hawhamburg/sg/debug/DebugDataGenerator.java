@@ -21,7 +21,7 @@ import com.hawhamburg.sg.mwrp.RabbitMqConstants;
 public class DebugDataGenerator {
 	
 	private static final int MAXVALUESPERDATA = 10;
-	private static final int NUMDATA = 10;
+	private static final int NUMDATA = 10000;
 	private static int valueId = 0;
 	
 	public static void main(String[] args) 
@@ -34,7 +34,7 @@ public class DebugDataGenerator {
 			
 			for(int i=0; i<NUMDATA; i++)
 			{
-				channel.basicPublish(RabbitMqConstants.MQ1_EXCHANGE_NAME, RabbitMqConstants.MQ1_ROUTING_KEY, null, getExampleData().getBytes());
+				channel.basicPublish(RabbitMqConstants.MQ1_EXCHANGE_NAME, RabbitMqConstants.MQ1_ROUTING_KEY, null, getExampleData(i).getBytes());
 			}
 			
 			channel.close();
@@ -47,19 +47,19 @@ public class DebugDataGenerator {
 		
 	}
 	
-	public static String getExampleData()
+	public static String getExampleData(int c)
 	{
 		Random rng=new Random();
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Value> values = new LinkedList<>();
-		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA); i++)
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(1024));
+			Value value = new Value(valueId++,rng.nextInt(35));
 			values.add(value);
 		}
 		int o=rng.nextInt(SensorType.values().length);
 		SensorType type = SensorType.values()[o];
-		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis());
+		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis()+c*500);
 		String json = "";
 		try {
 			json = objectMapper.writeValueAsString(msg);

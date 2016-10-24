@@ -48,12 +48,14 @@ public class Mwrp {
 	private MwrpProperties properties;
 	private boolean useGui, winCtrl, noServer;
 	private MwrpFrame frame;
+	private DataProvider dataProvider;
 
 	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer) throws IOException, TimeoutException {
 		this.useGui = useGui;
 		this.noServer = noServer;
+		dataProvider=new DataProvider();
 		if (useGui) {
-			frame = new MwrpFrame();
+			frame = new MwrpFrame(dataProvider);
 			frame.setVisible(true);
 		}
 		properties = props;
@@ -69,7 +71,7 @@ public class Mwrp {
 				mq2Connection = factory2.newConnection();
 			} catch (IOException e) {
 				System.err.println("Unable to Connect to remote server, continuing without sending data to server.");
-				noServer = true;
+				this.noServer=noServer = true;
 			}
 		}
 		mq1Consumer = new Mq1Consumer(mq1Connection);
@@ -88,16 +90,8 @@ public class Mwrp {
 			if (!noServer) {
 				mq2Publisher.publish(chm);
 			}
-			if (useGui) {
-				switch (sensm.getSensortype()) {
-				case temperature:
-					frame.setTemperatureValue(sensm.getValues().get(0).getValue());
-					break;
-				case pressure:
-					frame.setPressureValues(sensm.getValues());
-					break;
-				}
-			}
+			if(useGui)
+				dataProvider.addValues(sensm);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

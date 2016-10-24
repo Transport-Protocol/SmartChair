@@ -32,6 +32,9 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
+        resources{
+        	srcDirs = ['src']
+        }
     }
 }
 // In this section you declare the dependencies for your production and test code
@@ -71,8 +74,10 @@ task buildMwrp(type: Jar) {
     manifest { 
     	attributes "Main-Class": "com.hawhamburg.sg.mwrp.Mwrp"
   	}  
-	baseName = 'Mwrp'
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	baseName = 'mwrp'
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
 	with jar
 }
 
@@ -84,6 +89,23 @@ task deployMwrp(dependsOn: buildMwrp) << {
 			execute 'mkdir -p ' + deployPath
 			put from: jar.archivePath.path , into: deployPath + jar.archiveName
 			def result = execute 'cd ' + deployPath + '; java -jar ' + jar.archiveName + ' &'
+			println ""
+			println result
+			println ""
+        }
+    }
+}
+
+task deployMwrpToChair2(dependsOn: buildMwrp) << {
+	ssh.run {
+        session(remotes.chair2) {
+			def deployPath = '/home/chair/'
+			jar.baseName = 'mwrp'
+			execute 'pkill -f ' + jar.archiveName, ignoreError: true
+			execute 'mkdir -p ' + deployPath
+			put from: jar.archivePath.path , into: deployPath + jar.archiveName
+			execute 'cd ' + deployPath
+			def result= execute 'export DISPLAY=:0; java -jar ' + jar.archiveName + ' -gui -noserver 2>1&'
 			println ""
 			println result
 			println ""

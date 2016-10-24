@@ -9,16 +9,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.mwrp.DataProvider;
 
 public final class MwrpFrame extends JFrame {
 	private final MwrpCanvas canvas;
-	public MwrpFrame()
+	
+	public MwrpFrame(DataProvider dataProvider)
 	{
 		super();
 		setSize(GUI_WIDTH, GUI_HEIGHT);
 		setUndecorated(true);
 		setAlwaysOnTop(true);
-		canvas=new MwrpCanvas();
+		canvas=new MwrpCanvas(dataProvider);
 		canvas.setSize(getContentPane().getWidth(),getContentPane().getHeight());
 		this.getContentPane().add(canvas);
 	}
@@ -28,18 +30,5 @@ public final class MwrpFrame extends JFrame {
 		super.setVisible(v);
 		if(v==true)
 			canvas.startRenderer();
-	}
-	
-	public void setTemperatureValue(double t)
-	{
-		canvas.t0=t;
-	}
-	
-	public void setPressureValues(List<Value> vals)
-	{
-		for(Value v:vals)
-		{
-			canvas.p0[v.getId()]=(int)v.getValue();
-		}
 	}
 }

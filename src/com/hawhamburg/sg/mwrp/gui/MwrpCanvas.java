@@ -23,23 +23,23 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.view.IView;
 import com.hawhamburg.sg.mwrp.gui.view.MainView;
 
 public final class MwrpCanvas extends Canvas implements MouseListener {
 	private static final Color bgColor=new Color(0xffe9e5fc);
 	private static final Color fontColor=Color.black;
-	
-	public volatile double t0;
-	public final int[] p0=new int[10];
+	private final DataProvider dataProvider;
 
 	private int fps;
 	private int currentFrames;
 	
 	private Deque<IView> views=new LinkedList<IView>();
 	
-	public MwrpCanvas() {
-		views.push(new MainView(this));
+	public MwrpCanvas(DataProvider dataProvider) {
+		views.push(new MainView(dataProvider, this));
+		this.dataProvider=dataProvider;
 	}
 	public void startRenderer()
 	{
@@ -108,26 +108,26 @@ public final class MwrpCanvas extends Canvas implements MouseListener {
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		//views.peek().mouseClick(e);
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
 		views.peek().mouseClick(e);
 		
 	}
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
+	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

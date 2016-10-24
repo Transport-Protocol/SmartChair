@@ -24,7 +24,7 @@ public class SensorMessage {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.version = version;
-		this.timestamp=timestamp;
+		this.timestamp=timestamp==0?System.currentTimeMillis():timestamp;
 	}
 	
 	public SensorMessage(SensorType sensortype,
