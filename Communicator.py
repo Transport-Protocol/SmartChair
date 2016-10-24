@@ -1,5 +1,6 @@
 import pika
 
+
 class RabbitMQCommunicator:
     def __init__(self, ip_address, mq_exchange_name, mq_routing_keys):
         self.connection = False
@@ -16,6 +17,7 @@ class RabbitMQCommunicator:
         self.connection.close()
 
     def send(self, to_send):
+        print "toSend: ", to_send
         self.channel.basic_publish(exchange=self.mq_exchange_name,
                                    routing_key=self.mq_routing_keys,
                                    body=to_send)

@@ -17,13 +17,14 @@ def pack_location_to_json(version, timestamp, sensor_type, uuid, major, minor, d
 
     return json_msg
 
+#communicator = Communicator.RabbitMQCommunicator("127.0.0.1", "sg.ex.sensor_values",
+#                                                 "sg.rk.sensor_values")
+
+communicator = Communicator.CommunicatorDummy()
+communicator.setup_connection()
+
 scanner = Scanner(loops=3)
 while True:
-    #communicator = Communicator.RabbitMQCommunicator("127.0.0.1", "sg.ex.sensor_values",
-    #                                                  "sg.rk.sensor_values")
-
-    communicator = Communicator.CommunicatorDummy()
-    communicator.setup_connection()
     version = 1
 
     for beacon in scanner.scan():
