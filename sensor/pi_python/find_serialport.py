@@ -22,4 +22,4 @@ def get_serial_port():
         return False
 
 if __name__ == "__main__":
-    print(get_serial_port()import bluetooth._bluetooth as bluez)
+    print(get_serial_port())

@@ -1,21 +1,18 @@
 import MessageGenerator as msg_gen
 import serial
 import time
-import gyroscope
+# import gyroscope
 import sys
 import threading
 
 import find_serialport
 
-sys.path.append('/home/chair/git/SmartChair_sensor/team_sensor/pi_python/py-beacon')
-from proximity import Scanner
 
-scanner = Scanner(loops=3)
-
+port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
-port = serial.Serial(find_serialport.get_serial_port(), 9600, timeout=None)
+# port = serial.Serial(find_serialport.get_serial_port(), 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
-port = False
+# port = False
 
 pressure_sensor_ids = list(range(0, 10))
 acceleration_sensor_ids = list(range(0, 3))
@@ -58,33 +55,18 @@ def sound_sensor(timestamp):
     json_list.append(msg_gen.pack_to_json(1, timestamp, "sound", [0], value))
     return json_list
 
-
-def location(timestamp):
+def temperatur(timestamp):
     json_list = []
-    print("location()")
+    print("temperatur()")
     # get Values
+    value = [1]
+    # Validation
 
-    for beacon in scanner.scan():
-        # get values
-        split_arr = beacon.split(',')
-
-        # build json string
-        json = msg_gen.pack_location_to_json(1, timestamp, "location", str(split_arr[1]),
-                                             str(split_arr[2]), str(split_arr[3]), str(split_arr[5]))
-
-        # add to queue
-        json_list.append(json)
-
-    return json_list
-
-
-def serial_sensors(timestamp):
-    # print("port is open: ", port.is_open)
     json_list = []
 
     serial_mutex.acquire()
 
-    port.write(b'ss')
+    port.write(b'T')
     port.flush()
 
     while not port.inWaiting():
@@ -94,7 +76,40 @@ def serial_sensors(timestamp):
     start_sequence = port.read()
     # print(start_sequence)
 
-    while not start_sequence == b'G':
+    while not start_sequence == b'T':
+        # print("start_sequence not valid")
+        time.sleep(0.001)
+        start_sequence = port.read()
+
+    port.read(2)
+
+    # print("start_sequence valid")
+    temperature = port.read(6)
+
+    # get json
+    temperature_value = [float(temperature)]
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], temperature_value))
+    return json_list
+
+
+
+def serial_sensors(timestamp):
+    # print("port is open: ", port.is_open)
+    json_list = []
+
+    serial_mutex.acquire()
+
+    port.write(b'P')
+    port.flush()
+
+    while not port.inWaiting():
+        time.sleep(0.001)
+        # print("waiting for lines")
+
+    start_sequence = port.read()
+    # print(start_sequence)
+
+    while not start_sequence == b'P':
         # print("start_sequence not valid")
         time.sleep(0.001)
         start_sequence = port.read()
@@ -110,8 +125,6 @@ def serial_sensors(timestamp):
         analogs.append(port.readline())
         i += 1
 
-    temperature = port.read(6)
-
     serial_mutex.release()
 
     j = 0
@@ -126,11 +139,10 @@ def serial_sensors(timestamp):
         analog_values.append(int(analogs[j]))
         j += 1
 
-    temperature_value = [float(temperature)]
 
     # print("analogs: ", analog_values)
     # print("temperature: ", temperature_value)
     json_list.append(msg_gen.pack_to_json(1, timestamp, "pressure", pressure_sensor_ids, analog_values))
-    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], temperature_value))
+
 
     return json_list
