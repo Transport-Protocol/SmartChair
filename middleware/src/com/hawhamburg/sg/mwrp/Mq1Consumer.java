@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.rabbitmq.client.AMQP.BasicProperties;
@@ -58,7 +59,7 @@ public class Mq1Consumer implements Consumer {
 		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
 
 		try {
-			SensorMessage msg = mapper.readValue(arg3, SensorMessage.class);
+			SensorMessage msg = SensorMessage.parseJson(arg3);
 
 			for (int i = 0; i < msgHandlers.size(); i++)
 				msgHandlers.get(i).messageReceived(msg);

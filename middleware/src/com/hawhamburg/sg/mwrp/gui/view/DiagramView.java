@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
+import com.hawhamburg.sg.data.Value;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 
@@ -61,7 +62,7 @@ public class DiagramView implements IView {
 			double tsd = msgs.get(msgs.size() - 1).getTimestamp() - ts0;
 
 			g.setColor(Color.orange);
-			for (SensorMessage msg : msgs) {
+			for (SensorMessage<Value> msg : msgs) {
 				int y = (int) (dgh - (msg.getValues().get(0).getValue() / 35 * dgh) + yaxy1);
 				int x = (int) (xaxx1+(msg.getTimestamp() - ts0) / tsd * dgw);
 				if (lx >= 0 && ly >= 0) {
