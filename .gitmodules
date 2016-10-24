@@ -1,3 +1,0 @@
-[submodule "team_sensor/pi_python/py-beacon"]
-	path = team_sensor/pi_python/py-beacon
-	url = https://github.com/HaukeBu/py-beacon.git

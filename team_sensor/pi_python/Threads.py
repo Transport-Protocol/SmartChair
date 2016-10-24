@@ -12,7 +12,7 @@ class MQCommunicator (threading.Thread):
         self.q = json_queue
         self.communicator = communicator
 
-        self.setDaemon()
+        self.daemon = True
 
     def run(self):
         while True:
@@ -30,7 +30,7 @@ class SensorEvaluator (threading.Thread):
         self.function = hal_function
         self.interval_in_sec = interval_in_sec
 
-        self.setDaemon()
+        self.daemon = True
 
     def run(self):
         time.sleep(0.5)

@@ -7,7 +7,7 @@ import threading
 
 import find_serialport
 
-sys.path.append('/home/chair/git/team_sensor/team_sensor/pi_python/py-beacon')
+sys.path.append('/home/chair/git/SmartChair_sensor/team_sensor/pi_python/py-beacon')
 from proximity import Scanner
 
 scanner = Scanner(loops=3)
