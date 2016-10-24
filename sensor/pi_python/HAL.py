@@ -55,7 +55,8 @@ def sound_sensor(timestamp):
     json_list.append(msg_gen.pack_to_json(1, timestamp, "sound", [0], value))
     return json_list
 
-def temperatur(timestamp):
+
+def temperature(timestamp):
     json_list = []
     print("temperatur()")
     # get Values
@@ -66,7 +67,7 @@ def temperatur(timestamp):
 
     serial_mutex.acquire()
 
-    port.write(b'T')
+    port.write(b'ord("T")')
     port.flush()
 
     while not port.inWaiting():
@@ -92,14 +93,13 @@ def temperatur(timestamp):
     return json_list
 
 
-
 def serial_sensors(timestamp):
     # print("port is open: ", port.is_open)
     json_list = []
 
     serial_mutex.acquire()
 
-    port.write(b'P')
+    port.write(b'ord("P")')
     port.flush()
 
     while not port.inWaiting():
