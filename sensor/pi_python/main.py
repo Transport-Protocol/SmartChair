@@ -62,7 +62,7 @@ if args.test:
         threads.append(Threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.location))
 else:
     threads.append(Threads.SensorEvaluator(1, "SensorEvaluator_pressure", 1, 0.50, json_queue, HAL.serial_sensors))
-    threads.append(Threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2, 30, json_queue, HAL.temperatur))
+    threads.append(Threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2, 30, json_queue, HAL.temperature))
     threads.append(Threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, 1, json_queue, HAL.acceleration_sensor))
     threads.append(Threads.SensorEvaluator(3, "SensorEvaluator_location", 3, 0, json_queue, HAL.serial_sensors))
 
