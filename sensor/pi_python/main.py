@@ -50,7 +50,7 @@ if args.test:
     if args.temperature:
         print("temperature active!")
         threads.append(
-            Threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2, 30, json_queue, HAL.temperatur))
+            Threads.SensorEvaluator(2, "SensorEvaluator_temperature", 2, 30, json_queue, HAL.temperature))
 
     if args.acceleration:
         print("acceleration active!")
