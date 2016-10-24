@@ -1,0 +1,3 @@
+[submodule "team_sensor/pi_beacon"]
+	path = team_sensor/pi_beacon
+	url = https://github.com/HaukeBu/pi_beacon.git
