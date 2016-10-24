@@ -35,8 +35,9 @@ class SensorEvaluator (threading.Thread):
     def run(self):
         time.sleep(0.5)
         while True:
-            time.sleep(self.interval_in_sec)
             to_send = self.function(time.time()*1000)
 
             for json in to_send:
                 self.q.put(json)
+
+            time.sleep(self.interval_in_sec)
