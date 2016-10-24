@@ -157,7 +157,7 @@ public class DebugDataGenerator {
 		}
 		int o=rng.nextInt(SensorType.values().length);
 		SensorType type = SensorType.values()[o];
-		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis()+c*500);
+		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis());
 		String json = "";
 		try {
 			json = objectMapper.writeValueAsString(msg);
