@@ -14,7 +14,6 @@ import com.hawhamburg.sg.data.LocationValue;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.ConcurrentCache;
-import com.hawhamburg.sg.data.SynchronizedLinkedList;
 import com.hawhamburg.sg.data.Value;
 
 public class DataProvider {
