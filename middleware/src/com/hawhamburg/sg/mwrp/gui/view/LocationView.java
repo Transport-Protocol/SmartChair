@@ -12,18 +12,19 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.hawhamburg.sg.data.LocationValue;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.Value;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 
-public class DiagramView implements IView {
+public class LocationView implements IView {
 	private final MwrpCanvas canvas;
 	private Image backButton;
 	private final DataProvider dataProvider;
 
-	public DiagramView(DataProvider dp, MwrpCanvas canvas) {
+	public LocationView(DataProvider dp, MwrpCanvas canvas) {
 		this.canvas = canvas;
 		this.dataProvider = dp;
 		try {
@@ -39,38 +40,17 @@ public class DiagramView implements IView {
 		g.drawImage(backButton, 5, 5, 45, 45, 0, 0, 40, 40, null);
 		g.setStroke(new BasicStroke(2));
 		g.setColor(Color.black);
-		long tlength=30;
-		int xaxx1 = 50;
-		int xaxy1 = height - 30;
-		int xaxx2 = width - 30;
-		int xaxy2 = xaxy1;
-		int dgw = xaxx2 - xaxx1;
-
-		int yaxx1 = 50;
-		int yaxy1 = 60;
-		int yaxx2 = xaxx1;
-		int yaxy2 = xaxy1;
-		int dgh = yaxy2 - yaxy1;
-
-		g.drawLine(xaxx1, xaxy1, xaxx2, xaxy2);
-		g.drawLine(yaxx1, yaxy1, yaxx2, yaxy2);
-
-		List<SensorMessage> msgs = dataProvider.getDataForPastXSeconds(SensorType.temperature, tlength);
-		if (msgs!=null&&msgs.size() > 0) {
-			int lx = -1, ly = -1;
-			long ts0 = msgs.get(0).getTimestamp();
-			double tsd = msgs.get(msgs.size() - 1).getTimestamp() - ts0;
-
-			g.setColor(Color.orange);
-			for (SensorMessage<Value> msg : msgs) {
-				int y = (int) (dgh - (msg.getValues().get(0).getValue() / 35 * dgh) + yaxy1);
-				int x = (int) (xaxx1+(msg.getTimestamp() - ts0) / tsd * dgw);
-				if (lx >= 0 && ly >= 0) {
-					g.drawLine(lx, ly, x, y);
-				}
-				lx = x;
-				ly = y;
-			}
+		
+		LocationValue[] vals=dataProvider.getMostRecentLcoation();
+		if(vals==null)
+		{
+			g.setColor(Color.red);
+			g.drawString(MainView.ERROR_NO_DATA,width/2-fm.stringWidth(MainView.ERROR_NO_DATA)/2,height/2-fm.getHeight()/2);
+			return;
+		}
+		for(int i=0;i<vals.length;i++)
+		{
+			g.drawString("M"+(i+1)+": "+vals[i].getdB()+"dB", 5, 65+(fm.getHeight()+5)*i);
 		}
 	}
 

@@ -16,7 +16,7 @@ public enum SensorType {
 	}
 	SensorType()
 	{
-		this.cls=Value.class;
+		this(Value.class);
 	}
 	
 	public <T> Class<T> getValueObjectClass()
