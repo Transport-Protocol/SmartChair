@@ -14,6 +14,8 @@ port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
 # port = False
 
+gyroscope = False
+
 pressure_sensor_ids = list(range(0, 10))
 acceleration_sensor_ids = list(range(0, 3))
 test = list(range(0, 16))
@@ -86,6 +88,8 @@ def temperature(timestamp):
 
     # print("start_sequence valid")
     temperature = port.read(6)
+
+    serial_mutex.release()
 
     # get json
     temperature_value = [float(temperature)]
