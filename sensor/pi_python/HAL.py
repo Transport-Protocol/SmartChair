@@ -69,6 +69,7 @@ def temperature(timestamp):
 
     serial_mutex.acquire()
 
+    before = time.time()
     port.write(b'ord("T")')
     port.flush()
 
@@ -89,6 +90,7 @@ def temperature(timestamp):
     # print("start_sequence valid")
     temperature = port.read(6)
 
+    print("temperature: Serial Time needed: " + str(time.time() - before))
     serial_mutex.release()
 
     # get json
@@ -103,6 +105,7 @@ def serial_sensors(timestamp):
 
     serial_mutex.acquire()
 
+    before = time.time()
     port.write(b'ord("P")')
     port.flush()
 
@@ -129,6 +132,7 @@ def serial_sensors(timestamp):
         analogs.append(port.readline())
         i += 1
 
+    print("pressure: Serial Time needed: " + str(time.time()-before))
     serial_mutex.release()
 
     j = 0
@@ -143,10 +147,6 @@ def serial_sensors(timestamp):
         analog_values.append(int(analogs[j]))
         j += 1
 
-
-    # print("analogs: ", analog_values)
-    # print("temperature: ", temperature_value)
     json_list.append(msg_gen.pack_to_json(1, timestamp, "pressure", pressure_sensor_ids, analog_values))
-
 
     return json_list
