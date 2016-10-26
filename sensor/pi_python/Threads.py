@@ -3,7 +3,7 @@ import HAL
 import time
 
 
-class MQ_Communicator (threading.Thread):
+class MQCommunicator (threading.Thread):
     def __init__(self, thread_id, name, counter, json_queue, communicator):
         threading.Thread.__init__(self)
         self.thread_id = thread_id
@@ -11,6 +11,8 @@ class MQ_Communicator (threading.Thread):
         self.counter = counter
         self.q = json_queue
         self.communicator = communicator
+
+        self.daemon = True
 
     def run(self):
         while True:
@@ -28,10 +30,14 @@ class SensorEvaluator (threading.Thread):
         self.function = hal_function
         self.interval_in_sec = interval_in_sec
 
+        self.daemon = True
+
     def run(self):
+        time.sleep(0.5)
         while True:
-            time.sleep(self.interval_in_sec)
-            to_send = self.function()
+            to_send = self.function(time.time()*1000)
 
             for json in to_send:
                 self.q.put(json)
+
+            time.sleep(self.interval_in_sec)

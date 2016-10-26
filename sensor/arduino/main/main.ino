@@ -19,10 +19,12 @@ int addPin2   = 10;
 uint8_t readByte(int signalPin,bool *error){
     uint16_t byte = 0;
     bool correkt = true;
-    
+
     while(digitalRead(signalPin));
-    while(!digitalRead(signalPin));
     
+
+    while(!digitalRead(signalPin));
+        
     // read 8 bits and a parity bit
     for(int i = 0; i < 9; ++i) {
 
@@ -140,7 +142,7 @@ void readSensors(){
     digitalWrite(addPin0, (address & 0x1)?HIGH:LOW);
     digitalWrite(addPin1, (address & 0x2)?HIGH:LOW);
     digitalWrite(addPin2, (address & 0x4)?HIGH:LOW);
-    delay(1);
+    
     sensorValues[    address][sensorIndex] = analogRead(sensorPin0);
     sensorValues[8 + address][sensorIndex] = analogRead(sensorPin1);
     address+=1;
@@ -200,7 +202,6 @@ void sendThemperatureData(){
   Serial.println("T");  
   Serial.println(temperature);
   Serial.flush();
-    
 }
 
 
