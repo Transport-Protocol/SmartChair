@@ -19,12 +19,13 @@ gyroscope = False
 
 # generated Lists for easier json String building
 pressure_sensor_ids = list(range(0, 10))
-acceleration_sensor_ids = list(range(0, 3))
+acceleration_sensor_ids = list(range(0, 6))
 distance_sensor_ids = list(range(0, 1))
 test = list(range(0, 16))
 
 # mutual exclusion for serial connection
 serial_mutex = threading.RLock()
+
 
 def acceleration_sensor(timestamp):
     print("acceleration_sensor")
