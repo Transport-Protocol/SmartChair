@@ -55,13 +55,14 @@ def sound_sensor(timestamp):
 def temperature(timestamp):
     # print("temperatur()")
     start_sign = b'T'
+    start_sign_ord = b'ord("T")'
 
     json_list = []
 
     serial_mutex.acquire()
 
     before = time.time()
-    serial_establish_connection(port ,start_sign)
+    serial_establish_connection(port, start_sign_ord, start_sign)
 
     # print("start_sequence valid")
     temperature = port.read(6)
@@ -79,11 +80,12 @@ def pressure(timestamp):
     # print("pressure()")
     json_list = []
     start_sign = b'P'
+    start_sign_ord = b'ord("P")'
 
     serial_mutex.acquire()
 
     before = time.time()
-    serial_establish_connection(port, start_sign)
+    serial_establish_connection(port, start_sign_ord, start_sign)
 
     analogs = []
     analog_values = []
@@ -118,11 +120,12 @@ def distance_sensor(timestamp):
 
     json_list = []
     start_sign = b'D'
+    start_sign_ord = b'ord("D")'
 
     serial_mutex.acquire()
 
     before = time.time()
-    serial_establish_connection(port ,start_sign)
+    serial_establish_connection(port, start_sign_ord, start_sign)
 
     # print("start_sequence valid")
     temperature = port.read(6)
@@ -136,16 +139,17 @@ def distance_sensor(timestamp):
     return json_list
 
 
-def serial_establish_connection(specific_port, start_sign):
+def serial_establish_connection(specific_port, start_sign_ord, start_sign):
 
-    specific_port.write(start_sign)
+    specific_port.write(start_sign_ord)
     specific_port.flush()
+
     while not specific_port.inWaiting():
         time.sleep(0.001)
 
     start_sequence = specific_port.read()
 
-    while not start_sequence == start_sign:
+    while start_sequence != start_sign:
         # print("start_sequence not valid")
         time.sleep(0.001)
         start_sequence = specific_port.read()
