@@ -11,7 +11,7 @@ def get_serial_port():
     output_lines.sort()
 
     if len(output_lines) > 0:
-        return output_lines[-1]
+        return "/dev/" + output_lines[-1]
     else:
         return False
 
