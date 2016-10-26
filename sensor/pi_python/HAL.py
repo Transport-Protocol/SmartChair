@@ -8,34 +8,27 @@ import threading
 import find_serialport
 
 
-port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
+# serial port initialisation
+port = serial.Serial(find_serialport.get_serial_port(), 9600, timeout=None)
+# port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
-# port = serial.Serial(find_serialport.get_serial_port(), 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
 # port = False
 
 gyroscope = False
 
+# generated Lists for easier json String building
 pressure_sensor_ids = list(range(0, 10))
 acceleration_sensor_ids = list(range(0, 3))
+distance_sensor_ids = list(range(0, 1))
 test = list(range(0, 16))
+
+# mutual exclusion for serial connection
 serial_mutex = threading.RLock()
 
-def distance_sensor(timestamp):
-    json_list = []
-    print("distance_sensor()")
-    # get Values
-    value = [1]
-    # Validation
-
-    # get json
-    json_list.append(msg_gen.pack_to_json(1, timestamp, "distance", [0], value))
-    return json_list
-
-
 def acceleration_sensor(timestamp):
-    json_list = []
     print("acceleration_sensor")
+    json_list = []
 
     # get json
     json_list.append(
@@ -47,8 +40,8 @@ def acceleration_sensor(timestamp):
 
 
 def sound_sensor(timestamp):
-    json_list = []
     print("sound_sensor()")
+    json_list = []
     # get Values
     value = [1]
     # Validation
@@ -59,33 +52,15 @@ def sound_sensor(timestamp):
 
 
 def temperature(timestamp):
-    json_list = []
-    print("temperatur()")
-    # get Values
-    value = [1]
-    # Validation
+    # print("temperatur()")
+    start_sign = b'T'
 
     json_list = []
 
     serial_mutex.acquire()
 
     before = time.time()
-    port.write(b'ord("T")')
-    port.flush()
-
-    while not port.inWaiting():
-        time.sleep(0.001)
-        # print("waiting for lines")
-
-    start_sequence = port.read()
-    # print(start_sequence)
-
-    while not start_sequence == b'T':
-        # print("start_sequence not valid")
-        time.sleep(0.001)
-        start_sequence = port.read()
-
-    port.read(2)
+    serial_establish_connection(port ,start_sign)
 
     # print("start_sequence valid")
     temperature = port.read(6)
@@ -99,31 +74,16 @@ def temperature(timestamp):
     return json_list
 
 
-def serial_sensors(timestamp):
-    # print("port is open: ", port.is_open)
+def pressure(timestamp):
+    # print("pressure()")
     json_list = []
+    start_sign = b'P'
 
     serial_mutex.acquire()
 
     before = time.time()
-    port.write(b'ord("P")')
-    port.flush()
+    serial_establish_connection(port, start_sign)
 
-    while not port.inWaiting():
-        time.sleep(0.001)
-        # print("waiting for lines")
-
-    start_sequence = port.read()
-    # print(start_sequence)
-
-    while not start_sequence == b'P':
-        # print("start_sequence not valid")
-        time.sleep(0.001)
-        start_sequence = port.read()
-
-    port.read(2)
-
-    # print("start_sequence valid")
     analogs = []
     analog_values = []
 
@@ -150,3 +110,43 @@ def serial_sensors(timestamp):
     json_list.append(msg_gen.pack_to_json(1, timestamp, "pressure", pressure_sensor_ids, analog_values))
 
     return json_list
+
+
+def distance_sensor(timestamp):
+    print("distance()")
+
+    json_list = []
+    start_sign = b'D'
+
+    serial_mutex.acquire()
+
+    before = time.time()
+    serial_establish_connection(port ,start_sign)
+
+    # print("start_sequence valid")
+    temperature = port.read(6)
+
+    print("Distance: Serial Time needed: " + str(time.time() - before))
+    serial_mutex.release()
+
+    # get json
+    temperature_value = [float(temperature)]
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], temperature_value))
+    return json_list
+
+
+def serial_establish_connection(specific_port, start_sign):
+
+    specific_port.write(start_sign)
+    specific_port.flush()
+    while not specific_port.inWaiting():
+        time.sleep(0.001)
+
+    start_sequence = specific_port.read()
+
+    while not start_sequence == start_sign:
+        # print("start_sequence not valid")
+        time.sleep(0.001)
+        start_sequence = specific_port.read()
+
+    specific_port.read(2)
