@@ -19,6 +19,8 @@ import com.hawhamburg.sg.data.Value;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 
+import static java.lang.Math.*;
+
 public class LocationView implements IView {
 	private static final int MIN_DB_VALUE=25;
 	private static final int MAX_DB_VALUE=95;
@@ -69,16 +71,23 @@ public class LocationView implements IView {
 		int[] distance=new int[vals.length];
 		for(int i=0;i<distance.length;i++)
 		{
-			distance[i]=Math.abs(vals[i].getdB()+MIN_DB_VALUE);
+			distance[i]=abs(vals[i].getdB()+MIN_DB_VALUE);
 		}
 		
-		double a=(Math.pow(distance[0],2)-Math.pow(distance[1],2)+Math.pow(MAX_DB_DIFF,2))/(2*MAX_DB_DIFF);
-		double h =Math.sqrt(Math.pow(distance[0], 2)-Math.pow(a, 2));
-		double pxy=MAX_DB_DIFF*(a/MAX_DB_DIFF);
-		double x=pxy+h;
-		double y=pxy-h;
-		g.drawString("x: "+x, 190, 5+fm.getHeight());
-		g.drawString("y: "+y, 190, 5+fm.getHeight()*2);
+		double gamma = acos((pow(distance[0],2)+pow(distance[1],2)-pow(MAX_DB_DIFF,2))/(2*distance[0]*distance[1]));
+		double a=0.5*distance[0]*distance[1]*sin(gamma);
+		
+		double h=2*(a/MAX_DB_DIFF);
+		
+		double gamma2 = acos((pow(distance[0],2)+pow(distance[2],2)-pow(MAX_DB_DIFF,2))/(2*distance[0]*distance[2]));
+		double a2=0.5*distance[0]*distance[2]*sin(gamma2);
+		
+		double h2=2*(a2/MAX_DB_DIFF);
+		g.drawString("x: "+h, 190, 5+fm.getHeight());
+		g.drawString("y: "+h2, 190, 5+fm.getHeight()*2);
+		
+		g.setColor(Color.magenta);
+		g.fillRect(FRAME_X+(int)(h/MAX_DB_DIFF*(width-FRAME_X*2)), FRAME_Y+(int)(h2/MAX_DB_DIFF*(height-FRAME_Y-FRAME_X)), 3, 3);
 	}
 
 	@Override
