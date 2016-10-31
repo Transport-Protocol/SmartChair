@@ -147,14 +147,8 @@ public class DebugDataGenerator {
 	
 	public static String getSensorMessageAsJson()
 	{
-		Random rng=new Random();
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<Value> values = new LinkedList<>();
-		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
-		{
-			Value value = new Value(valueId++,rng.nextInt(35));
-			values.add(value);
-		}
+		Random rng=new Random();
 		int o=rng.nextInt(SensorType.values().length);
 		SensorType type = SensorType.values()[o];
 		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis());
