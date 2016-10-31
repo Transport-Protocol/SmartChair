@@ -4,67 +4,81 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
+import com.hawhamburg.sg.data.LocationValue;
+import com.hawhamburg.sg.data.SensorValue;
 
 class RandomDataGenerator {
 	private static int valueId = 0;
 	private static final int MAXVALUESPERDATA = 10;
 
-	List<Value> getTempData()
+	static List<AbstractValue> getTempData()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(35));
+			AbstractValue value = new SensorValue(valueId++,rng.nextInt(35));
 			values.add(value);
 		}
 		return values;
 	}
 	
-	List<Value> getPressureData()
+	static List<AbstractValue> getPressureData()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(1024));
+			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
 	}
 	
-	List<Value> getAccelerationData()
+	static List<AbstractValue> getAccelerationData()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(35));
+			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
 	}
 	
-	List<Value> getDistance()
+	static List<AbstractValue> getDistanceData()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(35));
+			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
 	}
 	
-	List<Value> getGyroscope()
+	static List<AbstractValue> getGyroscopeData()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(35));
+			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			values.add(value);
+		}
+		return values;
+	}
+	
+	static List<AbstractValue> getLocationValueData()
+	{
+		Random rng=new Random();
+		List<AbstractValue> values = new LinkedList<>();
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
+		{
+			AbstractValue value = new LocationValue("0613ff4c000c0e00b62bd6450252fce7",1,rng.nextInt(4)+1,-1*(rng.nextInt(70)+25));
 			values.add(value);
 		}
 		return values;

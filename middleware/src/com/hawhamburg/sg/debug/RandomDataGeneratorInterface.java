@@ -1,5 +1,12 @@
 package com.hawhamburg.sg.debug;
 
-interface RandomDataGeneratorInterface {
+import java.util.List;
 
+import com.hawhamburg.sg.data.AbstractValue;
+
+@FunctionalInterface
+interface RandomDataGeneratorInterface {
+	
+	List<AbstractValue> invoke();
+	
 }
