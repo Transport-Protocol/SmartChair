@@ -14,7 +14,8 @@ plugins{
 //         identity = file("${System.properties['user.home']}/.ssh/id_rsa")
 //     }
 // }
-apply from: "remotes"
+if (file('remotes').exists())
+	apply from: "remotes"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -58,7 +59,9 @@ dependencies {
     // testCompile 'junit:junit:4.12'
     
 }
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
 
 task showPlatformVersion << {
     println ssh.version

@@ -22,7 +22,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.view.IView;
 import com.hawhamburg.sg.mwrp.gui.view.MainView;

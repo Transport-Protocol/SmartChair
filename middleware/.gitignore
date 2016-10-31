@@ -19,7 +19,11 @@ hs_err_pid*
 .project
 .classpath
 
+
 #Config Files
 /mwrp.properties
 db.properties
 remotes
+
+#linux
+.directory

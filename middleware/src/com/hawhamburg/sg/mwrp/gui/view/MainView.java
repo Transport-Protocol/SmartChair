@@ -12,7 +12,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.hawhamburg.sg.data.SensorType;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 
@@ -33,10 +33,11 @@ public class MainView implements IView {
 	private static final int absBackP67Y = 120;
 	private static final int absBackP89Y = 160;
 	
-	private static final String ERROR_NO_DATA="No data available!";
+	static final String ERROR_NO_DATA="No data available!";
 
 	private Image img;
 	private Image statsButton;
+	private Image locButton;
 	private final MwrpCanvas canvas;
 	private final DataProvider dataProvider;
 
@@ -46,6 +47,7 @@ public class MainView implements IView {
 		try {
 			img = ImageIO.read(getClass().getClassLoader().getResourceAsStream("resources/mwrpbg.png"));
 			statsButton = ImageIO.read(getClass().getClassLoader().getResourceAsStream("resources/btn_statistics.png"));
+			locButton = ImageIO.read(getClass().getClassLoader().getResourceAsStream("resources/btn_loc.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +59,7 @@ public class MainView implements IView {
 		g.drawImage(img, 0, 0, width, height, 0, 0, width, height, null);
 		g.setColor(fontColor);
 
-		List<Value> t = dataProvider.getMostRecent(SensorType.temperature);
+		List<AbstractValue> t = dataProvider.getMostRecent(SensorType.temperature);
 		
 		if (t!=null&&t.size() > 0)
 			g.drawString(String.format("Temp: %1$,.2f °C", t.get(0).getValue()), 5, 17);
@@ -85,6 +87,7 @@ public class MainView implements IView {
 			g.drawString(ERROR_NO_DATA,width/2-fm.stringWidth(ERROR_NO_DATA)/2,height/2-fm.getHeight()/2);
 		}
 		g.drawImage(statsButton, 5, 195, 45, 235, 0, 0, 40, 40, null);
+		g.drawImage(locButton, 50, 195, 90, 235, 0, 0, 40, 40, null);
 	}
 
 	@Override
@@ -92,6 +95,9 @@ public class MainView implements IView {
 		e.consume();
 		if (MathHelper.geoIntersect(5, 195, 45, 235, e.getX(), e.getY())) {
 			canvas.pushView(new DiagramView(dataProvider,canvas));
+		}
+		else if(MathHelper.geoIntersect(50, 195, 90, 235, e.getX(), e.getY())) {
+			canvas.pushView(new LocationView(dataProvider,canvas));
 		}
 	}
 

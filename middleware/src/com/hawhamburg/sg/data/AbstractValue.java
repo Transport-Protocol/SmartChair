@@ -1,25 +1,24 @@
 package com.hawhamburg.sg.data;
 
+import org.influxdb.dto.Point.Builder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Value {
+public abstract class AbstractValue {
 	
-	private int id;
 	private double value;
 	
-	@JsonCreator
-	public Value(@JsonProperty("id") int id, @JsonProperty("value") double value){
-		this.id = id;
+	public AbstractValue( double value){
 		this.value = value;
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
 	public double getValue() {
 		return value;
+	}
+	
+	public void addValueToPoint(Builder pointBuilder){
+		
 	}
 	
 }
