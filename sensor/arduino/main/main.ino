@@ -8,7 +8,7 @@ int addPin1   = 9;
 int addPin2   = 10;
 
 #define BUFFER_SIZE 8
-#define BAUDRATE 38400
+#define BAUDRATE 9600
 
 /*void setup(void)
  * Will be Called once of the Micro Controller Powers Up
