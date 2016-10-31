@@ -1,8 +1,9 @@
 package com.hawhamburg.sg.debug;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -22,11 +23,17 @@ import com.hawhamburg.sg.mwrp.RabbitMqConstants;
 
 public class DebugDataGenerator {
 	
-	private static final int MAXVALUESPERDATA = 10;
 	private static final int STANDARDNUMDATA = 10;
 	private static final int STANDARDDELAY = 1;
-	private static int valueId = 0;
-	
+	private static final Map<SensorType, RandomDataGeneratorInterface> generatorMap = new HashMap<>();
+	static
+	{
+		generatorMap.put(SensorType.temperature, RandomDataGenerator::getTempData);
+		generatorMap.put(SensorType.distance, RandomDataGenerator::getDistanceData);
+		generatorMap.put(SensorType.pressure, RandomDataGenerator::getPressureData);
+		generatorMap.put(SensorType.acceleration, RandomDataGenerator::getAccelerationData);
+		generatorMap.put(SensorType.gyroscope, RandomDataGenerator::getGyroscopeData);
+	}
 	public static void main(String[] args) 
 	{
 		String modus = null;
@@ -132,7 +139,7 @@ public class DebugDataGenerator {
 		    
 		    for(int i = 0; i<numData; i++)
 		    {
-		    	ChairMessage msg = getChairMessage();
+		    	ChairMessage<?> msg = getChairMessage();
 		    	connector.write(msg);
 		    	
 				Thread.sleep(delay);
@@ -147,17 +154,13 @@ public class DebugDataGenerator {
 	
 	public static String getSensorMessageAsJson()
 	{
-		Random rng=new Random();
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<Value> values = new LinkedList<>();
-		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
-		{
-			Value value = new Value(valueId++,rng.nextInt(35));
-			values.add(value);
-		}
+		Random rng=new Random();
 		int o=rng.nextInt(SensorType.values().length);
 		SensorType type = SensorType.values()[o];
-		SensorMessage msg = new SensorMessage(1,type, values,System.currentTimeMillis());
+		List<AbstractValue> values = generatorMap.get(type).invoke();
+		
+		SensorMessage<?> msg = new SensorMessage<>(1,type, values,System.currentTimeMillis());
 		String json = "";
 		try {
 			json = objectMapper.writeValueAsString(msg);
@@ -182,18 +185,14 @@ public class DebugDataGenerator {
 		return json;
 	}
 	
-	public static ChairMessage getChairMessage()
+	public static ChairMessage<?> getChairMessage()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
-		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
-		{
-			Value value = new Value(valueId++,rng.nextInt(1024));
-			values.add(value);
-		}
 		int o=rng.nextInt(SensorType.values().length);
 		SensorType type = SensorType.values()[o];
-		ChairMessage msg = new ChairMessage("1", 1, type, values, System.currentTimeMillis());
+		
+		List<AbstractValue> values = generatorMap.get(type).invoke();
+		ChairMessage<?> msg = new ChairMessage<>("1", 1, type, values, System.currentTimeMillis());
 		return msg;
 	}
 

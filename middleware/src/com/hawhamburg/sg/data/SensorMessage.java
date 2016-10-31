@@ -1,34 +1,40 @@
 package com.hawhamburg.sg.data;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SensorMessage {
+public class SensorMessage<T extends AbstractValue> {
 	
 	private final static int DATA_VERSION = 1;
+	private final static ObjectMapper mapper=new ObjectMapper();
 
 	private long timestamp;
 	private int version;
 	private SensorType sensortype;
-	private List<Value> values;
+	private List<T> values;
 
 	//private SensorMessage() {}
 	@JsonCreator(mode=Mode.PROPERTIES)
 	public SensorMessage(@JsonProperty("version") int version,
 						@JsonProperty("sensortype") SensorType sensortype,
-						@JsonProperty("values") List<Value> values,
+						@JsonProperty("values") List<T> values,
 						@JsonProperty("timestamp") long timestamp) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.version = version;
-		this.timestamp=timestamp==0?System.currentTimeMillis():timestamp;
+		this.timestamp=timestamp;
 	}
 	
 	public SensorMessage(SensorType sensortype,
-						List<Value> values) {
+						List<T> values) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.version = DATA_VERSION;
@@ -42,12 +48,22 @@ public class SensorMessage {
 		return sensortype;
 	}
 
-	public List<Value> getValues() {
+	public List<T> getValues() {
 		return values;
 	}
 	
 	public long getTimestamp()
 	{
 		return timestamp;
+	}
+	
+	public static SensorMessage<?> parseJson(byte[] b) throws JsonProcessingException, IOException
+	{
+		JsonNode node=mapper.readTree(b);
+		SensorType sensorType= SensorType.valueOf(node.get("sensortype").asText());
+		JavaType t=mapper.getTypeFactory().constructParametricType(SensorMessage.class, sensorType.getSensorValueClass());
+		
+		return mapper.convertValue(node, t);
+		
 	}
 }
