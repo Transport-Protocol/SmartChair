@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.hawhamburg.sg.mwrp.DataProvider;
 
 public final class MwrpFrame extends JFrame {

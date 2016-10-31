@@ -5,22 +5,29 @@ public enum SensorType {
 	temperature,
 	acceleration,
 	gyroscope,
-	location(LocationValue.class),
+	location(LocationValue.class,AbsoluteLocationValue.class),
 	distance,
 	microphone;
+
+	private Class<?> sensorCls;
+	private Class<?> chairCls;
 	
-	private Class<?> cls;
-	SensorType(Class<?> cls)
+	SensorType(Class<?> sensorCls, Class<?> chairCls)
 	{
-		this.cls=cls;
+		this.sensorCls=sensorCls;
+		this.chairCls=chairCls;
 	}
 	SensorType()
 	{
-		this(Value.class);
+		this(SensorValue.class,SensorValue.class);
 	}
 	
-	public <T> Class<T> getValueObjectClass()
+	public <T> Class<T> getSensorValueClass()
 	{
-		return (Class<T>)cls;
+		return (Class<T>)sensorCls;
+	}	
+	public <T> Class<T> getChairValueClass()
+	{
+		return (Class<T>)chairCls;
 	}
 }

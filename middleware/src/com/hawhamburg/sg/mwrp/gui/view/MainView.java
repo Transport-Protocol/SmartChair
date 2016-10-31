@@ -12,7 +12,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.hawhamburg.sg.data.SensorType;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 
@@ -59,7 +59,7 @@ public class MainView implements IView {
 		g.drawImage(img, 0, 0, width, height, 0, 0, width, height, null);
 		g.setColor(fontColor);
 
-		List<Value> t = dataProvider.getMostRecent(SensorType.temperature);
+		List<AbstractValue> t = dataProvider.getMostRecent(SensorType.temperature);
 		
 		if (t!=null&&t.size() > 0)
 			g.drawString(String.format("Temp: %1$,.2f °C", t.get(0).getValue()), 5, 17);

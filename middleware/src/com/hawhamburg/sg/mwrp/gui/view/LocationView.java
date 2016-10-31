@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 import com.hawhamburg.sg.data.LocationValue;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 
@@ -70,7 +70,7 @@ public class LocationView implements IView {
 		
 		for(int i=0;i<vals.length;i++)
 		{
-			int v=vals[i]==null?0:vals[i].getdB();
+			int v=vals[i]==null?0:(int)vals[i].getValue();
 			g.drawString("M"+(i+1)+": "+(v==0?"N/A":v+"dB"), 50+(i/2*70), 5+fm.getHeight()+(fm.getHeight()+5)*(i%2));
 		}
 		int[] distance=new int[vals.length];
@@ -82,7 +82,7 @@ public class LocationView implements IView {
 				g.drawString(String.format(ERROR_NO_SIGNAL,i+1),width/2-fm.stringWidth(ERROR_NO_SIGNAL)/2,height/2-fm.getHeight()/2);
 				return;
 			}
-			distance[i]=abs(vals[i].getdB()+MIN_DB_VALUE);
+			distance[i]=abs((int)vals[i].getValue()+MIN_DB_VALUE);
 		}
 		
 		Point p1=calcPoint(distance[0],distance[1],distance[2]);

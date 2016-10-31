@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SensorMessage<T> {
+public class SensorMessage<T extends AbstractValue> {
 	
 	private final static int DATA_VERSION = 1;
 	private final static ObjectMapper mapper=new ObjectMapper();
@@ -61,7 +61,7 @@ public class SensorMessage<T> {
 	{
 		JsonNode node=mapper.readTree(b);
 		SensorType sensorType= SensorType.valueOf(node.get("sensortype").asText());
-		JavaType t=mapper.getTypeFactory().constructParametricType(SensorMessage.class, sensorType.getValueObjectClass());
+		JavaType t=mapper.getTypeFactory().constructParametricType(SensorMessage.class, sensorType.getSensorValueClass());
 		
 		return mapper.convertValue(node, t);
 		

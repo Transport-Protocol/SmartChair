@@ -14,7 +14,7 @@ import com.hawhamburg.sg.data.LocationValue;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.ConcurrentCache;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 
 public class DataProvider {
 	private Map<SensorType, ConcurrentCache<SensorMessage>> valueLists = new HashMap<>();
@@ -53,7 +53,7 @@ public class DataProvider {
 		}
 	}
 
-	public List<Value> getMostRecent(SensorType type) {
+	public List<AbstractValue> getMostRecent(SensorType type) {
 		ConcurrentCache<SensorMessage> l = valueLists.get(type);
 		try {
 			l.readLock();

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.data.SensorType;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -149,10 +149,10 @@ public class DebugDataGenerator {
 	{
 		Random rng=new Random();
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(35));
+			AbstractValue value = new AbstractValue(valueId++,rng.nextInt(35));
 			values.add(value);
 		}
 		int o=rng.nextInt(SensorType.values().length);
@@ -185,10 +185,10 @@ public class DebugDataGenerator {
 	public static ChairMessage getChairMessage()
 	{
 		Random rng=new Random();
-		List<Value> values = new LinkedList<>();
+		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			Value value = new Value(valueId++,rng.nextInt(1024));
+			AbstractValue value = new AbstractValue(valueId++,rng.nextInt(1024));
 			values.add(value);
 		}
 		int o=rng.nextInt(SensorType.values().length);
