@@ -7,7 +7,7 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Point.Builder;
 
 import com.hawhamburg.sg.data.ChairMessage;
-import com.hawhamburg.sg.data.Value;
+import com.hawhamburg.sg.data.AbstractValue;
 
 public class DBConnector {
 	
@@ -47,7 +47,7 @@ public class DBConnector {
 
 //		 System.out.println("writing msg to db: " + msg.getSensortype());
 		 Builder pointBuilder = Point.measurement(msg.getSensortype().name()).time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-         for (Value v : msg.getValues()) {
+         for (AbstractValue v : msg.getValues()) {
 //        	 System.out.println("Adding Value to point: " + String.valueOf(v.getId()) + ", " + v.getValue());
         	 pointBuilder.addField(String.valueOf(v.getId()), v.getValue());
          }
