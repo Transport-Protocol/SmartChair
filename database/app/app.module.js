@@ -10,15 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
-var app_component_1 = require('./app.component');
+var app_component_1 = require('./pressure.component.ts');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule],
-            declarations: [app_component_1.AppComponentPressure, app_component_1.AppComponentTemperature],
-            bootstrap: [app_component_1.AppComponentPressure, app_component_1.AppComponentTemperature]
+            declarations: [app_component_1.PressureComponent, app_component_1.AppComponentTemperature],
+            bootstrap: [app_component_1.PressureComponent, app_component_1.AppComponentTemperature]
         }), 
         __metadata('design:paramtypes', [])
     ], AppModule);

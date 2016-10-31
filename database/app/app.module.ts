@@ -1,10 +1,11 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppComponentPressure, AppComponentTemperature }   from './app.component';
+import { PressureComponent }   from './pressure.component';
+import { TemperatureComponent }   from './temperature.component';
 
 @NgModule({
     imports:      [ BrowserModule ],
-    declarations: [ AppComponentPressure, AppComponentTemperature ],
-    bootstrap:    [ AppComponentPressure, AppComponentTemperature ]
+    declarations: [ PressureComponent, TemperatureComponent ],
+    bootstrap:    [ PressureComponent, TemperatureComponent ]
 })
 export class AppModule { }
