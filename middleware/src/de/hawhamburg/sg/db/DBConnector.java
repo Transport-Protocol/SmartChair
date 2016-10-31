@@ -44,16 +44,17 @@ public class DBConnector {
 	}
 	
 	 private Point chairMessageToPoint(ChairMessage msg){
-
-//		 System.out.println("writing msg to db: " + msg.getSensortype());
-		 Builder pointBuilder = Point.measurement(msg.getSensortype().name()).time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-         for (AbstractValue v : msg.getValues()) {
-//        	 System.out.println("Adding Value to point: " + String.valueOf(v.getId()) + ", " + v.getValue());
-        	 pointBuilder.addField(String.valueOf(v.getId()), v.getValue());
-         }
-         pointBuilder.tag("ChairUUID", msg.getDeviceUuid());
-         Point point = pointBuilder.build();
-//         System.out.println(point.toString());
-         return point;
+//		 TODO
+//
+////		 System.out.println("writing msg to db: " + msg.getSensortype());
+//		 Builder pointBuilder = Point.measurement(msg.getSensortype().name()).time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+//         for (AbstractValue v : msg.getValues()) {
+////        	 System.out.println("Adding Value to point: " + String.valueOf(v.getId()) + ", " + v.getValue());
+//        	 pointBuilder.addField(String.valueOf(v.getId()), v.getValue());
+//         }
+//         pointBuilder.tag("ChairUUID", msg.getDeviceUuid());
+//         Point point = pointBuilder.build();
+////         System.out.println(point.toString());
+         return null;
 	 }
 }
