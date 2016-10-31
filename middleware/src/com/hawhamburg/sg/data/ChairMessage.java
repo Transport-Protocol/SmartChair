@@ -3,6 +3,8 @@ package com.hawhamburg.sg.data;
 import java.io.IOException;
 import java.util.List;
 
+import org.influxdb.dto.Point.Builder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -68,5 +70,9 @@ public class ChairMessage<T extends AbstractValue> {
 		
 		return mapper.convertValue(node, t);
 		
+	}
+	public void addValuesToPoint(Builder pointBuilder){
+		for (T v : getValues())
+			v.addValueToPoint(pointBuilder);
 	}
 }

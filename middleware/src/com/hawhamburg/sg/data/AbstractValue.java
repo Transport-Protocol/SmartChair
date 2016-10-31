@@ -1,5 +1,7 @@
 package com.hawhamburg.sg.data;
 
+import org.influxdb.dto.Point.Builder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,6 +15,10 @@ public abstract class AbstractValue {
 	
 	public double getValue() {
 		return value;
+	}
+	
+	public void addValueToPoint(Builder pointBuilder){
+		
 	}
 	
 }
