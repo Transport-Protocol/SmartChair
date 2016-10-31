@@ -177,7 +177,7 @@ void sendData(){
  */
 int avarage(int index){
   int toret=0;
-  for(int i = -1;i<BUFFER_SIZE;i++){
+  for(int i = 0;i<BUFFER_SIZE;i++){
     toret+=sensorValues[index][i];
   }
   return toret/BUFFER_SIZE;
