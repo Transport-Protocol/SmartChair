@@ -13,12 +13,15 @@ echo "check for git"
 command -v git >/dev/null 2>&1 || { echo >&2 "I require git but it's not installed.  Aborting."; exit 1; }
 
 echo "checkout git"
-git clone https://github.com/Transport-Protocol/SmartChair.git
+git clone https://github.com/Transport-Protocol/SmartChair.git;
 
-cd "SmartChair\middleware"
+cd "SmartChair\middleware";
 
 echo "run gradle build script"
 if [[ -x "gradlew" ]]
-./gradle buildMWRP
+./gradle buildMWRP;
+
+echo "setting up the MQ"
+rabbitmqadmin -q import rabbit.config || { echo >&2 "failed to load MQ config file please fix and try again"; }
 
 echo "everything seems in order, you may now change config values and start mwrp"
