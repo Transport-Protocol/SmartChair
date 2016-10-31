@@ -1,8 +1,8 @@
 #include <inttypes.h>
 
-int sensorPin0 = A0;    // select the input pin for the potentiometer
-int sensorPin1 = A1;    // select the input pin for the potentiometer
-int sensorPin2 = A2;    // select the input pin for the potentiometer
+int sensorPin0 = A0;    // pressure seat 
+int sensorPin1 = A1;    // pressure back rest
+int sensorPin2 = A2;    // distance
 int addPin0   = 8;
 int addPin1   = 9;
 int addPin2   = 10;
@@ -16,17 +16,14 @@ int addPin2   = 10;
 void setup() {
     Serial.begin(BAUDRATE); // init serail Connection
 
-    
     pinMode(addPin0, OUTPUT); // Sets the Pins used for the Multiplexer address line to Output
     pinMode(addPin1, OUTPUT);
     pinMode(addPin2, OUTPUT);
   
-    
     digitalWrite(addPin0, LOW); //And Puts them in a defined state
     digitalWrite(addPin1, LOW);
     digitalWrite(addPin2, LOW);
 
-  
     pinMode(11,OUTPUT);
     pinMode(12,INPUT);
 }
@@ -119,7 +116,7 @@ int hoehe[BUFFER_SIZE];
 int sensorIndex=0;
 
 /* void readSensors(void)
- * reades all sensores connected to the arduino and stores the falue in a List.
+ * reads pressure and distance sensors connected to the arduino and stores the value in an array.
  */
 void readSensors(){
   int address=0;
@@ -185,7 +182,7 @@ int avarage(int index){
 
 
 /* void sendPressureData(void)
- * Calculates the  avarage value of all the Connected sensors and sends it over serial
+ * Calculates the avarage value of all the Connected sensors and sends it over serial
  */
 void sendPressureData(){
   Serial.println("P");
