@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +23,8 @@ import com.hawhamburg.sg.mwrp.gui.MwrpCanvas;
 import static java.lang.Math.*;
 
 public class LocationView implements IView {
+	private static final String ERROR_NO_SIGNAL="No signal from beacon %d!";
+	
 	private static final int MIN_DB_VALUE=25;
 	private static final int MAX_DB_VALUE=95;
 	private static final int MAX_DB_DIFF=MAX_DB_VALUE-MIN_DB_VALUE;
@@ -64,30 +67,51 @@ public class LocationView implements IView {
 			g.drawString(MainView.ERROR_NO_DATA,width/2-fm.stringWidth(MainView.ERROR_NO_DATA)/2,height/2-fm.getHeight()/2);
 			return;
 		}
+		
 		for(int i=0;i<vals.length;i++)
 		{
-			g.drawString("M"+(i+1)+": "+vals[i].getdB()+"dB", 50+(i/2*70), 5+fm.getHeight()+(fm.getHeight()+5)*(i%2));
+			int v=vals[i]==null?0:vals[i].getdB();
+			g.drawString("M"+(i+1)+": "+(v==0?"N/A":v+"dB"), 50+(i/2*70), 5+fm.getHeight()+(fm.getHeight()+5)*(i%2));
 		}
 		int[] distance=new int[vals.length];
 		for(int i=0;i<distance.length;i++)
 		{
+			if(vals[i]==null)
+			{
+				g.setColor(Color.red);
+				g.drawString(String.format(ERROR_NO_SIGNAL,i+1),width/2-fm.stringWidth(ERROR_NO_SIGNAL)/2,height/2-fm.getHeight()/2);
+				return;
+			}
 			distance[i]=abs(vals[i].getdB()+MIN_DB_VALUE);
 		}
 		
-		double gamma = acos((pow(distance[0],2)+pow(distance[1],2)-pow(MAX_DB_DIFF,2))/(2*distance[0]*distance[1]));
-		double a=0.5*distance[0]*distance[1]*sin(gamma);
+		Point p1=calcPoint(distance[0],distance[1],distance[2]);
+		
+		Point p2=calcPoint(distance[3],distance[2],distance[1]);
+
+		double x=p1.getX();
+		double y=p1.getY();
+		
+		g.drawString("x: "+(int)x, 190, 5+fm.getHeight());
+		g.drawString("y: "+(int)y, 190, 5+fm.getHeight()*2);
+		
+		g.setColor(Color.magenta);
+		g.fillRect(FRAME_X+(int)(x/MAX_DB_DIFF*(width-FRAME_X*2)), FRAME_Y+(int)(y/MAX_DB_DIFF*(height-FRAME_Y-FRAME_X)), 3, 3);
+	}
+	
+	private Point calcPoint(int d1,int d2, int d3)
+	{
+		
+		double gamma = acos((pow(d1,2)+pow(d2,2)-pow(MAX_DB_DIFF,2))/(2*d1*d2));
+		double a=0.5*d1*d2*sin(gamma);
 		
 		double h=2*(a/MAX_DB_DIFF);
 		
-		double gamma2 = acos((pow(distance[0],2)+pow(distance[2],2)-pow(MAX_DB_DIFF,2))/(2*distance[0]*distance[2]));
-		double a2=0.5*distance[0]*distance[2]*sin(gamma2);
+		double gamma2 = acos((pow(d1,2)+pow(d3,2)-pow(MAX_DB_DIFF,2))/(2*d1*d3));
+		double a2=0.5*d1*d3*sin(gamma2);
 		
 		double h2=2*(a2/MAX_DB_DIFF);
-		g.drawString("x: "+h, 190, 5+fm.getHeight());
-		g.drawString("y: "+h2, 190, 5+fm.getHeight()*2);
-		
-		g.setColor(Color.magenta);
-		g.fillRect(FRAME_X+(int)(h/MAX_DB_DIFF*(width-FRAME_X*2)), FRAME_Y+(int)(h2/MAX_DB_DIFF*(height-FRAME_Y-FRAME_X)), 3, 3);
+		return new Point((int)h2,(int)h);
 	}
 
 	@Override
