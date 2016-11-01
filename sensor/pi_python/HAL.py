@@ -9,7 +9,7 @@ import find_serialport
 
 
 # serial port initialisation
-port = serial.Serial(find_serialport.get_serial_port(), 9600, timeout=None)
+port = serial.Serial(find_serialport.get_serial_port(), 38400, timeout=None)
 # port = serial.Serial("/dev/ttyUSB0", 9600, timeout=None)
 # port = serial.Serial("/dev/tty.wchusbserial410", 9600, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)

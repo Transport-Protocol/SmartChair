@@ -10,7 +10,7 @@ from proximity import *
 
 
 def pack_location_to_json(version, timestamp, sensor_type, uuid, major, minor, db):
-    beacon_json = '{"uuid" : "' + uuid + '", "major" : ' + major + ', "minor" : ' + minor + ', "dB" : ' + db + '}'
+    beacon_json = '{"uuid" : "' + uuid + '", "major" : ' + major + ', "minor" : ' + minor + ', "value" : ' + db + '}'
 
     json_msg = '{"version": ' + str(version) + ', "timestamp": ' + \
                str(timestamp) + ', "sensortype": "' + sensor_type + '", "values": [' + beacon_json + "]}"
