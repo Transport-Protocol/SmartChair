@@ -17,8 +17,6 @@ public abstract class AbstractValue {
 		return value;
 	}
 	
-	public void addValueToPoint(Builder pointBuilder){
-		
-	}
+	public abstract void addValueToPoint(Builder pointBuilder);
 	
 }

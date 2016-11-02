@@ -1,5 +1,7 @@
 package com.hawhamburg.sg.data;
 
+import org.influxdb.dto.Point.Builder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,5 +25,10 @@ public class AbsoluteLocationValue extends AbstractValue
 	public int getY()
 	{
 		return y;
+	}
+
+	@Override
+	public void addValueToPoint(Builder pointBuilder) {
+		
 	}
 }
