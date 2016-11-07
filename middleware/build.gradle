@@ -143,9 +143,9 @@ task deployDBConnect(dependsOn: buildDBConnect) << {
 
 task buildTestDataGen(type: Jar) {
     manifest { 
-    	attributes "Main-Class": "com.hawhamburg.sg.debug.TestDataGenerator"
+    	attributes "Main-Class": "com.hawhamburg.sg.debug.DebugDataGenerator"
   	}  
-	baseName = 'TestDataGen'
+	baseName = 'DebugDataGen'
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 	with jar
 }
@@ -154,7 +154,7 @@ task deployTestDataGen(dependsOn: buildTestDataGen) << {
 	ssh.run {
         session(remotes.testvm) {
 			def deployPath = '/home/rztmk/build/'
-			jar.baseName = 'TestDataGen'
+			jar.baseName = 'DebugDataGen'
 			execute 'mkdir -p ' + deployPath
 			put from: jar.archivePath.path , into: deployPath + jar.archiveName
 			def result = execute 'cd ' + deployPath + '; java -jar ' + jar.archiveName
