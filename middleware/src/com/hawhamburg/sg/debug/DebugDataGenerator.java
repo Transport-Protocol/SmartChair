@@ -41,7 +41,7 @@ public class DebugDataGenerator {
 		String modus = null;
 		int delay = STANDARDDELAY;
 		int numData = STANDARDNUMDATA;
-		boolean deamon = false;
+		boolean daemon = false;
 		for(int i = 0; i< args.length; i++)
 		{
 			if(args[i].equals("raspi") || args[i].equals("server") || args[i].equals("database"))
@@ -58,7 +58,7 @@ public class DebugDataGenerator {
 			}
 			else if(args[i].equals("deamon"))
 			{
-				deamon = true;
+				daemon = true;
 			}
 			else if(args[i].equals("help"))
 			{
@@ -73,21 +73,21 @@ public class DebugDataGenerator {
 			do{
 				testRasPi(numData, delay);
 			}
-			while(deamon);
+			while(daemon);
 		}
 		else if(modus.equals("server"))
 		{
 			do {
 			testServer(numData, delay);
 			}
-			while(deamon);
+			while(daemon);
 		}
 		else if(modus.equals("database"))
 		{
 			do {
 			testDatabase(numData, delay);
 			}
-			while(deamon);
+			while(daemon);
 		}
 		else
 		{
@@ -219,7 +219,7 @@ public class DebugDataGenerator {
 		System.out.println("Options:\n"
 				+ "delay NUMBER		Set the delay between the messages in ms\n"
 				+ "numData NUMBER	Set the count of messages\n"
-				+ "deamon			Runs DebugDataGenerator until the process got killed."
+				+ "daemon			Runs DebugDataGenerator until the process got killed."
 				+ "					Uses delay between messages and numData for messages per Connection");
 	}
 
