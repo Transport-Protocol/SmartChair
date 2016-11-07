@@ -83,5 +83,17 @@ class RandomDataGenerator {
 		}
 		return values;
 	}
+	
+	static List<AbstractValue> getMicrophoneData()
+	{
+		Random rng=new Random();
+		List<AbstractValue> values = new LinkedList<>();
+		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
+		{
+			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			values.add(value);
+		}
+		return values;
+	}
 
 }

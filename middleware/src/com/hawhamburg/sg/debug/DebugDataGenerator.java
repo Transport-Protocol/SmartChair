@@ -33,19 +33,22 @@ public class DebugDataGenerator {
 		generatorMap.put(SensorType.pressure, RandomDataGenerator::getPressureData);
 		generatorMap.put(SensorType.acceleration, RandomDataGenerator::getAccelerationData);
 		generatorMap.put(SensorType.gyroscope, RandomDataGenerator::getGyroscopeData);
+		generatorMap.put(SensorType.microphone, RandomDataGenerator::getMicrophoneData);
+		generatorMap.put(SensorType.location, RandomDataGenerator::getLocationValueData);
 	}
 	public static void main(String[] args) 
 	{
 		String modus = null;
 		int delay = STANDARDDELAY;
 		int numData = STANDARDNUMDATA;
+		boolean daemon = false;
 		for(int i = 0; i< args.length; i++)
 		{
 			if(args[i].equals("raspi") || args[i].equals("server") || args[i].equals("database"))
 			{
 				modus = args[i];
 			}
-			else if (args[i].equals(delay)) 
+			else if (args[i].equals("delay")) 
 			{
 				delay = Integer.parseInt(args[i+1]);
 			}
@@ -53,16 +56,13 @@ public class DebugDataGenerator {
 			{
 				numData = Integer.parseInt(args[i+1]);
 			}
+			else if(args[i].equals("deamon"))
+			{
+				daemon = true;
+			}
 			else if(args[i].equals("help"))
 			{
-				System.out.println("Usage: java Myprogram MODUS [Options] || java Myprogram [Options] MODUS");
-				System.out.println("MODUS: \n"
-						+ "raspi			Push messages to the raspi queue(has to run on raspi)\n"
-						+ "server			Push messages to the server queue(has to run on server)\n"
-						+ "database			Push messages to the database(Configuration in properties file)");
-				System.out.println("Options:\n"
-						+ "delay NUMBER		Set the delay between the messages in ms\n"
-						+ "numData NUMBER	Set the count of messages\n");
+				printHelp();
 				System.exit(0);
 			}
 			
@@ -70,15 +70,28 @@ public class DebugDataGenerator {
 		
 		if(modus.equals("raspi"))
 		{
-			testRasPi(numData, delay);
+			do{
+				testRasPi(numData, delay);
+			}
+			while(daemon);
 		}
 		else if(modus.equals("server"))
 		{
+			do {
 			testServer(numData, delay);
+			}
+			while(daemon);
 		}
 		else if(modus.equals("database"))
 		{
+			do {
 			testDatabase(numData, delay);
+			}
+			while(daemon);
+		}
+		else
+		{
+			printHelp();
 		}
 		
 	}
@@ -194,6 +207,20 @@ public class DebugDataGenerator {
 		List<AbstractValue> values = generatorMap.get(type).invoke();
 		ChairMessage<?> msg = new ChairMessage<>("1", 1, type, values, System.currentTimeMillis());
 		return msg;
+	}
+	
+	private static void printHelp()
+	{
+		System.out.println("Usage: java Myprogram MODUS [Options] || java Myprogram [Options] MODUS");
+		System.out.println("MODUS: \n"
+				+ "raspi			Push messages to the raspi queue(has to run on raspi)\n"
+				+ "server			Push messages to the server queue(has to run on server)\n"
+				+ "database			Push messages to the database(Configuration in properties file)");
+		System.out.println("Options:\n"
+				+ "delay NUMBER		Set the delay between the messages in ms\n"
+				+ "numData NUMBER	Set the count of messages\n"
+				+ "daemon			Runs DebugDataGenerator until the process got killed."
+				+ "					Uses delay between messages and numData for messages per Connection");
 	}
 
 
