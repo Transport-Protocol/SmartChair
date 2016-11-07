@@ -22,7 +22,7 @@ parser.add_argument("--socket",
 
 for entry in sensor:
     parser.add_argument("--" + entry, type=float,
-                        help="This flag enables " + entry + " sensor. You can enter an interval after the flag."
+                        help="This flag enables " + entry + " sensor. You have to enter an interval after the flag."
                                                             " Interval in Seconds! example = 1.0")
 
 args = parser.parse_args()

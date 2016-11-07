@@ -61,13 +61,13 @@ def temperature(timestamp):
 
     serial_mutex.acquire()
 
-    before = time.time()
+    # before = time.time()
     serial_establish_connection(port, start_sign_ord, start_sign)
 
     # print("start_sequence valid")
     temperature = port.read(6)
 
-    print("temperature: Serial Time needed: " + str(time.time() - before))
+    # print("temperature: Serial Time needed: " + str(time.time() - before))
     serial_mutex.release()
 
     # get json
@@ -84,7 +84,7 @@ def pressure(timestamp):
 
     serial_mutex.acquire()
 
-    before = time.time()
+    # before = time.time()
     serial_establish_connection(port, start_sign_ord, start_sign)
 
     analogs = []
@@ -95,7 +95,7 @@ def pressure(timestamp):
         analogs.append(port.readline())
         i += 1
 
-    print("pressure: Serial Time needed: " + str(time.time()-before))
+    # print("pressure: Serial Time needed: " + str(time.time()-before))
     serial_mutex.release()
 
     j = 0
@@ -124,18 +124,18 @@ def distance_sensor(timestamp):
 
     serial_mutex.acquire()
 
-    before = time.time()
+    # before = time.time()
     serial_establish_connection(port, start_sign_ord, start_sign)
 
     # print("start_sequence valid")
-    temperature = port.read(6)
+    distance = port.readline()
 
-    print("Distance: Serial Time needed: " + str(time.time() - before))
+    # print("Distance: Serial Time needed: " + str(time.time() - before))
     serial_mutex.release()
 
     # get json
-    temperature_value = [float(temperature)]
-    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], temperature_value))
+    distance = [int(distance)]
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], distance))
     return json_list
 
 
