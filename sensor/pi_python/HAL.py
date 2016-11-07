@@ -1,7 +1,7 @@
 import MessageGenerator as msg_gen
 import serial
 import time
-# import gyroscope
+import gyroscope
 import sys
 import threading
 
@@ -15,7 +15,7 @@ port = serial.Serial(find_serialport.get_serial_port(), 38400, timeout=None)
 # port = serial.Serial("com3", 9600, timeout=None)
 # port = False
 
-gyroscope = False
+#gyroscope = False
 
 # generated Lists for easier json String building
 pressure_sensor_ids = list(range(0, 10))

@@ -49,7 +49,7 @@ if args.acceleration is not None:
 if args.distance is not None:
     print("distance active!")
     threads.append(
-        Threads.SensorEvaluator(3, "SensorEvaluator_distance", 4, args.distance, json_queue, HAL.acceleration_sensor))
+        Threads.SensorEvaluator(3, "SensorEvaluator_distance", 4, args.distance, json_queue, HAL.distance_sensor))
 
 # acquire right communication medium
 if args.rabbit:
