@@ -33,6 +33,8 @@ public class DebugDataGenerator {
 		generatorMap.put(SensorType.pressure, RandomDataGenerator::getPressureData);
 		generatorMap.put(SensorType.acceleration, RandomDataGenerator::getAccelerationData);
 		generatorMap.put(SensorType.gyroscope, RandomDataGenerator::getGyroscopeData);
+		generatorMap.put(SensorType.microphone, RandomDataGenerator::getMicrophoneData);
+		generatorMap.put(SensorType.location, RandomDataGenerator::getLocationValueData);
 	}
 	public static void main(String[] args) 
 	{
@@ -55,14 +57,7 @@ public class DebugDataGenerator {
 			}
 			else if(args[i].equals("help"))
 			{
-				System.out.println("Usage: java Myprogram MODUS [Options] || java Myprogram [Options] MODUS");
-				System.out.println("MODUS: \n"
-						+ "raspi			Push messages to the raspi queue(has to run on raspi)\n"
-						+ "server			Push messages to the server queue(has to run on server)\n"
-						+ "database			Push messages to the database(Configuration in properties file)");
-				System.out.println("Options:\n"
-						+ "delay NUMBER		Set the delay between the messages in ms\n"
-						+ "numData NUMBER	Set the count of messages\n");
+				printHelp();
 				System.exit(0);
 			}
 			
@@ -79,6 +74,10 @@ public class DebugDataGenerator {
 		else if(modus.equals("database"))
 		{
 			testDatabase(numData, delay);
+		}
+		else
+		{
+			printHelp();
 		}
 		
 	}
@@ -194,6 +193,18 @@ public class DebugDataGenerator {
 		List<AbstractValue> values = generatorMap.get(type).invoke();
 		ChairMessage<?> msg = new ChairMessage<>("1", 1, type, values, System.currentTimeMillis());
 		return msg;
+	}
+	
+	private static void printHelp()
+	{
+		System.out.println("Usage: java Myprogram MODUS [Options] || java Myprogram [Options] MODUS");
+		System.out.println("MODUS: \n"
+				+ "raspi			Push messages to the raspi queue(has to run on raspi)\n"
+				+ "server			Push messages to the server queue(has to run on server)\n"
+				+ "database			Push messages to the database(Configuration in properties file)");
+		System.out.println("Options:\n"
+				+ "delay NUMBER		Set the delay between the messages in ms\n"
+				+ "numData NUMBER	Set the count of messages\n");
 	}
 
 
