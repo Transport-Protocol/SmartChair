@@ -51,6 +51,7 @@ public class MqConsumer implements Consumer {
 		try {
 			ChairMessage msg = mapper.readValue(arg3, ChairMessage.class);
 				System.out.println(msg.toString());
+				System.out.println(System.currentTimeMillis()-msg.getTimestamp());
 			if (!msg.getValues().isEmpty()){
 				dbConnector.write(msg);
 			} else{
