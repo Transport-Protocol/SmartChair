@@ -67,7 +67,7 @@ public class ChairMessage<T extends AbstractValue> {
 	{
 		JsonNode node=mapper.readTree(b);
 		SensorType sensorType= SensorType.valueOf(node.get("sensortype").asText());
-		JavaType t=mapper.getTypeFactory().constructParametricType(ChairMessage.class, sensorType.getChairValueClass());
+		JavaType t=mapper.getTypeFactory().constructParametricType(ChairMessage.class, sensorType.getSensorValueClass());
 		
 		return mapper.convertValue(node, t);
 		
