@@ -34,10 +34,11 @@ public class ChairMessage<T extends AbstractValue> {
 		this.timestamp=timestamp;
 	}
 	
-	public ChairMessage(String deviceUuid, SensorType sensortype, List<T> values) {
+	public ChairMessage(String deviceUuid, SensorType sensortype, List<T> values, long timestamp) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.deviceUuid = deviceUuid;
+		this.timestamp=timestamp;
 		this.version = DATA_VERSION;
 	}
 

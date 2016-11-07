@@ -85,7 +85,7 @@ public class Mwrp {
 	}
 
 	private void consume(SensorMessage sensm) {
-		ChairMessage chm = new ChairMessage(properties.getChairId(), sensm.getSensortype(), sensm.getValues());
+		ChairMessage chm = new ChairMessage(properties.getChairId(), sensm.getSensortype(), sensm.getValues(),sensm.getTimestamp());
 		try {
 			if (!noServer) {
 				mq2Publisher.publish(chm);
