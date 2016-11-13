@@ -38,7 +38,7 @@ public class DebugDataGenerator {
 	}
 	public static void main(String[] args) 
 	{
-		String modus = null;
+		String modus = "";
 		int delay = STANDARDDELAY;
 		int numData = STANDARDNUMDATA;
 		boolean daemon = false;
@@ -56,7 +56,7 @@ public class DebugDataGenerator {
 			{
 				numData = Integer.parseInt(args[i+1]);
 			}
-			else if(args[i].equals("deamon"))
+			else if(args[i].equals("daemon"))
 			{
 				daemon = true;
 			}
