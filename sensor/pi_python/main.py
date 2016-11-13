@@ -8,7 +8,7 @@ import HAL
 import Threads
 
 # Define here all supported sensors.
-sensor = ["pressure", "temperature", "acceleration", "distance"]
+sensor = ["pressure", "temperature", "acceleration", "distance", "gyroscope"]
 
 parser = argparse.ArgumentParser()
 
@@ -46,10 +46,15 @@ if args.acceleration is not None:
     threads.append(
         Threads.SensorEvaluator(3, "SensorEvaluator_accelerator", 3, args.acceleration, json_queue, HAL.acceleration_sensor))
 
+if args.gyroscope is not None:
+    print("gyroscope active!")
+    threads.append(
+        Threads.SensorEvaluator(4, "SensorEvaluator_accelerator", 3, args.gyroscope, json_queue, HAL.gyroscope_sensor))
+
 if args.distance is not None:
     print("distance active!")
     threads.append(
-        Threads.SensorEvaluator(3, "SensorEvaluator_distance", 4, args.distance, json_queue, HAL.distance_sensor))
+        Threads.SensorEvaluator(5, "SensorEvaluator_distance", 4, args.distance, json_queue, HAL.distance_sensor))
 
 # acquire right communication medium
 if args.rabbit:

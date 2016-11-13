@@ -34,6 +34,15 @@ def acceleration_sensor(timestamp):
     # get json
     json_list.append(
         msg_gen.pack_to_json(1, timestamp, "acceleration", acceleration_sensor_ids, gyroscope.get_accelerator_values()))
+
+    return json_list
+
+
+def gyroscope_sensor(timestamp):
+    print("gyroscope_sensor")
+    json_list = []
+
+    # get json
     json_list.append(
         msg_gen.pack_to_json(1, timestamp, "gyroscope", acceleration_sensor_ids, gyroscope.get_gyro_values()))
 
