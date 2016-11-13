@@ -9,9 +9,13 @@ import com.hawhamburg.sg.data.LocationValue;
 import com.hawhamburg.sg.data.SensorValue;
 
 class RandomDataGenerator {
-	private static int valueId = 0;
-	private static final int MAXVALUESPERDATA = 10;
-
+	private static int valueId = 0;		//new message -> valueId++
+	private static final int MAXVALUESPERDATA = 10; //Values per Message between 0 and MAXVALUESPERDATA
+	
+	/*
+	 * Returns a List with random generated temperature data between 0-35°
+	 * @return List with random generated temperature data between 0-35° as SensorValue   
+	 */
 	static List<AbstractValue> getTempData()
 	{
 		Random rng=new Random();
@@ -24,6 +28,10 @@ class RandomDataGenerator {
 		return values;
 	}
 	
+	/*
+	 * Returns a List with random generated pressure data between 0-1024
+	 * @return List with random generated pressure data between 0-1024 as SensorValue   
+	 */
 	static List<AbstractValue> getPressureData()
 	{
 		Random rng=new Random();
@@ -36,6 +44,10 @@ class RandomDataGenerator {
 		return values;
 	}
 	
+	/*
+	 * Returns a List with random generated acceleration data between 0-1024
+	 * @return List with random generated acceleration data between 0-1024 as SensorValue   
+	 */
 	static List<AbstractValue> getAccelerationData()
 	{
 		Random rng=new Random();
@@ -48,6 +60,10 @@ class RandomDataGenerator {
 		return values;
 	}
 	
+	/*
+	 * Returns a List with random generated distance data between 0-1024
+	 * @return List with random generated distance data between 0-1024 as SensorValue   
+	 */
 	static List<AbstractValue> getDistanceData()
 	{
 		Random rng=new Random();
@@ -60,6 +76,10 @@ class RandomDataGenerator {
 		return values;
 	}
 	
+	/*
+	 * Returns a List with random generated gyroscope data between 0-1024
+	 * @return List with random generated gyroscope data between 0-1024 as SensorValue   
+	 */
 	static List<AbstractValue> getGyroscopeData()
 	{
 		Random rng=new Random();
@@ -72,6 +92,14 @@ class RandomDataGenerator {
 		return values;
 	}
 	
+	/*
+	 * Returns a List with random generated LocationValue data.
+	 * UUID: 0613ff4c000c0e00b62bd6450252fce7
+	 * Major : 1
+	 * Minor : 0-4
+	 * value: 25-95db 
+	 * @return List with random generated LocationValue data between 25-95db   
+	 */
 	static List<AbstractValue> getLocationValueData()
 	{
 		Random rng=new Random();
@@ -84,6 +112,10 @@ class RandomDataGenerator {
 		return values;
 	}
 	
+	/*
+	 * Returns a List with random generated microphone data between 0 - 1024
+	 * @return List with random generated microphone data between 0 - 1024 as SensorValue   
+	 */
 	static List<AbstractValue> getMicrophoneData()
 	{
 		Random rng=new Random();

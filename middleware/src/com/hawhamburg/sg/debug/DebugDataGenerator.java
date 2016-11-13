@@ -26,6 +26,7 @@ public class DebugDataGenerator {
 	private static final int STANDARDNUMDATA = 10;
 	private static final int STANDARDDELAY = 1;
 	private static final Map<SensorType, RandomDataGeneratorInterface> generatorMap = new HashMap<>();
+	
 	static
 	{
 		generatorMap.put(SensorType.temperature, RandomDataGenerator::getTempData);
@@ -36,12 +37,15 @@ public class DebugDataGenerator {
 		generatorMap.put(SensorType.microphone, RandomDataGenerator::getMicrophoneData);
 		generatorMap.put(SensorType.location, RandomDataGenerator::getLocationValueData);
 	}
+	
 	public static void main(String[] args) 
 	{
 		String modus = "";
 		int delay = STANDARDDELAY;
 		int numData = STANDARDNUMDATA;
 		boolean daemon = false;
+		
+		//Parse args
 		for(int i = 0; i< args.length; i++)
 		{
 			if(args[i].equals("raspi") || args[i].equals("server") || args[i].equals("database"))
@@ -96,6 +100,11 @@ public class DebugDataGenerator {
 		
 	}
 	
+	/*
+	 * Connects to Queue1 and push numData Packages with delay ms.
+	 * @param numData Count of Packages
+	 * @param delay Time between Messages 
+	 */
 	public static void testRasPi(int numData, int delay)
 	{
 		ConnectionFactory factory = new ConnectionFactory();		
@@ -120,6 +129,11 @@ public class DebugDataGenerator {
 		
 	}
 	
+	/*
+	 * Connects to Queue2 and push numData Packages with delay ms.
+	 * @param numData Count of Packages
+	 * @param delay Time between Messages
+	 */
 	public static void testServer(int numData, int delay)
 	{
 		ConnectionFactory factory = new ConnectionFactory();		
@@ -143,6 +157,11 @@ public class DebugDataGenerator {
 		}
 	}
 	
+	/*
+	 * Connects to database and push numData Packages with delay ms.
+	 * @param numData Count of Packages
+	 * @param delay Time between Messages
+	 */
 	public static void testDatabase(int numData, int delay)
 	{
 		DBProperties props = null;
@@ -165,6 +184,10 @@ public class DebugDataGenerator {
 	    
 	}
 	
+	/*
+	 * Generate a Random SensorMessage and returns it as a JSON formatted string.
+	 * @return Random SensorMessage as JSON string
+	 */
 	public static String getSensorMessageAsJson()
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -184,6 +207,10 @@ public class DebugDataGenerator {
 		return json;
 	}
 	
+	/*
+	 * Generate a Random ChairMessage and returns it as a JSON formatted string.
+	 * @return Random ChairMessage as JSON string
+	 */
 	public static String getChairMessageAsJson()
 	{
 		
@@ -198,6 +225,10 @@ public class DebugDataGenerator {
 		return json;
 	}
 	
+	/*
+	 * Generate a Random ChairMessage
+	 * @return Random ChairMessage
+	 */
 	public static ChairMessage<?> getChairMessage()
 	{
 		Random rng=new Random();
@@ -209,6 +240,9 @@ public class DebugDataGenerator {
 		return msg;
 	}
 	
+	/*
+	 * Print Information about the DebugDataGenerator on a terminal.
+	 */
 	private static void printHelp()
 	{
 		System.out.println("Usage: java Myprogram MODUS [Options] || java Myprogram [Options] MODUS");
