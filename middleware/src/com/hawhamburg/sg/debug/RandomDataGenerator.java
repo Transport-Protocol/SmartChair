@@ -22,7 +22,7 @@ class RandomDataGenerator {
 		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			AbstractValue value = new SensorValue(valueId++,rng.nextInt(35));
+			AbstractValue value = new SensorValue(0,rng.nextInt(35));
 			values.add(value);
 		}
 		return values;
@@ -38,7 +38,7 @@ class RandomDataGenerator {
 		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			AbstractValue value = new SensorValue(rng.nextInt(10),rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
@@ -54,7 +54,7 @@ class RandomDataGenerator {
 		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			AbstractValue value = new SensorValue(0,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
@@ -70,7 +70,7 @@ class RandomDataGenerator {
 		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			AbstractValue value = new SensorValue(0,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
@@ -86,13 +86,14 @@ class RandomDataGenerator {
 		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			AbstractValue value = new SensorValue(0,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;
 	}
 	
 	/*
+	 * DEPRECATED
 	 * Returns a List with random generated LocationValue data.
 	 * UUID: 0613ff4c000c0e00b62bd6450252fce7
 	 * Major : 1
@@ -122,7 +123,7 @@ class RandomDataGenerator {
 		List<AbstractValue> values = new LinkedList<>();
 		for(int i = 0; i <rng.nextInt(MAXVALUESPERDATA-1)+1; i++)
 		{
-			AbstractValue value = new SensorValue(valueId++,rng.nextInt(1024));
+			AbstractValue value = new SensorValue(0,rng.nextInt(1024));
 			values.add(value);
 		}
 		return values;

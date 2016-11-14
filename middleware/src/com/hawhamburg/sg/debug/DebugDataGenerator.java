@@ -86,6 +86,7 @@ public class DebugDataGenerator {
 		if(TestDataType.isEmpty())
 		{
 			TestDataType.addAll(Arrays.asList(SensorType.values()));
+			TestDataType.remove(SensorType.location);
 		}
 		
 		if(modus.equals("raspi"))
