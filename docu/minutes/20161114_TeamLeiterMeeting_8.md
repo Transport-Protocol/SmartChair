@@ -17,20 +17,19 @@ Hauke (S)
 - GUI Verheiraten der Komponenten            
         
 ## Messe        
-- Vlt. Messestand            
-- Dann 2 grosse Bildschirme Spiel (Sollte können)           
-- Zweite Poster         
+- Vlt. Messestand  (pending on Kai)           
+- 2 grosse Bildschirme - Spiel + DB                 
+- Zwei Poster         
 -- genereller überblick        
 -- Milstone I überblick        
 - Story            
-- Aufgabenverteilung         
-        
+- Rollen 
+
 - Verantwortungen         
 -- Aufbau         
 -- Poster         
 -- Story         
---- Aufgabenverteilung         
-        
+--- Aufgabenverteilung                 
 
 - Story        
 -- Smart Systems        
