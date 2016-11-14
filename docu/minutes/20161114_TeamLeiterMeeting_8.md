@@ -41,7 +41,7 @@ Hauke (S)
 --- Lehre umfasstfür uns Hochschule, Arbeitsplatz(Daheim) oder Studentenarbeitsplatz in der Firma                
 -- Prototypisches Beispielszenario zur Darstellung möglicher Interaktionslemente eines Studenten gegenüber einem Informationsystem       
 --- Stuhl da bekanntes Alltagsobjekt, Eigentümer kann skalieren und es ist transfrierbar auf andere Anwendungsfälle            
--- Schaffung einer offenen und kostengüstigen I        
+-- Schaffung einer offenen und kostengüstigen Infrastruktur        
 
 - Methodik        
 -- Milestone I         
