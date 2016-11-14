@@ -9,7 +9,6 @@ import com.hawhamburg.sg.data.LocationValue;
 import com.hawhamburg.sg.data.SensorValue;
 
 class RandomDataGenerator {
-	private static int valueId = 0;		//new message -> valueId++
 	private static final int MAXVALUESPERDATA = 10; //Values per Message between 0 and MAXVALUESPERDATA
 	
 	/*
