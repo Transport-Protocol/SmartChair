@@ -108,7 +108,7 @@ task deployMwrpToChair2(dependsOn: buildMwrp) << {
 			execute 'mkdir -p ' + deployPath
 			put from: jar.archivePath.path , into: deployPath + jar.archiveName
 			execute 'cd ' + deployPath
-			def result= execute 'export DISPLAY=:0; java -jar ' + jar.archiveName + ' -gui -noserver 2>1&'
+			def result= execute 'export DISPLAY=:0; java -jar ' + jar.archiveName + ' -gui -noserver -gctrl 2>1&'
 			println ""
 			println result
 			println ""
