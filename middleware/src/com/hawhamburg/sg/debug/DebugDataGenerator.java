@@ -1,6 +1,8 @@
 package com.hawhamburg.sg.debug;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ public class DebugDataGenerator {
 	private static final int STANDARDNUMDATA = 10;
 	private static final int STANDARDDELAY = 1;
 	private static final Map<SensorType, RandomDataGeneratorInterface> generatorMap = new HashMap<>();
+	private static List<SensorType> TestDataType = new ArrayList<>(); //SensorTypes that will be generated
 	
 	static
 	{
@@ -64,12 +67,25 @@ public class DebugDataGenerator {
 			{
 				daemon = true;
 			}
+			else if(args[i].equals("temperature") || args[i].equals("pressure") || 
+					args[i].equals("distance") || args[i].equals("acceleration") || 
+					args[i].equals("gyroscope") || args[i].equals("microphone") || 
+					args[i].equals("location"))
+			{
+				TestDataType.add(SensorType.valueOf(args[i]));
+			}
 			else if(args[i].equals("help"))
 			{
 				printHelp();
 				System.exit(0);
 			}
 			
+		}
+		
+		//Standard: All SensorTypes
+		if(TestDataType.isEmpty())
+		{
+			TestDataType.addAll(Arrays.asList(SensorType.values()));
 		}
 		
 		if(modus.equals("raspi"))
@@ -192,8 +208,8 @@ public class DebugDataGenerator {
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		Random rng=new Random();
-		int o=rng.nextInt(SensorType.values().length);
-		SensorType type = SensorType.values()[o];
+		int o=rng.nextInt(TestDataType.size());
+		SensorType type = TestDataType.get(o);
 		List<AbstractValue> values = generatorMap.get(type).invoke();
 		
 		SensorMessage<?> msg = new SensorMessage<>(1,type, values,System.currentTimeMillis());
@@ -232,8 +248,8 @@ public class DebugDataGenerator {
 	public static ChairMessage<?> getChairMessage()
 	{
 		Random rng=new Random();
-		int o=rng.nextInt(SensorType.values().length);
-		SensorType type = SensorType.values()[o];
+		int o=rng.nextInt(TestDataType.size());
+		SensorType type = TestDataType.get(o);
 		
 		List<AbstractValue> values = generatorMap.get(type).invoke();
 		ChairMessage<?> msg = new ChairMessage<>("1", 1, type, values, System.currentTimeMillis());
