@@ -38,7 +38,7 @@ Hauke (S)
 - Motivation          
 -- Lehre für Studenten und Lehrenden verbessern          
 -- Darstellung des Mehrwertes von Smart Objekts für die Lehre        
---- Lehre umfasstfür uns Hochschule, Arbeitsplatz(Daheim) oder Studentenarbeitsplatz in der Firma                
+--- Lehre umfasst für uns Hochschule, Arbeitsplatz(Daheim) oder Studentenarbeitsplatz in der Firma                
 -- Prototypisches Beispielszenario zur Darstellung möglicher Interaktionslemente eines Studenten gegenüber einem Informationsystem       
 --- Stuhl da bekanntes Alltagsobjekt, Eigentümer kann skalieren und es ist transfrierbar auf andere Anwendungsfälle            
 -- Schaffung einer offenen und kostengüstigen Infrastruktur        
