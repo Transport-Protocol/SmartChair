@@ -23,6 +23,9 @@ acceleration_sensor_ids = list(range(0, 6))
 distance_sensor_ids = list(range(0, 1))
 test = list(range(0, 16))
 
+print("Partiy: ", port.parity)
+print("Stopbits: ", port.stopbits)
+
 # mutual exclusion for serial connection
 serial_mutex = threading.RLock()
 
@@ -144,7 +147,7 @@ def distance_sensor(timestamp):
 
     # get json
     distance = [int(distance)]
-    json_list.append(msg_gen.pack_to_json(1, timestamp, "temperature", [0], distance))
+    json_list.append(msg_gen.pack_to_json(1, timestamp, "distance", [0], distance))
     return json_list
 
 

@@ -8,7 +8,7 @@ int addPin1   = 9;
 int addPin2   = 10;
 
 #define BUFFER_SIZE 8
-#define BAUDRATE 9600
+#define BAUDRATE 38400
 
 /*void setup(void)
  * Will be Called once of the Micro Controller Powers Up
@@ -18,7 +18,7 @@ void setup() {
 
     pinMode(addPin0, OUTPUT); // Sets the Pins used for the Multiplexer address line to Output
     pinMode(addPin1, OUTPUT);
-    pinMode(addPin2, OUTPUT);
+    pinMode(addPin2, OUTPUT); 
   
     digitalWrite(addPin0, LOW); //And Puts them in a defined state
     digitalWrite(addPin1, LOW);
