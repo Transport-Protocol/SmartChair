@@ -266,11 +266,11 @@ public class DebugDataGenerator {
 		System.out.println("MODUS: \n"
 				+ "raspi			Push messages to the raspi queue(has to run on raspi)\n"
 				+ "server			Push messages to the server queue(has to run on server)\n"
-				+ "database			Push messages to the database(Configuration in properties file)");
+				+ "database			Push messages to the database(Configuration in properties file)\n");
 		System.out.println("Options:\n"
 				+ "delay NUMBER		Set the delay between the messages in ms\n"
 				+ "numData NUMBER	Set the count of messages\n"
-				+ "daemon			Runs DebugDataGenerator until the process got killed."
+				+ "daemon			Runs DebugDataGenerator until the process got killed.\n"
 				+ "					Uses delay between messages and numData for messages per Connection");
 	}
 
