@@ -10,4 +10,8 @@ public final class RabbitMqConstants {
 	public static final String MQ2_QUEUE_NAME="sg.q.ss";
 	public static final String MQ2_EXCHANGE_NAME="sg.ex.ss";
 	public static final String MQ2_ROUTING_KEY="sg.rk.ss";
+	
+	public static final String CHAT_EXCHANGE_NAME="sg.ex.chat";
+	public static final String TWITTER_QUEUE_NAME="sg.q.twitter";
+	public static final String TWITTER_ROUTING_KEY="sg.rk.twitter";
 }
