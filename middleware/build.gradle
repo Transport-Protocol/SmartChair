@@ -67,6 +67,9 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     // testCompile 'junit:junit:4.12'
     
+    // https://mvnrepository.com/artifact/com.ullink.slack/simpleslackapi
+	compile group: 'com.ullink.slack', name: 'simpleslackapi', version: '0.6.0'
+
 }
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
