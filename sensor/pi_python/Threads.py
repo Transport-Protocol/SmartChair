@@ -1,5 +1,4 @@
 import threading
-import HAL
 import time
 
 
@@ -15,6 +14,7 @@ class MQCommunicator (threading.Thread):
         self.daemon = True
 
     def run(self):
+        self.communicator.setup_connection()
         while True:
             to_send = self.q.get()
             self.communicator.send(to_send)
