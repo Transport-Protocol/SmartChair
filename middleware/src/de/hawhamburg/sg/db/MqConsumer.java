@@ -49,7 +49,7 @@ public class MqConsumer implements Consumer {
 		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
 
 		try {
-			ChairMessage msg = mapper.readValue(arg3, ChairMessage.class);
+			ChairMessage msg = ChairMessage.parseJson(arg3);
 				System.out.println(msg.toString());
 				System.out.println(System.currentTimeMillis()-msg.getTimestamp());
 			if (!msg.getValues().isEmpty()){
