@@ -1,7 +1,9 @@
 package de.hawhamburg.sg.messenchair;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.ChairMessage;
@@ -19,8 +21,14 @@ public class ChatPublisher {
 	private static final int LIMIT = 250;
 	private static final int MEASUREMENTTIME = 5000;
 	private static boolean manned = false;
+	private final static Map<String, ChatChair> CHAIRS = new HashMap<>();
+	
 	
 	public ChatPublisher(Connection connection) {
+
+		CHAIRS.put("e46b9f05-5075-4608-9d39-049e63cb0607", new ChatChair(this, "chair1"));
+		CHAIRS.put("dad82379-e0c2-4b8b-82f6-1823ac340633", new ChatChair(this, "chair2"));
+		
 		this.connection = connection;
 		try {
 			channel=connection.createChannel();
@@ -32,76 +40,21 @@ public class ChatPublisher {
 	
 	void newMessage(ChairMessage<SensorValue> msg)
 	{
-		if(manned)
-		{
-			if(averageSeatPressure(msg.getValues()) < LIMIT)
-			{
-				if(firstTimestamp == 0)
-				{
-					firstTimestamp = msg.getTimestamp();
-				}
-				else if((msg.getTimestamp() - firstTimestamp) >= MEASUREMENTTIME)
-				{
-					manned = !manned;
-					firstTimestamp = 0;
-					publishManned(manned);
-				}
-				
-			}
-			else
-			{
-				firstTimestamp = 0;
-			}
-		}
-		else
-		{
-			if(averageSeatPressure(msg.getValues()) > LIMIT)
-			{
-				if(firstTimestamp == 0)
-				{
-					firstTimestamp = msg.getTimestamp();
-				}
-				else if((msg.getTimestamp() - firstTimestamp) >= MEASUREMENTTIME)
-				{
-					manned = !manned;
-					firstTimestamp = 0;
-					publishManned(manned);
-				}
-				
-			}
-			else
-			{
-				firstTimestamp = 0;
-			}
-		}
+		CHAIRS.get(msg.getDeviceUuid()).newMessage(msg);
 	}
 	
-	private int averageSeatPressure(List<SensorValue> values)
-	{
-		double average = 0;
-		for(SensorValue value: values)
-		{
-			// Seat pressure Sensor id 0-3
-			if(value.getId() <= 3)
-			{
-				average += value.getValue();
-			}
-		}
-		return (int)(average / 4);
-	}
-	
-	private void publishManned(boolean manned)
+	void publishManned(boolean manned, String sender)
 	{
 		String text = "";
 		if(manned)
-		{
-			text = "Der Benutzer des Stuhls ist aufgestanden.";
+		{			
+			text = "Der Benutzer des Stuhls hat sich hingesetzt";
 		}
 		else
 		{
-			text = "Der Benutzer des Stuhls hat sich hingesetzt";
+			text = "Der Benutzer des Stuhls ist aufgestanden.";
 		}
-		ChatMessage msg = new ChatMessage(text, "chair");
+		ChatMessage msg = new ChatMessage(text, sender);
 		
 		try {
 			publish(msg);
@@ -113,7 +66,7 @@ public class ChatPublisher {
 	
 	private void publish(ChatMessage msg) throws IOException
 	{
-		channel.basicPublish(RabbitMqConstants.CHAT_EXCHANGE_NAME, RabbitMqConstants.CHAT_ROUTING_KEY,null, serializer.writeValueAsBytes(msg));
+		channel.basicPublish(RabbitMqConstants.CHAT_EXCHANGE_NAME, RabbitMqConstants.ALL_CHAT_ROUTING_KEY,null, serializer.writeValueAsBytes(msg));
 	}
 
 }
