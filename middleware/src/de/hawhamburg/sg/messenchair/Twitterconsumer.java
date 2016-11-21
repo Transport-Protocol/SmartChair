@@ -14,7 +14,6 @@ import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.ShutdownSignalException;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
-import de.hawhamburg.sg.db.DBConnector;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

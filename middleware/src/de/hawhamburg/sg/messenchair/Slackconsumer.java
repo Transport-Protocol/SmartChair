@@ -18,7 +18,6 @@ import com.ullink.slack.simpleslackapi.SlackSession;
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
-import de.hawhamburg.sg.db.DBConnector;
 import de.hawhamburg.sg.db.DBConstants;
 import de.hawhamburg.sg.db.DBProperties;
 

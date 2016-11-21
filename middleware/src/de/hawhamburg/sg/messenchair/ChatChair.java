@@ -7,7 +7,7 @@ import com.hawhamburg.sg.data.SensorValue;
 
 public class ChatChair {
 	private static final int LIMIT = 250;
-	private static final int MEASUREMENTTIME = 5000;
+	private static final int MEASUREMENTTIME = 2000;
 	private static boolean manned = false;
 	private long firstTimestamp = 0;
 	private ChatPublisher publisher;

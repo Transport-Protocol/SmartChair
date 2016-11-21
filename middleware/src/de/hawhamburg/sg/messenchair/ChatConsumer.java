@@ -23,8 +23,7 @@ public class ChatConsumer implements Consumer {
 	
 	public ChatConsumer() {
 		ConnectionFactory factory = new ConnectionFactory();
-		publisher = new ChatPublisher(connection);
-	    
+		
 	    try {
 		    connection = factory.newConnection();
 			channel = connection.createChannel();
@@ -33,6 +32,7 @@ public class ChatConsumer implements Consumer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	    publisher = new ChatPublisher(connection);
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class ChatConsumer implements Consumer {
 		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
 
 		try {
-			ChairMessage msg = ChairMessage.parseJson(arg3);
+			ChairMessage<?> msg = ChairMessage.parseJson(arg3);
 			System.out.println(msg.toString());
 			//only pressure for twitter
 			if ((!msg.getValues().isEmpty()) && (msg.getSensortype() == SensorType.pressure)){

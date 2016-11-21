@@ -2,7 +2,6 @@ package de.hawhamburg.sg.messenchair;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,13 +13,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
 public class ChatPublisher {
-	private Connection connection;
 	private Channel channel;
 	private ObjectMapper serializer=new ObjectMapper();
-	private long firstTimestamp;
-	private static final int LIMIT = 250;
-	private static final int MEASUREMENTTIME = 5000;
-	private static boolean manned = false;
 	private final static Map<String, ChatChair> CHAIRS = new HashMap<>();
 	
 	
@@ -29,7 +23,6 @@ public class ChatPublisher {
 		CHAIRS.put("e46b9f05-5075-4608-9d39-049e63cb0607", new ChatChair(this, "chair1"));
 		CHAIRS.put("dad82379-e0c2-4b8b-82f6-1823ac340633", new ChatChair(this, "chair2"));
 		
-		this.connection = connection;
 		try {
 			channel=connection.createChannel();
 		} catch (IOException e) {
