@@ -15,13 +15,13 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 
-public class MqConsumer implements Consumer {
+public class ChatConsumer implements Consumer {
 	
 	private Connection connection;
 	private Channel channel;
 	private final ChatPublisher publisher;
 	
-	public MqConsumer() {
+	public ChatConsumer() {
 		ConnectionFactory factory = new ConnectionFactory();
 		publisher = new ChatPublisher(connection);
 	    
