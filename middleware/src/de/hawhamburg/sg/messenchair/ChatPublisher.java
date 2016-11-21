@@ -19,7 +19,7 @@ public class ChatPublisher {
 	
 	
 	public ChatPublisher(Connection connection) {
-
+		
 		CHAIRS.put("e46b9f05-5075-4608-9d39-049e63cb0607", new ChatChair(this, "chair1"));
 		CHAIRS.put("dad82379-e0c2-4b8b-82f6-1823ac340633", new ChatChair(this, "chair2"));
 		
@@ -36,28 +36,8 @@ public class ChatPublisher {
 		CHAIRS.get(msg.getDeviceUuid()).newMessage(msg);
 	}
 	
-	void publishManned(boolean manned, String sender)
-	{
-		String text = "";
-		if(manned)
-		{			
-			text = "Der Benutzer des Stuhls hat sich hingesetzt";
-		}
-		else
-		{
-			text = "Der Benutzer des Stuhls ist aufgestanden.";
-		}
-		ChatMessage msg = new ChatMessage(text, sender);
-		
-		try {
-			publish(msg);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
-	private void publish(ChatMessage msg) throws IOException
+	void publish(ChatMessage msg) throws IOException
 	{
 		channel.basicPublish(RabbitMqConstants.CHAT_EXCHANGE_NAME, RabbitMqConstants.ALL_CHAT_ROUTING_KEY,null, serializer.writeValueAsBytes(msg));
 	}
