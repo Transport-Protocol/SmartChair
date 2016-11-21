@@ -43,8 +43,8 @@ public class DBConnector {
 			props = new DBProperties(false);
 		    DBConnector connector = new DBConnector(props);
 		    new MqConsumer(connector);
-		    new Slackconsumer(connector, props);
-		    new Twitterconsumer(connector);
+		    new Slackconsumer(props);
+		    new Twitterconsumer();
 		} catch (IOException e) {e.printStackTrace();}
 	}
 	

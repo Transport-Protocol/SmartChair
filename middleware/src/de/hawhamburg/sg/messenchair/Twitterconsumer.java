@@ -26,7 +26,7 @@ public class Twitterconsumer implements Consumer{
 
 	private ObjectMapper mapper = new ObjectMapper();
 
-	public Twitterconsumer(DBConnector db) {
+	public Twitterconsumer() {
 		
 		ConnectionFactory factory = new ConnectionFactory();
 	    

@@ -31,7 +31,7 @@ public class Slackconsumer implements Consumer{
 	
 	SlackSession session;
 
-	public Slackconsumer(DBConnector db, DBProperties properties) {
+	public Slackconsumer(DBProperties properties) {
 		this.properties = properties;
 		ConnectionFactory factory = new ConnectionFactory();
 		
