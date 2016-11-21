@@ -98,12 +98,14 @@ public class ChatChair {
 		if(manned)
 		{			
 			text = "Der Benutzer des Stuhls hat sich hingesetzt.\n"
-					+ "Es wurde sich Ingesamt schon " + mannedCounter + " mal auf den Stuhl gesetzt.";
+					+ "Es wurde sich ingesamt schon " + mannedCounter + " mal auf den Stuhl gesetzt.";
 		}
 		else
 		{
+			
 			text = "Der Benutzer des Stuhls ist aufgestanden.\n"
-					+ "Er saß für " + (timestamp - firstMannedTimestamp) + " Minuten auf dem Stuhl.";
+					+ "Er hat " + ((timestamp - firstMannedTimestamp)/60000) + " Minuten auf dem Stuhl gesessen.";
+			// /1000 -> s /60 -> min
 		}
 		
 		if(secret)
