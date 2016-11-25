@@ -9,11 +9,11 @@
 
 SoftwareSerial mySerial(10, 11); // RX, TX
 
-
+#define SSSpeed 57600
 
 void setup() {
   Keyboard.begin();
-  mySerial.begin(9600);
+  mySerial.begin(SSSpeed);
   while(!mySerial);
 
   delay(5000);

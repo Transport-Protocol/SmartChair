@@ -15,16 +15,30 @@
 class Session {
   public:
 
-    // Creates an instance of the Session using Serial1
+    /**
+     * @brief Creates an instance of the Session
+     * @param ak 47
+     */
     Session(ArduinoKeyboard *ak);
 
-    // tries to read packages form the spezified client
+
+    /**
+     * @brief tries to read packages form the spezified client
+     * @param client the client to read data from
+     */
     void process(WiFiClient *client);
 
-    // sends a Session ID to the client, and uses it as the curent session ID
+    /**
+     * @brief sends a Session ID to the client, and uses it as the curent session ID
+     * @param client to send the data to
+     * @param sid the sesion Id to be send to the client, can be 0 to close the session
+     */
     void sendSessionId(WiFiClient *client,uint16_t sid);
 
-    //setzt diese Session zurück, kann verwendet werden, wenn die verbindung zum client unterbrochen wird.
+    /**
+     * @brief resets the curent session
+     * @note doesn`t close it acording to the protocoll
+     */
     void reset();
 
   private:
@@ -36,8 +50,8 @@ class Session {
 
     uint16_t sessionId = 0;
 
-    uint8_t  avaitingFields = 0;
-    uint32_t currentPaketID   = 0;
+    uint8_t  avaitingFields = 0;      /**< The number of fields, still to receavce */
+    uint32_t currentPaketID   = 0;    /**< The curent package ID, can be used to reprot problems with devices */
 
 };
 

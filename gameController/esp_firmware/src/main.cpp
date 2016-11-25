@@ -1,7 +1,6 @@
 #include "include/main.hpp"
 
 ArduinoKeyboard ak;
-SoftwareSerial swSer(SSRX, SSTX, false, 256);
 
 WiFiServer server(PORT);  //Creating a server instance to be used
 
@@ -17,6 +16,7 @@ void HANG(){
 
 
 void setup() {
+
   SETUP_LOGGING
   LOGLN("\n\nStartup . . .")
 
@@ -40,12 +40,6 @@ inline void connectToWiFi(){
     LOGLN("[NOK]")
     HANG();
   }
-  LOGLN("[OK]")
-}
-
-inline void setupSS(){
-  LOG("Starting Software Serial at [RX:") LOG(SSRX) LOG(",TX:") LOG(SSTX) LOG("] . . . ")
-  swSer.begin(SSBAUDRATE);
   LOGLN("[OK]")
 }
 

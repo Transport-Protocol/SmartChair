@@ -11,18 +11,16 @@ void ArduinoKeyboard::update(uint16_t timePassed){
   bool doTheFlop = false;
 
   for(i = 0;i!=activeCount;i++){
-    if(this->timer[this->active[i]] < (uint16_t)(this->timer[this->active[i]]-timePassed)){
-      this->timer[this->active[i]]=0;
+    if(this->timer[this->active[i]+1] < (uint16_t)(this->timer[this->active[i]+1]-timePassed)){
+      this->timer[this->active[i]+1]=0;
       LOGLN("DEACTIVATION");
       Serial1.write(0x00);
-      Serial1.write(this->active[i]-1);
+      Serial1.write(this->active[i]);
       this->active[i]=0;
       doTheFlop = true;
     }else{
-
-      this->timer[this->active[i]] -= timePassed;
-      LOG("UPDATE(")LOG(i)LOG(") NV = : ")LOGLN(this->timer[this->active[i]])
-
+      this->timer[this->active[i]+1] -= timePassed;
+      LOG("UPDATE(")LOG(i)LOG(") NV = : ")LOGLN(this->timer[this->active[i]+1])
     }
   }
   if(doTheFlop){
@@ -47,7 +45,7 @@ void ArduinoKeyboard::setState(uint8_t ascii,uint16_t time){
     LOGLN("ACTIVATION");
     Serial1.write(0x01);
     Serial1.write(ascii);
-    this->active[activeCount]=ascii+1;
+    this->active[activeCount]=ascii;
     activeCount++;
   }
   this->timer[ascii+1] = time;

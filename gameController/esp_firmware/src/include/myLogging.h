@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-#define SETUP_LOGGING()
+#define SETUP_LOGGING
 #define LOG(X)
 #define LOGLN(X)
 
