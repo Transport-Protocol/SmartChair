@@ -12,8 +12,9 @@ var core_1 = require('@angular/core');
 var chair_1 = require("../shared/chair");
 var router_1 = require("@angular/router");
 var ChairComponent = (function () {
-    function ChairComponent(route) {
+    function ChairComponent(route, zone) {
         this.route = route;
+        this.zone = zone;
         this.chair = new chair_1.Chair('null');
     }
     ChairComponent.prototype.getChairByID = function () {
@@ -30,7 +31,7 @@ var ChairComponent = (function () {
             selector: 'chair',
             templateUrl: './app/chair/chair.component.html'
         }), 
-        __metadata('design:paramtypes', [router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [router_1.ActivatedRoute, core_1.NgZone])
     ], ChairComponent);
     return ChairComponent;
 }());

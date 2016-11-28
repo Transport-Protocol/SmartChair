@@ -9,12 +9,12 @@ import * as io from "socket.io-client";
 @Injectable()
 export class ChairService {
 
-    private url = 'http://localhost:8000'
-    private socket;
+    private socket = io('http://localhost:8000');
 
     getChairs() {
+        this.socket.disconnect()
+        this.socket = io('http://localhost:8000');
         let observable = new Observable(observer => {
-            this.socket = io(this.url);
             this.socket.emit('getChairs', '');
 
             this.socket.on('chairs', function (data) {
@@ -28,12 +28,13 @@ export class ChairService {
     }
 
     getPressure(whereUUID) {
+        this.socket.disconnect()
+        this.socket = io('http://localhost:8000');
         let observable = new Observable(observer => {
-            this.socket = io(this.url);
             this.socket.emit('getPressure', whereUUID);
 
             this.socket.on('pressure', function (data) {
-                console.log('getPressure() in chair.service; only data: ' + data);
+                //console.log('getPressure() in chair.service; only data: ' + data);
                 observer.next(data);
             });
             return () => {
@@ -44,12 +45,13 @@ export class ChairService {
     }
 
     getTemperature(whereUUID) {
+        this.socket.disconnect()
+        this.socket = io('http://localhost:8000');
         let observable = new Observable(observer => {
-            this.socket = io(this.url);
             this.socket.emit('getTemperature', whereUUID);
 
             this.socket.on('temperature', function (data) {
-                console.log('getTemperature() in chair.service; only data: ' + data);
+                //console.log('getTemperature() in chair.service; only data: ' + data);
                 observer.next(data);
             });
             return () => {
@@ -60,12 +62,13 @@ export class ChairService {
     }
 
     getFirstXTemperatures(amount, whereUUID) {
+        this.socket.disconnect()
+        this.socket = io('http://localhost:8000');
         let observable = new Observable(observer => {
-            this.socket = io(this.url);
             this.socket.emit('getFirstXTemperatures', amount, whereUUID);
 
             this.socket.on('firstTemperature', function (data) {
-                console.log('getFirstXTemperatures() in chair.service; only data: ' + data);
+                //console.log('getFirstXTemperatures() in chair.service; only data: ' + data);
                 observer.next(data);
             });
             return () => {

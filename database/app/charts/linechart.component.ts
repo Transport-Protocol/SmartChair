@@ -1,7 +1,7 @@
 ///<reference path="../../typings/AmCharts.d.ts" />
 
-import {Component, AfterViewInit, OnInit} from '@angular/core';
-
+import {Component, AfterViewInit, OnInit, NgZone} from '@angular/core';
+import {Observable} from "rxjs/Observable";
 import {Chair} from "../shared/chair";
 import {Params, ActivatedRoute} from "@angular/router";
 import {ChairService} from "../shared/chair.service";
@@ -20,13 +20,27 @@ export class LineChartComponent implements OnInit {
 	connection;
 	chair: Chair = new Chair('null');
 
-	constructor(private chairService: ChairService, private route: ActivatedRoute) {
+	constructor(private chairService: ChairService, private route: ActivatedRoute, private zone:NgZone) {
+		this.detectChange().subscribe((uuid => {
+			if(uuid != this.chair.uuid) {
+				this.zone.run(() => {
+					console.log('re-render');
+					this.start();
+				});
+			}
+		}))
 	}
 
 	ngOnInit() {
+		this.start();
+	}
+
+	start() {
 		this.getChairByID();
 
 		this.getTemperature();
+
+		this.drawChart()
 	}
 
 	getChairByID() {
@@ -36,6 +50,10 @@ export class LineChartComponent implements OnInit {
 	}
 
 	ngAfterViewInit(): void {
+		this.drawChart()
+	}
+
+	drawChart() {
 		this.chart = AmCharts.makeChart(this.chartDiv, {
 			"type": "serial",
 			"theme": "light",
@@ -101,10 +119,19 @@ export class LineChartComponent implements OnInit {
 		this.drawReady = true;
 	}
 
+	detectChange() {
+		let observable = new Observable(observer => {
+			this.route.params.forEach((params: Params) => {
+				observer.next(params['uuid']);
+			});
+		});
+		return observable;
+	}
+
 	getTemperature() {
 		this.connection = this.chairService.getTemperature(this.chair.uuid).subscribe(temperature => {
 			let temperatureJSON = JSON.parse('' + temperature);
-			console.log('getTemperature() in temperature.component; pressure before for-loop: ' + temperature);
+			//console.log('getTemperature() in temperature.component; pressure before for-loop: ' + temperature);
 			if(this.drawReady) this.updateTemperature(temperatureJSON);
 		});
 	}
@@ -112,13 +139,12 @@ export class LineChartComponent implements OnInit {
     updateTemperature(temperatureJSON) {
 		if(this.chart.dataProvider.length > LineChartComponent.MAX_MEASURE_POINTS)
 			this.chart.dataProvider.shift();
-		console.log(temperatureJSON.time.toLocaleString());
-		console.log(JSON.stringify(temperatureJSON.t));
+		//console.log(temperatureJSON.time.toLocaleString());
+		//console.log(JSON.stringify(temperatureJSON.t));
 		let dataset = {
 			date: temperatureJSON.time,
 			value: temperatureJSON.t[0]
 		}
-		console.log("test");
 		if(this.chart.dataProvider.length > 0 && this.chart.dataProvider[this.chart.dataProvider.length-1].date == dataset.date)
 			return;
 		this.chart.dataProvider.push(dataset);
