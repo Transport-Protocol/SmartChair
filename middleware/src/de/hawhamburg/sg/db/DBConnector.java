@@ -8,6 +8,10 @@ import org.influxdb.dto.Point.Builder;
 
 import com.hawhamburg.sg.data.ChairMessage;
 
+import de.hawhamburg.sg.messenchair.ChatConsumer;
+import de.hawhamburg.sg.messenchair.Slackconsumer;
+import de.hawhamburg.sg.messenchair.Twitterconsumer;
+
 public class DBConnector {
 	
 	private InfluxDB influxDB;
@@ -40,6 +44,9 @@ public class DBConnector {
 			props = new DBProperties(false);
 		    DBConnector connector = new DBConnector(props);
 		    new MqConsumer(connector);
+		    new Slackconsumer(props);
+		    new Twitterconsumer();
+		    new ChatConsumer();
 		} catch (IOException e) {e.printStackTrace();}
 	}
 	
