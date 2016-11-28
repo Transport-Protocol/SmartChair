@@ -115,7 +115,7 @@ function sendPressure(socket, whereUUID) {
 }
 
 function sendFirstXTemperature(socket, amount, whereUUID) {
-    const query = 'select * from temperature where ChairUUID = \'' + whereUUID + '\' order by time desc limit ' + amount;
+    const query = 'select * from temperature where ChairUUID = \'' + whereUUID + '\' order by desc limit ' + amount;
     dbClient.query(query).then(result => {
       //receive data and format it
       result = result[0];
@@ -137,14 +137,14 @@ function sendFirstXTemperature(socket, amount, whereUUID) {
 }
 
 function sendTemperature(socket, whereUUID) {
-    const query = 'select * from temperature where ChairUUID = \'' + whereUUID + '\' group by * order by desc limit 1';
+    const query = 'select * from temperature where ChairUUID = \'' + whereUUID + '\' order by desc limit 1';
     dbClient.query(query).then(result => {
         //receive data and format it
         result = result[0];
     var data =
     {
         cid: result.ChairUUID,
-        time: result.time,
+        time: new Date(result.time),
         t: {}
     }
     for(var i = 0; i < 1; i++) {
@@ -195,7 +195,7 @@ function sendChairs(socket) {
         if(result.empty) {
             i = result.length;
         } else {
-            chairsString[i] = result[i].ChairUUID;
+            chairsString[i] = result[i].value;
         }
     }
     //and then send it

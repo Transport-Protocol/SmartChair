@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router'
 import { ChairComponent } from './chair/chair.component';
 import { PressureComponent }   from './pressure/pressure.component';
-import { TemperatureComponent }   from './temperature.component';
 import { LineChartComponent } from './charts/linechart.component';
 import {AppComponent} from "./app.component";
 import {Header} from "./header/header";
@@ -18,7 +17,8 @@ import {ChairService} from "./shared/chair.service";
         BrowserModule,
         AppRoutingModule
     ],
-    declarations: [ AppComponent, DashboardComponent, Header, Footer, NavbarComponent, ChairComponent, PressureComponent, TemperatureComponent, LineChartComponent ],
+    declarations: [ AppComponent, DashboardComponent, Header, Footer, NavbarComponent,
+        ChairComponent, PressureComponent, LineChartComponent ],
     providers: [ ChairService ],
     bootstrap:    [ AppComponent ]
 })
