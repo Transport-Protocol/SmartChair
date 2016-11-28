@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-xs-12">
+        <br>
+        <h1>
+            Dashboard
+        </h1>
+        <br>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-2" *ngFor="let chair of chairs">
+                <a routerLink="/chair/{{chair.uuid}}">
+                    <button type="button" class="btn btn-primary btn-circle btn-xl">
+                        <img border="0" alt="Chair" src="../../images/chair.png" height="37" width="37">
+                    </button>
+                    <h5>
+                        {{chair.uuid}}
+                    </h5>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
