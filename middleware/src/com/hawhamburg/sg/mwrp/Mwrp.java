@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
+import com.hawhamburg.sg.mwrp.gamectrl.GameController;
 import com.hawhamburg.sg.mwrp.gui.MwrpFrame;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -21,6 +22,7 @@ public class Mwrp {
 		
 		boolean useGui = false;
 		boolean noServer = false;
+		boolean gameController = false;
 		
 		for (String s : args) {
 			switch (s) {
@@ -30,6 +32,9 @@ public class Mwrp {
 			case "-noserver":
 				noServer = true;
 				break;
+			case "-gctrl":
+				gameController = true;
+				break;
 			default:
 				System.out.println("Unrecognized arg: " + s);
 			}
@@ -38,7 +43,7 @@ public class Mwrp {
 
 		System.out.println("DeviceId: " + props.getChairId());
 
-		new Mwrp(props, useGui, noServer);
+		new Mwrp(props, useGui, noServer,gameController);
 	}
 
 	private Connection mq1Connection;
@@ -46,13 +51,14 @@ public class Mwrp {
 	private Mq1Consumer mq1Consumer;
 	private Mq2Publisher mq2Publisher;
 	private MwrpProperties properties;
-	private boolean useGui, winCtrl, noServer;
+	private boolean useGui, winCtrl, noServer,gameController;
 	private MwrpFrame frame;
 	private DataProvider dataProvider;
 
-	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer) throws IOException, TimeoutException {
+	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean gameController) throws IOException, TimeoutException {
 		this.useGui = useGui;
 		this.noServer = noServer;
+		this.gameController=gameController;
 		dataProvider=new DataProvider();
 		if (useGui) {
 			frame = new MwrpFrame(dataProvider);
@@ -81,11 +87,19 @@ public class Mwrp {
 			mq2Publisher = new Mq2Publisher(mq2Connection);
 			mq2Publisher.start();
 		}
+		
+		if(gameController)
+		{
+			System.out.println("Connecting to NodeMCU.");
+			GameController gctrl=new GameController("192.168.188.41",23);
+			gctrl.connect();
+			
+		}
 
 	}
 
 	private void consume(SensorMessage sensm) {
-		ChairMessage chm = new ChairMessage(properties.getChairId(), sensm.getSensortype(), sensm.getValues());
+		ChairMessage chm = new ChairMessage(properties.getChairId(), sensm.getSensortype(), sensm.getValues(),sensm.getTimestamp());
 		try {
 			if (!noServer) {
 				mq2Publisher.publish(chm);

@@ -72,6 +72,8 @@ public class DBProperties {
 
 	public String getDBName() {return getOrInit(DBConstants.DB_NAME_KEY, DBConstants.DEFVAL_DB_NAME);}
 	
+	public String getSlackAuthToken() {return getOrInit(DBConstants.SLACK_AUTH_TOKEN_KEY, DBConstants.DEFVAL_SLACK_AUTH_TOKEN);}
+	
 	public void initializePorpertiesFile() throws IOException{
 		for (Field f : DBConstants.class.getDeclaredFields()){
 			if (f.getName().endsWith("_KEY")){
