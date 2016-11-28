@@ -1,7 +1,4 @@
-/// <reference path="../../typings/socket-io.d.ts" />
-
 import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
-import * as io from "socket.io-client";
 import {Chair} from "../shared/chair";
 import {Params, ActivatedRoute} from "@angular/router";
 import {ChairService} from "../shared/chair.service";
@@ -10,8 +7,6 @@ import {ChairService} from "../shared/chair.service";
     selector: 'pressure',
     template: `
         <canvas class="canvas" #pressureCanvas width="150" height="300"></canvas>
-        <img #source src="https://mdn.mozillademos.org/files/5397/rhino.jpg"
-           width="300" height="227">
     `,
     styles: [`
         .canvas {
@@ -48,13 +43,6 @@ export class PressureComponent implements OnInit {
         }
 
         this.getPressure();
-
-        /*this.socket = io('http://localhost:8000');
-        this.socket.emit('getData', this.chair.uuid);
-
-        this.socket.on('pressure', function(message) {
-            this.updatePressure(JSON.parse(message));
-        }.bind(this));*/
     }
 
     getChairByID() {
@@ -71,18 +59,10 @@ export class PressureComponent implements OnInit {
                 console.log('getPressure() in pressure.component; pressure in for-loop: ' + pressureJSON.p[i]);
                 this.pressure[i] = pressureJSON.p[i];
             }
-            this.drawCanvasPressure();
+            if(this.drawReady) {
+                this.drawCanvasPressure();
+            }
         });
-    }
-
-    updatePressure(pressureJSON): void {
-        if(!pressureJSON) return;
-        for(var i in pressureJSON.p) {
-            this.pressure[i] = pressureJSON.p[i];
-        }
-        if(this.drawReady) {
-            this.drawCanvasPressure();
-        }
     }
 
     //draw code
@@ -135,10 +115,11 @@ export class PressureComponent implements OnInit {
             ctx.stroke();
         }
 
+
         function drawCircle(posX, posY, color) {
             ctx.beginPath();
             ctx.arc(posX * disX, posY * disY, radius, 0, 2*Math.PI);
-            ctx.fillStyle = percentageToHsl(color, 120, 0);
+            ctx.fillStyle = percentageToHsl(toPercent(color), 120, 0);
             ctx.fill();
             ctx.stroke();
         }
@@ -155,6 +136,13 @@ export class PressureComponent implements OnInit {
             return 'hsl(' + hue + ', 100%, 50%)';
         }
 
-        //TODO Drucksensoren gehen von 0 bis 1024
+        /**
+         * calculates the percentual value of incoming pressure data
+         * @param value: pressure value from 0 to 1024
+         * @returns {number} pressure value in 0% to 100%
+         */
+        function toPercent(value) {
+            return value / 1024
+        }
     }
 }

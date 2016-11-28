@@ -1,3 +1,4 @@
+///<reference path="../../typings/AmCharts.d.ts" />
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -8,56 +9,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-///<reference path="../../typings/AmCharts.d.ts" />
 var core_1 = require('@angular/core');
+var chair_1 = require("../shared/chair");
+var router_1 = require("@angular/router");
+var chair_service_1 = require("../shared/chair.service");
 var LineChartComponent = (function () {
-    function LineChartComponent() {
+    function LineChartComponent(chairService, route) {
+        this.chairService = chairService;
+        this.route = route;
         this.chartDiv = "chartdiv";
-        this.count = 0;
-        this.data = [{
-                "date": "2016-10-17T12:01:03.381Z",
-                "value": 13
-            }, {
-                "date": "2016-10-18T12:01:03.381Z",
-                "value": 11
-            }, {
-                "date": "2016-10-19T12:01:03.381Z",
-                "value": 15
-            }, {
-                "date": "2016-10-20T12:01:03.381Z",
-                "value": 16
-            }, {
-                "date": "2016-10-21T12:01:03.381Z",
-                "value": 18
-            }, {
-                "date": "2016-10-22T12:01:03.381Z",
-                "value": 13
-            }, {
-                "date": "2016-10-23T12:01:03.381Z",
-                "value": 22
-            }, {
-                "date": "2016-10-24T12:01:03.381Z",
-                "value": 23
-            }, {
-                "date": "2016-10-25T12:01:03.381Z",
-                "value": 20
-            }, {
-                "date": "2016-10-26T12:01:03.381Z",
-                "value": 17
-            }, {
-                "date": "2016-10-27T12:01:03.381Z",
-                "value": 16
-            }, {
-                "date": "2016-10-28T12:01:03.381Z",
-                "value": 18
-            }, {
-                "date": "2016-10-29T12:01:03.381Z",
-                "value": 21
-            }, {
-                "date": "2016-10-31T12:01:03.381Z",
-                "value": 25
-            }];
+        this.drawReady = false;
+        this.chair = new chair_1.Chair('null');
     }
+    LineChartComponent.prototype.ngOnInit = function () {
+        this.getChairByID();
+        this.getTemperature();
+    };
+    LineChartComponent.prototype.getChairByID = function () {
+        var _this = this;
+        this.route.params.forEach(function (params) {
+            _this.chair.uuid = params['uuid'];
+        });
+    };
     LineChartComponent.prototype.ngAfterViewInit = function () {
         this.chart = AmCharts.makeChart(this.chartDiv, {
             "type": "serial",
@@ -65,13 +38,21 @@ var LineChartComponent = (function () {
             "marginRight": 40,
             "marginLeft": 40,
             "autoMarginOffset": 20,
-            //"dataDateFormat": "YYYY-MM-DD",
+            "dataDateFormat": "YYYY-MM-DD JJ:NN:SS",
             "valueAxes": [{
                     "id": "v1",
                     "axisAlpha": 0,
                     "position": "left",
-                    "ignoreAxisWidth": true
+                    "ignoreAxisWidth": true,
+                    "maximum": 50,
+                    "minimum": -20,
+                    "labelFrequency": 2
                 }],
+            "numberFormatter": {
+                "precision": 1,
+                "decimalSeparator": ",",
+                "thousandsSeparator": ""
+            },
             "balloon": {
                 "borderThickness": 1,
                 "shadowAlpha": 0
@@ -101,33 +82,51 @@ var LineChartComponent = (function () {
                 "cursorAlpha": 1,
                 "cursorColor": "#258cbb",
                 "limitToGraph": "g1",
-                "valueLineAlpha": 0.2
+                "valueLineAlpha": 0.2,
+                "categoryBalloonDateFormat": "YYYY-MM-DD, JJ:NN:SS"
             },
             "categoryField": "date",
             "categoryAxis": {
                 "parseDates": true,
+                "minPeriod": "ss",
                 "dashLength": 1,
                 "minorGridEnabled": true
             },
-            "dataProvider": this.data
+            "dataProvider": [] //geTemperature - start werte
         });
-        //bind(this) is needed, because the "this" context gets lost in setInterval functions
-        setInterval(this.update.bind(this), 5000);
+        this.drawReady = true;
     };
-    LineChartComponent.prototype.update = function () {
-        this.chart.dataProvider.shift();
-        this.chart.dataProvider.push({
-            date: new Date().setDate(new Date().getDate() + this.count++),
-            value: Math.floor(Math.random() * 25)
+    LineChartComponent.prototype.getTemperature = function () {
+        var _this = this;
+        this.connection = this.chairService.getTemperature(this.chair.uuid).subscribe(function (temperature) {
+            var temperatureJSON = JSON.parse('' + temperature);
+            console.log('getTemperature() in temperature.component; pressure before for-loop: ' + temperature);
+            if (_this.drawReady)
+                _this.updateTemperature(temperatureJSON);
         });
+    };
+    LineChartComponent.prototype.updateTemperature = function (temperatureJSON) {
+        if (this.chart.dataProvider.length > LineChartComponent.MAX_MEASURE_POINTS)
+            this.chart.dataProvider.shift();
+        console.log(temperatureJSON.time.toLocaleString());
+        console.log(JSON.stringify(temperatureJSON.t));
+        var dataset = {
+            date: temperatureJSON.time,
+            value: temperatureJSON.t[0]
+        };
+        console.log("test");
+        if (this.chart.dataProvider.length > 0 && this.chart.dataProvider[this.chart.dataProvider.length - 1].date == dataset.date)
+            return;
+        this.chart.dataProvider.push(dataset);
         this.chart.validateData();
     };
+    LineChartComponent.MAX_MEASURE_POINTS = 20;
     LineChartComponent = __decorate([
         core_1.Component({
             selector: 'linechart',
             templateUrl: 'app/charts/linechart.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [chair_service_1.ChairService, router_1.ActivatedRoute])
     ], LineChartComponent);
     return LineChartComponent;
 }());

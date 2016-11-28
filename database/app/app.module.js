@@ -12,7 +12,6 @@ var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var chair_component_1 = require('./chair/chair.component');
 var pressure_component_1 = require('./pressure/pressure.component');
-var temperature_component_1 = require('./temperature.component');
 var linechart_component_1 = require('./charts/linechart.component');
 var app_component_1 = require("./app.component");
 var header_1 = require("./header/header");
@@ -30,7 +29,8 @@ var AppModule = (function () {
                 platform_browser_1.BrowserModule,
                 app_routing_1.AppRoutingModule
             ],
-            declarations: [app_component_1.AppComponent, dashboard_component_1.DashboardComponent, header_1.Header, footer_1.Footer, navbar_component_1.NavbarComponent, chair_component_1.ChairComponent, pressure_component_1.PressureComponent, temperature_component_1.TemperatureComponent, linechart_component_1.LineChartComponent],
+            declarations: [app_component_1.AppComponent, dashboard_component_1.DashboardComponent, header_1.Header, footer_1.Footer, navbar_component_1.NavbarComponent,
+                chair_component_1.ChairComponent, pressure_component_1.PressureComponent, linechart_component_1.LineChartComponent],
             providers: [chair_service_1.ChairService],
             bootstrap: [app_component_1.AppComponent]
         }), 

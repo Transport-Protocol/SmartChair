@@ -1,4 +1,3 @@
-/// <reference path="../../typings/socket-io.d.ts" />
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -28,12 +27,6 @@ var PressureComponent = (function () {
             this.pressure[i] = '' + i;
         }
         this.getPressure();
-        /*this.socket = io('http://localhost:8000');
-        this.socket.emit('getData', this.chair.uuid);
-
-        this.socket.on('pressure', function(message) {
-            this.updatePressure(JSON.parse(message));
-        }.bind(this));*/
     };
     PressureComponent.prototype.getChairByID = function () {
         var _this = this;
@@ -50,18 +43,10 @@ var PressureComponent = (function () {
                 console.log('getPressure() in pressure.component; pressure in for-loop: ' + pressureJSON.p[i]);
                 _this.pressure[i] = pressureJSON.p[i];
             }
-            _this.drawCanvasPressure();
+            if (_this.drawReady) {
+                _this.drawCanvasPressure();
+            }
         });
-    };
-    PressureComponent.prototype.updatePressure = function (pressureJSON) {
-        if (!pressureJSON)
-            return;
-        for (var i in pressureJSON.p) {
-            this.pressure[i] = pressureJSON.p[i];
-        }
-        if (this.drawReady) {
-            this.drawCanvasPressure();
-        }
     };
     //draw code
     PressureComponent.prototype.ngAfterViewInit = function () {
@@ -111,7 +96,7 @@ var PressureComponent = (function () {
         function drawCircle(posX, posY, color) {
             ctx.beginPath();
             ctx.arc(posX * disX, posY * disY, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = percentageToHsl(color, 120, 0);
+            ctx.fillStyle = percentageToHsl(toPercent(color), 120, 0);
             ctx.fill();
             ctx.stroke();
         }
@@ -126,7 +111,14 @@ var PressureComponent = (function () {
             var hue = (percentage * (hue1 - hue0)) + hue0;
             return 'hsl(' + hue + ', 100%, 50%)';
         }
-        //TODO Drucksensoren gehen von 0 bis 1024
+        /**
+         * calculates the percentual value of incoming pressure data
+         * @param value: pressure value from 0 to 1024
+         * @returns {number} pressure value in 0% to 100%
+         */
+        function toPercent(value) {
+            return value / 1024;
+        }
     };
     __decorate([
         core_1.ViewChild("pressureCanvas"), 
@@ -135,7 +127,7 @@ var PressureComponent = (function () {
     PressureComponent = __decorate([
         core_1.Component({
             selector: 'pressure',
-            template: "\n        <canvas class=\"canvas\" #pressureCanvas width=\"150\" height=\"300\"></canvas>\n        <img #source src=\"https://mdn.mozillademos.org/files/5397/rhino.jpg\"\n           width=\"300\" height=\"227\">\n    ",
+            template: "\n        <canvas class=\"canvas\" #pressureCanvas width=\"150\" height=\"300\"></canvas>\n    ",
             styles: ["\n        .canvas {\n          border: 1px solid black;\n          padding-left: 15px;\n          padding-right: 15px;\n        }\n        img {\n            display: none;\n        }\n    "],
             providers: [chair_service_1.ChairService]
         }), 
