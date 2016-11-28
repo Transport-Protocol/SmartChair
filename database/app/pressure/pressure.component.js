@@ -12,16 +12,38 @@ var core_1 = require('@angular/core');
 var chair_1 = require("../shared/chair");
 var router_1 = require("@angular/router");
 var chair_service_1 = require("../shared/chair.service");
+var Observable_1 = require("rxjs/Observable");
 var PressureComponent = (function () {
-    function PressureComponent(chairService, route) {
+    function PressureComponent(chairService, route, zone) {
+        var _this = this;
         this.chairService = chairService;
         this.route = route;
+        this.zone = zone;
         this.pressure = {};
-        this.socket = null;
         this.drawReady = false;
         this.chair = new chair_1.Chair('null');
+        this.detectChange().subscribe((function (uuid) {
+            if (uuid != _this.chair.uuid) {
+                _this.zone.run(function () {
+                    console.log('re-render');
+                    _this.start();
+                });
+            }
+        }));
     }
+    PressureComponent.prototype.detectChange = function () {
+        var _this = this;
+        var observable = new Observable_1.Observable(function (observer) {
+            _this.route.params.forEach(function (params) {
+                observer.next(params['uuid']);
+            });
+        });
+        return observable;
+    };
     PressureComponent.prototype.ngOnInit = function () {
+        this.start();
+    };
+    PressureComponent.prototype.start = function () {
         this.getChairByID();
         for (var i = 0; i < 10; i++) {
             this.pressure[i] = '' + i;
@@ -38,9 +60,9 @@ var PressureComponent = (function () {
         var _this = this;
         this.connection = this.chairService.getPressure(this.chair.uuid).subscribe(function (pressure) {
             var pressureJSON = JSON.parse('' + pressure);
-            console.log('getPressure() in pressure.component; pressure before for-loop: ' + pressure);
+            //console.log('getPressure() in pressure.component; pressure before for-loop: ' + pressure);
             for (var i in pressureJSON.p) {
-                console.log('getPressure() in pressure.component; pressure in for-loop: ' + pressureJSON.p[i]);
+                //console.log('getPressure() in pressure.component; pressure in for-loop: ' + pressureJSON.p[i]);
                 _this.pressure[i] = pressureJSON.p[i];
             }
             if (_this.drawReady) {
@@ -66,9 +88,11 @@ var PressureComponent = (function () {
         drawRoundRect(disX / 2, 3 * disY + disY / 2, 2 * disX, 2 * disY, radius);
         drawRoundRect(0, 3 * disY + disY / 2, disX / 2, 1.8 * disY, radius);
         drawRoundRect(ctx.canvas.width - disX / 2, 3 * disY + disY / 2, disX / 2, 1.8 * disY, radius);
-        for (var i in this.pressure) {
-            console.log('drawCanvasPressure() in pressure.component; pressure ' + i + ': ' + this.pressure[i]);
+        /*
+        for(var i in this.pressure) {
+            console.log('drawCanvasPressure() in pressure.component; pressure '+ i + ': ' + this.pressure[i]);
         }
+        */
         drawCircle(1, 1, this.pressure[4]);
         drawCircle(2, 1, this.pressure[5]);
         drawCircle(1, 2, this.pressure[6]);
@@ -131,7 +155,7 @@ var PressureComponent = (function () {
             styles: ["\n        .canvas {\n          border: 1px solid black;\n          padding-left: 15px;\n          padding-right: 15px;\n        }\n        img {\n            display: none;\n        }\n    "],
             providers: [chair_service_1.ChairService]
         }), 
-        __metadata('design:paramtypes', [chair_service_1.ChairService, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [chair_service_1.ChairService, router_1.ActivatedRoute, core_1.NgZone])
     ], PressureComponent);
     return PressureComponent;
 }());

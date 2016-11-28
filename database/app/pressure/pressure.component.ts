@@ -1,7 +1,8 @@
-import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
+import {Component, ViewChild, ElementRef, OnInit, NgZone} from '@angular/core';
 import {Chair} from "../shared/chair";
 import {Params, ActivatedRoute} from "@angular/router";
 import {ChairService} from "../shared/chair.service";
+import {Observable} from "rxjs/Observable";
 
 @Component({
     selector: 'pressure',
@@ -24,18 +25,37 @@ import {ChairService} from "../shared/chair.service";
 export class PressureComponent implements OnInit {
 
     pressure = {};
-    socket:any = null;
     connection;
     drawReady = false;
     chair: Chair = new Chair('null');
 
     @ViewChild("pressureCanvas") pressureCanvas: ElementRef;
 
-    constructor(private chairService: ChairService, private route: ActivatedRoute) {
+    constructor(private chairService: ChairService, private route: ActivatedRoute, private zone:NgZone) {
+        this.detectChange().subscribe((uuid => {
+            if(uuid != this.chair.uuid) {
+                this.zone.run(() => {
+                    console.log('re-render');
+                    this.start();
+                });
+            }
+        }))
+    }
+
+    detectChange() {
+        let observable = new Observable(observer => {
+            this.route.params.forEach((params: Params) => {
+                observer.next(params['uuid']);
+            });
+        });
+        return observable;
     }
 
     ngOnInit() {
+        this.start()
+    }
 
+    start() {
         this.getChairByID();
 
         for(var i = 0; i < 10; i++) {
@@ -54,9 +74,9 @@ export class PressureComponent implements OnInit {
     getPressure() {
         this.connection = this.chairService.getPressure(this.chair.uuid).subscribe(pressure => {
             let pressureJSON = JSON.parse('' + pressure);
-            console.log('getPressure() in pressure.component; pressure before for-loop: ' + pressure);
+            //console.log('getPressure() in pressure.component; pressure before for-loop: ' + pressure);
             for(var i in pressureJSON.p) {
-                console.log('getPressure() in pressure.component; pressure in for-loop: ' + pressureJSON.p[i]);
+                //console.log('getPressure() in pressure.component; pressure in for-loop: ' + pressureJSON.p[i]);
                 this.pressure[i] = pressureJSON.p[i];
             }
             if(this.drawReady) {
@@ -87,9 +107,11 @@ export class PressureComponent implements OnInit {
         drawRoundRect(0,3*disY+disY/2,disX/2,1.8*disY,radius);
         drawRoundRect(ctx.canvas.width-disX/2,3*disY+disY/2,disX/2,1.8*disY,radius);
 
+        /*
         for(var i in this.pressure) {
             console.log('drawCanvasPressure() in pressure.component; pressure '+ i + ': ' + this.pressure[i]);
         }
+        */
 
         drawCircle(1, 1, this.pressure[4]);
         drawCircle(2, 1, this.pressure[5]);

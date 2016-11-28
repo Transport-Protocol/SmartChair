@@ -10,20 +10,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var Observable_1 = require("rxjs/Observable");
 var chair_1 = require("../shared/chair");
 var router_1 = require("@angular/router");
 var chair_service_1 = require("../shared/chair.service");
 var LineChartComponent = (function () {
-    function LineChartComponent(chairService, route) {
+    function LineChartComponent(chairService, route, zone) {
+        var _this = this;
         this.chairService = chairService;
         this.route = route;
+        this.zone = zone;
         this.chartDiv = "chartdiv";
         this.drawReady = false;
         this.chair = new chair_1.Chair('null');
+        this.detectChange().subscribe((function (uuid) {
+            if (uuid != _this.chair.uuid) {
+                _this.zone.run(function () {
+                    console.log('re-render');
+                    _this.start();
+                });
+            }
+        }));
     }
     LineChartComponent.prototype.ngOnInit = function () {
+        this.start();
+    };
+    LineChartComponent.prototype.start = function () {
         this.getChairByID();
         this.getTemperature();
+        this.drawChart();
     };
     LineChartComponent.prototype.getChairByID = function () {
         var _this = this;
@@ -32,6 +47,9 @@ var LineChartComponent = (function () {
         });
     };
     LineChartComponent.prototype.ngAfterViewInit = function () {
+        this.drawChart();
+    };
+    LineChartComponent.prototype.drawChart = function () {
         this.chart = AmCharts.makeChart(this.chartDiv, {
             "type": "serial",
             "theme": "light",
@@ -96,11 +114,20 @@ var LineChartComponent = (function () {
         });
         this.drawReady = true;
     };
+    LineChartComponent.prototype.detectChange = function () {
+        var _this = this;
+        var observable = new Observable_1.Observable(function (observer) {
+            _this.route.params.forEach(function (params) {
+                observer.next(params['uuid']);
+            });
+        });
+        return observable;
+    };
     LineChartComponent.prototype.getTemperature = function () {
         var _this = this;
         this.connection = this.chairService.getTemperature(this.chair.uuid).subscribe(function (temperature) {
             var temperatureJSON = JSON.parse('' + temperature);
-            console.log('getTemperature() in temperature.component; pressure before for-loop: ' + temperature);
+            //console.log('getTemperature() in temperature.component; pressure before for-loop: ' + temperature);
             if (_this.drawReady)
                 _this.updateTemperature(temperatureJSON);
         });
@@ -108,13 +135,12 @@ var LineChartComponent = (function () {
     LineChartComponent.prototype.updateTemperature = function (temperatureJSON) {
         if (this.chart.dataProvider.length > LineChartComponent.MAX_MEASURE_POINTS)
             this.chart.dataProvider.shift();
-        console.log(temperatureJSON.time.toLocaleString());
-        console.log(JSON.stringify(temperatureJSON.t));
+        //console.log(temperatureJSON.time.toLocaleString());
+        //console.log(JSON.stringify(temperatureJSON.t));
         var dataset = {
             date: temperatureJSON.time,
             value: temperatureJSON.t[0]
         };
-        console.log("test");
         if (this.chart.dataProvider.length > 0 && this.chart.dataProvider[this.chart.dataProvider.length - 1].date == dataset.date)
             return;
         this.chart.dataProvider.push(dataset);
@@ -126,7 +152,7 @@ var LineChartComponent = (function () {
             selector: 'linechart',
             templateUrl: 'app/charts/linechart.component.html'
         }), 
-        __metadata('design:paramtypes', [chair_service_1.ChairService, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [chair_service_1.ChairService, router_1.ActivatedRoute, core_1.NgZone])
     ], LineChartComponent);
     return LineChartComponent;
 }());

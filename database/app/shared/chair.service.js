@@ -16,12 +16,13 @@ var Observable_1 = require('rxjs/Observable');
 var io = require("socket.io-client");
 var ChairService = (function () {
     function ChairService() {
-        this.url = 'http://localhost:8000';
+        this.socket = io('http://localhost:8000');
     }
     ChairService.prototype.getChairs = function () {
         var _this = this;
+        this.socket.disconnect();
+        this.socket = io('http://localhost:8000');
         var observable = new Observable_1.Observable(function (observer) {
-            _this.socket = io(_this.url);
             _this.socket.emit('getChairs', '');
             _this.socket.on('chairs', function (data) {
                 observer.next(data);
@@ -34,11 +35,12 @@ var ChairService = (function () {
     };
     ChairService.prototype.getPressure = function (whereUUID) {
         var _this = this;
+        this.socket.disconnect();
+        this.socket = io('http://localhost:8000');
         var observable = new Observable_1.Observable(function (observer) {
-            _this.socket = io(_this.url);
             _this.socket.emit('getPressure', whereUUID);
             _this.socket.on('pressure', function (data) {
-                console.log('getPressure() in chair.service; only data: ' + data);
+                //console.log('getPressure() in chair.service; only data: ' + data);
                 observer.next(data);
             });
             return function () {
@@ -49,11 +51,12 @@ var ChairService = (function () {
     };
     ChairService.prototype.getTemperature = function (whereUUID) {
         var _this = this;
+        this.socket.disconnect();
+        this.socket = io('http://localhost:8000');
         var observable = new Observable_1.Observable(function (observer) {
-            _this.socket = io(_this.url);
             _this.socket.emit('getTemperature', whereUUID);
             _this.socket.on('temperature', function (data) {
-                console.log('getTemperature() in chair.service; only data: ' + data);
+                //console.log('getTemperature() in chair.service; only data: ' + data);
                 observer.next(data);
             });
             return function () {
@@ -64,11 +67,12 @@ var ChairService = (function () {
     };
     ChairService.prototype.getFirstXTemperatures = function (amount, whereUUID) {
         var _this = this;
+        this.socket.disconnect();
+        this.socket = io('http://localhost:8000');
         var observable = new Observable_1.Observable(function (observer) {
-            _this.socket = io(_this.url);
             _this.socket.emit('getFirstXTemperatures', amount, whereUUID);
             _this.socket.on('firstTemperature', function (data) {
-                console.log('getFirstXTemperatures() in chair.service; only data: ' + data);
+                //console.log('getFirstXTemperatures() in chair.service; only data: ' + data);
                 observer.next(data);
             });
             return function () {
