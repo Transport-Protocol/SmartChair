@@ -99,7 +99,7 @@ task deployMwrp(dependsOn: buildMwrp) << {
     }
 }
 
-task deployMwrpToChair2(dependsOn: buildMwrp) << {
+task deployMwrpToChairAndStart2(dependsOn: buildMwrp) << {
 	ssh.run {
         session(remotes.chair2) {
 			def deployPath = '/home/chair/'
@@ -112,6 +112,18 @@ task deployMwrpToChair2(dependsOn: buildMwrp) << {
 			println ""
 			println result
 			println ""
+        }
+    }
+}
+
+task deployMwrpToChair2(dependsOn: buildMwrp) << {
+	ssh.run {
+        session(remotes.chair2) {
+			def deployPath = '/home/chair/'
+			jar.baseName = 'mwrp'
+			execute 'pkill -f ' + jar.archiveName + " < /dev/null > /dev/null 2> /dev/null", ignoreError: true
+			execute 'mkdir -p ' + deployPath+ " < /dev/null > /dev/null 2> /dev/null"
+			put from: jar.archivePath.path , into: deployPath + jar.archiveName
         }
     }
 }

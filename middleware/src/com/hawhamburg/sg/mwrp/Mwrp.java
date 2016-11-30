@@ -50,23 +50,29 @@ public class Mwrp {
 	private Connection mq2Connection;
 	private Mq1Consumer mq1Consumer;
 	private Mq2Publisher mq2Publisher;
+	private GameController gameController;
 	private MwrpProperties properties;
-	private boolean useGui, winCtrl, noServer,gameController;
+	private boolean useGui, winCtrl, noServer,useGameController;
 	private MwrpFrame frame;
 	private DataProvider dataProvider;
 
-	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean gameController) throws IOException, TimeoutException {
+	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean useGameController) throws IOException, TimeoutException {
 		this.useGui = useGui;
 		this.noServer = noServer;
-		this.gameController=gameController;
-		dataProvider=new DataProvider();
+		this.useGameController=useGameController;
+		properties = props;
+		ConnectionFactory factory = new ConnectionFactory();
+		mq1Connection = factory.newConnection();
+		mq1Consumer = new Mq1Consumer(mq1Connection);
+		mq1Consumer.addMessageHandler(this::consume);
+		mq1Consumer.start();
+		if(useGui||useGameController)
+			dataProvider=new DataProvider();
+		
 		if (useGui) {
 			frame = new MwrpFrame(dataProvider);
 			frame.setVisible(true);
 		}
-		properties = props;
-		ConnectionFactory factory = new ConnectionFactory();
-		mq1Connection = factory.newConnection();
 		if (!noServer) {
 			ConnectionFactory factory2 = new ConnectionFactory();
 			factory2.setHost(props.getMqHost());
@@ -80,34 +86,26 @@ public class Mwrp {
 				this.noServer=noServer = true;
 			}
 		}
-		mq1Consumer = new Mq1Consumer(mq1Connection);
-		mq1Consumer.addMessageHandler(this::consume);
-		mq1Consumer.start();
 		if (!noServer) {
 			mq2Publisher = new Mq2Publisher(mq2Connection);
 			mq2Publisher.start();
 		}
 		
-		if(gameController)
+		if(useGameController)
 		{
 			System.out.println("Connecting to NodeMCU.");
-			GameController gctrl=new GameController("192.168.188.41",23);
-			gctrl.connect();
+			gameController=new GameController(dataProvider, "ESP_C41A0F",23);
+			
+			gameController.connect();
+			mq1Consumer.addMessageHandler(gameController::sensorMessageReceived);
 			
 		}
 
 	}
 
 	private void consume(SensorMessage sensm) {
-		ChairMessage chm = new ChairMessage(properties.getChairId(), sensm.getSensortype(), sensm.getValues(),sensm.getTimestamp());
-		try {
-			if (!noServer) {
-				mq2Publisher.publish(chm);
-			}
-			if(useGui)
-				dataProvider.addValues(sensm);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		SensorTypeBehavior.getSensorTypeBehavior(sensm.getSensortype()).invoke(sensm, properties, dataProvider, mq2Publisher, gameController);
+
 	}
 }
