@@ -74,12 +74,19 @@ public class GameController {
 		sendPacket(new InputSignalPacket(sessionId, nextPacketId.getAndIncrement(), devs, vals));
 	}
 
-	public void sendKeys(InputCharacter... chars) throws IOException {
-		sendKeys((short) 100, chars);
-	}
-
 	public void sendKeys(short msTime, String keys) throws IOException {
 		sendKeys(msTime, InputCharacter.getChars(keys));
+	}
+
+	public void sendArduinoKeysKeys(short msTime, char... chars) throws IOException {
+
+		short[] devs = new short[chars.length];
+		short[] vals = new short[chars.length];
+		Arrays.fill(vals, msTime);
+		for (int i = 0; i < chars.length; i++) {
+			devs[i] = (short)chars[i];
+		}
+		sendPacket(new InputSignalPacket(sessionId, nextPacketId.getAndIncrement(), devs, vals));
 	}
 
 	public void sendKeys(String keys, short... msTime) throws IOException {
@@ -93,10 +100,6 @@ public class GameController {
 
 		}
 		sendPacket(new InputSignalPacket(sessionId, nextPacketId.getAndIncrement(), devs, msTime));
-	}
-
-	public void sendKeys(String keys) throws IOException {
-		sendKeys((short) 100, keys);
 	}
 
 	public void setLeds(boolean all) throws IOException {
