@@ -6,11 +6,12 @@ import java.util.Map;
 
 public enum InputCharacter {
 	SPACE		(' ',' '),
+	SPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACE(' ',' '),
 	ARROW_UP	('↑',(char)0xDA),
 	ARROW_DOWN	('↓',(char)0xD9),
 	ARROW_LEFT	('←',(char)0xD8),
 	ARROW_RIGHT	('→',(char)0xD7),
-	
+	/*
 	A	('A','A'),
 	B	('B','B'),
 	C	('C','C'),
@@ -64,7 +65,7 @@ public enum InputCharacter {
 	x	('x','x'),
 	y	('y','y'),
 	z	('z','z'),
-	
+	*/
 	ONE		('1','1'),
 	TWO		('2','2'),
 	THREE	('3','3'),
@@ -94,12 +95,15 @@ public enum InputCharacter {
 	}
 	
 	///////////////////////
-	
+
 	private static final Map<Character, InputCharacter> charMap=new HashMap<>();
+	private static final Map<String, InputCharacter> nameMap=new HashMap<>();
 	static
 	{
-		for(InputCharacter ch:values())
+		for(InputCharacter ch:values()){
 			charMap.put(ch.unicodePoint, ch);
+			nameMap.put(ch.name(), ch);
+		}
 		
 	}
 	
@@ -113,5 +117,13 @@ public enum InputCharacter {
 		return ic;
 	}
 	
+	public static InputCharacter getChar(char str)
+	{
+		return charMap.get(str);
+	}
 	
+	public static InputCharacter getOrNull(String name)
+	{
+		return nameMap.get(name);
+	}
 }
