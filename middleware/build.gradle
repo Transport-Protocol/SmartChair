@@ -77,7 +77,7 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
 }
-
+compileJava.options.encoding = 'UTF-8'
 task showPlatformVersion << {
     println ssh.version
     ssh.run {
