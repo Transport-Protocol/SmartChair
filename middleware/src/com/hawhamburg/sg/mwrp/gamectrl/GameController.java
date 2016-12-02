@@ -18,6 +18,7 @@ import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.SensorValue;
 import com.hawhamburg.sg.mwrp.DataProvider;
 import com.hawhamburg.sg.mwrp.gamectrl.data.*;
+
 import static com.hawhamburg.sg.mwrp.gamectrl.GameControllerDevice.*;
 
 public class GameController {

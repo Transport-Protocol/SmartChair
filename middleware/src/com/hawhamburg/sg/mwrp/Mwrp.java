@@ -13,6 +13,7 @@ import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.mwrp.gamectrl.GameController;
 import com.hawhamburg.sg.mwrp.gamectrl.GameControllerProperties;
+import com.hawhamburg.sg.mwrp.gamectrl.webinterface.GcHttpServer;
 import com.hawhamburg.sg.mwrp.gui.MwrpFrame;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -98,7 +99,8 @@ public class Mwrp {
 			GameControllerProperties gcProps=new GameControllerProperties();
 			gcProps.readFromFile(Paths.get(MwrpConstants.GAME_CONTROLLER_PROPERTIES_FILENAME));
 			gameController=new GameController(dataProvider, gcProps);
-			
+
+			new GcHttpServer(gcProps);
 			gameController.connect();
 			mq1Consumer.addMessageHandler(gameController::sensorMessageReceived);
 			

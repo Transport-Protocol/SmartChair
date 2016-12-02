@@ -1,0 +1,13 @@
+.maindiv
+{
+	margin: auto;
+	background-color: #fdffc6;
+	max-width: 400px;
+}
+
+.midalign
+{
+	margin: auto;
+	margin-bottom: 3px;
+	text-align: center;
+}
