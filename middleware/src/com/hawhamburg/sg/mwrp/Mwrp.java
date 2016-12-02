@@ -3,6 +3,7 @@ package com.hawhamburg.sg.mwrp;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeoutException;
 
 import javax.swing.BoxLayout;
@@ -11,6 +12,7 @@ import javax.swing.JFrame;
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.mwrp.gamectrl.GameController;
+import com.hawhamburg.sg.mwrp.gamectrl.GameControllerProperties;
 import com.hawhamburg.sg.mwrp.gui.MwrpFrame;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -93,8 +95,9 @@ public class Mwrp {
 		
 		if(useGameController)
 		{
-			System.out.println("Connecting to NodeMCU.");
-			gameController=new GameController(dataProvider, "ESP_C41A0F",23);
+			GameControllerProperties gcProps=new GameControllerProperties();
+			gcProps.readFromFile(Paths.get(MwrpConstants.GAME_CONTROLLER_PROPERTIES_FILENAME));
+			gameController=new GameController(dataProvider, gcProps);
 			
 			gameController.connect();
 			mq1Consumer.addMessageHandler(gameController::sensorMessageReceived);

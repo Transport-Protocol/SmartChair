@@ -21,9 +21,9 @@ import com.hawhamburg.sg.mwrp.gamectrl.data.*;
 import static com.hawhamburg.sg.mwrp.gamectrl.GameControllerDevice.*;
 
 public class GameController {
-	private String host;
-	private int port;
 
+	private GameControllerProperties properties;
+	
 	private Socket socket;
 
 	private DataOutputStream outStream;
@@ -36,15 +36,16 @@ public class GameController {
 	private short sessionId;
 	private DataProvider dataProvider;
 
-	public GameController(DataProvider dp, String host, int port) {
-		this.host = host;
-		this.port = port;
+	public GameController(DataProvider dp, GameControllerProperties properties) {
+		if(properties==null)
+			throw new IllegalArgumentException("properties");
 		this.dataProvider = dp;
+		this.properties=properties;
 	}
 
 	public void connect() throws UnknownHostException, IOException {
 		socket = new Socket();
-		socket.connect(new InetSocketAddress(InetAddress.getByName(host), port));
+		socket.connect(new InetSocketAddress(InetAddress.getByName(properties.getGcHost()), properties.getGcPort()));
 		outStream = new DataOutputStream(socket.getOutputStream());
 		inStream = new DataInputStream(socket.getInputStream());
 		connected = true;
@@ -78,7 +79,7 @@ public class GameController {
 		sendKeys(msTime, InputCharacter.getChars(keys));
 	}
 
-	public void sendArduinoKeysKeys(short msTime, char... chars) throws IOException {
+	public void sendArduinoKeys(short msTime, char... chars) throws IOException {
 
 		short[] devs = new short[chars.length];
 		short[] vals = new short[chars.length];
@@ -89,6 +90,15 @@ public class GameController {
 		sendPacket(new InputSignalPacket(sessionId, nextPacketId.getAndIncrement(), devs, vals));
 	}
 
+	public void sendArduinoKeys(short[] msTime, char... chars) throws IOException {
+
+		short[] devs = new short[chars.length];
+		for (int i = 0; i < chars.length; i++) {
+			devs[i] = (short)(chars[i]|GameControllerDevice.KEYBOARD_START.getId());
+		}
+		sendPacket(new InputSignalPacket(sessionId, nextPacketId.getAndIncrement(), devs, msTime));
+	}
+
 	public void sendKeys(String keys, short... msTime) throws IOException {
 		if (keys.length() != msTime.length)
 			throw new IllegalArgumentException("keys.length()!=msTime.length");
@@ -96,7 +106,7 @@ public class GameController {
 		InputCharacter[] chars = InputCharacter.getChars(keys);
 		short[] devs = new short[chars.length];
 		for (int i = 0; i < chars.length; i++) {
-			devs[i] = (short) (chars[i].getArduinoCode() | 0x0100);
+			devs[i] = (short) (chars[i].getArduinoCode() | GameControllerDevice.KEYBOARD_START.getId());
 
 		}
 		sendPacket(new InputSignalPacket(sessionId, nextPacketId.getAndIncrement(), devs, msTime));
@@ -162,7 +172,7 @@ public class GameController {
 		return nextPacketId.getAndIncrement();
 	}
 
-	boolean led = true;
+	boolean lastStep = true;
 
 	public final void sensorMessageReceived(SensorMessage<AbstractValue> smg) {
 		if(smg.getSensortype()!=SensorType.pressure)
@@ -175,54 +185,50 @@ public class GameController {
 		int fb, s;
 		fb = (p[0] + p[1]) - (p[2] + p[3]);
 		s = (p[0] + p[2]) - (p[1] + p[3]);
-		int gw = 150;
 		try {
 			StringBuilder aChars = new StringBuilder();
 			StringBuilder dChars = new StringBuilder();
 			if (0 == fb && 0 == s) {
-				if (led) {
-					dChars.append("↑↓←→");
-					led = false;
+				if (lastStep) {
+					dChars.append(properties.getKeyForward()).append(properties.getKeyBackward()).append(properties.getKeyLeft()).append(properties.getKeyRight());
+					lastStep=false;
 				}
 			} else {
-				if (fb < -gw) {
-					aChars.append('↑');
-					dChars.append('↓');
-					led = true;
-				} else if (fb > gw) {
-					aChars.append('↓');
-					dChars.append('↑');
-					led = true;
+				if (fb < -properties.getFbThreshold()) {
+					aChars.append(properties.getKeyForward());
+					dChars.append(properties.getKeyBackward());
+					lastStep = true;
+				} else if (fb > properties.getFbThreshold()) {
+					aChars.append(properties.getKeyBackward());
+					dChars.append(properties.getKeyForward());
+					lastStep = true;
 				}
 
-				if (s < -gw) {
-					aChars.append('←');
-					dChars.append('→');
-					led = true;
-				} else if (s > gw) {
-					aChars.append('→');
-					dChars.append('←');
-					led = true;
+				if (s < -properties.getSwThreshold()) {
+					aChars.append(properties.getKeyLeft());
+					dChars.append(properties.getKeyRight());
+					lastStep = true;
+				} else if (s > properties.getSwThreshold()) {
+					aChars.append(properties.getKeyRight());
+					dChars.append(properties.getKeyLeft());
+					lastStep = true;
 				}
 			}
 			if (aChars.length() + dChars.length() > 0) {
 				short[] t = new short[aChars.length() + dChars.length()];
 				Arrays.fill(t, 0, aChars.length(), (short) 200);
 				Arrays.fill(t, aChars.length(), t.length, (short) 0);
-				sendKeys(aChars.toString() + dChars.toString(), t);
+				sendArduinoKeys(t, (aChars.toString() + dChars.toString()).toCharArray());
 				boolean[] leds = new boolean[3];
 				for (int i = 0; i < aChars.length(); i++) {
-					switch (aChars.charAt(i)) {
-					case '↑':
+					char ch=aChars.charAt(i);
+					if(ch==properties.getKeyForward())
 						leds[0] = true;
-						break;
-					case '←':
+					if(ch==properties.getKeyLeft())
 						leds[1] = true;
-						break;
-					case '→':
+					if(ch==properties.getKeyRight())
 						leds[2] = true;
-						break;
-					}
+					
 				}
 				setLeds(leds[2], leds[0], leds[1]);
 			}

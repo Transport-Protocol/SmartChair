@@ -4,6 +4,7 @@ public final class MwrpConstants {
 	private MwrpConstants(){throw new RuntimeException();}
 
 	public static final String PROPERTIES_FILENAME="mwrp.properties";
+	public static final String GAME_CONTROLLER_PROPERTIES_FILENAME="gamecontroller.properties";
 
 	public static final String CHAIR_ID_KEY="chairId";
 	public static final String MQ_HOST_KEY="mqHost";

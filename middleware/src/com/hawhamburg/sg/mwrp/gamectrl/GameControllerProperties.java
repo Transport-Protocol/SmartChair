@@ -8,6 +8,7 @@ import java.util.Properties;
 import static com.hawhamburg.sg.mwrp.gamectrl.GameControllerPropertiesConstants.*;
 
 public class GameControllerProperties {
+
 	private char keyForward;
 	private char keyBackward;
 	private char keyLeft;
@@ -66,6 +67,86 @@ public class GameControllerProperties {
 		if(ch!=null)
 			return ch.getArduinoCode();
 		return (char)Integer.parseInt(str);
+	}
+
+	public char getKeyForward() {
+		return keyForward;
+	}
+
+	public void setKeyForward(char keyForward) {
+		this.keyForward = keyForward;
+	}
+
+	public char getKeyBackward() {
+		return keyBackward;
+	}
+
+	public void setKeyBackward(char keyBackward) {
+		this.keyBackward = keyBackward;
+	}
+
+	public char getKeyLeft() {
+		return keyLeft;
+	}
+
+	public void setKeyLeft(char keyLeft) {
+		this.keyLeft = keyLeft;
+	}
+
+	public char getKeyRight() {
+		return keyRight;
+	}
+
+	public void setKeyRight(char keyRight) {
+		this.keyRight = keyRight;
+	}
+
+	public char getKeyHop() {
+		return keyHop;
+	}
+
+	public void setKeyHop(char keyHop) {
+		this.keyHop = keyHop;
+	}
+
+	public int getFbThreshold() {
+		return fbThreshold;
+	}
+
+	public void setFbThreshold(int fbThreshold) {
+		this.fbThreshold = fbThreshold;
+	}
+
+	public int getSwThreshold() {
+		return swThreshold;
+	}
+
+	public void setSwThreshold(int swThreshold) {
+		this.swThreshold = swThreshold;
+	}
+
+	public String getGcHost() {
+		return gcHost;
+	}
+
+	public void setGcHost(String gcHost) {
+		this.gcHost = gcHost;
+	}
+
+	public int getGcPort() {
+		return gcPort;
+	}
+
+	public void setGcPort(int gcPort) {
+		this.gcPort = gcPort;
+	}
+
+	public Properties getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
 	}
 }
 
