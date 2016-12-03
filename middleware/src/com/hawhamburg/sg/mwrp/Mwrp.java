@@ -26,6 +26,7 @@ public class Mwrp {
 		boolean useGui = false;
 		boolean noServer = false;
 		boolean gameController = false;
+		boolean gameControllerWww = false;
 		
 		for (String s : args) {
 			switch (s) {
@@ -38,6 +39,9 @@ public class Mwrp {
 			case "-gctrl":
 				gameController = true;
 				break;
+			case "-gctrlwww":
+				gameControllerWww = true;
+				break;
 			default:
 				System.out.println("Unrecognized arg: " + s);
 			}
@@ -46,7 +50,7 @@ public class Mwrp {
 
 		System.out.println("DeviceId: " + props.getChairId());
 
-		new Mwrp(props, useGui, noServer,gameController);
+		new Mwrp(props, useGui, noServer,gameController,gameControllerWww);
 	}
 
 	private Connection mq1Connection;
@@ -55,14 +59,15 @@ public class Mwrp {
 	private Mq2Publisher mq2Publisher;
 	private GameController gameController;
 	private MwrpProperties properties;
-	private boolean useGui, winCtrl, noServer,useGameController;
+	private boolean useGui, winCtrl, noServer,useGameController,useGameControllerWebInterface;
 	private MwrpFrame frame;
 	private DataProvider dataProvider;
 
-	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean useGameController) throws IOException, TimeoutException {
+	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean useGameController, boolean gameControllerWww) throws IOException, TimeoutException {
 		this.useGui = useGui;
 		this.noServer = noServer;
-		this.useGameController=useGameController;
+		this.useGameController=useGameController=useGameController|gameControllerWww;
+		this.useGameControllerWebInterface=gameControllerWww;
 		properties = props;
 		ConnectionFactory factory = new ConnectionFactory();
 		mq1Connection = factory.newConnection();
@@ -99,8 +104,8 @@ public class Mwrp {
 			GameControllerProperties gcProps=new GameControllerProperties();
 			gcProps.readFromFile(Paths.get(MwrpConstants.GAME_CONTROLLER_PROPERTIES_FILENAME));
 			gameController=new GameController(dataProvider, gcProps);
-
-			new GcHttpServer(gcProps);
+			if(gameControllerWww)
+				new GcHttpServer(gcProps);
 			gameController.connect();
 			mq1Consumer.addMessageHandler(gameController::sensorMessageReceived);
 			

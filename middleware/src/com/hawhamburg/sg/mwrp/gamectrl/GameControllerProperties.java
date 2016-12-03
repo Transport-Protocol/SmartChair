@@ -1,9 +1,14 @@
 package com.hawhamburg.sg.mwrp.gamectrl;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import static com.hawhamburg.sg.mwrp.gamectrl.GameControllerPropertiesConstants.*;
 
@@ -28,6 +33,8 @@ public class GameControllerProperties {
 	public void readFromFile(Path filename) throws IOException
 	{
 		Properties props=new Properties();
+		if(!Files.exists(filename))
+			Files.createFile(filename);
 		props.load(Files.newInputStream(filename,StandardOpenOption.READ));
 
 		keyForward=getKeycode(props, KEY_KEY_FORWARD, DEFVAL_KEY_FORWARD);
@@ -66,9 +73,39 @@ public class GameControllerProperties {
 		InputCharacter ch=InputCharacter.getOrNull(str);
 		if(ch!=null)
 			return ch.getArduinoCode();
-		return (char)Integer.parseInt(str);
+		return (char)InputCharacter.keycodeToArduino((char)Integer.parseInt(str));
 	}
-
+	
+	public Map<String,Integer> getArduinoKeyMap()
+	{
+		Map<String,Integer> map=new HashMap<>();
+		map.put(KEY_KEY_FORWARD, (int)keyForward);
+		map.put(KEY_KEY_BACKWARD, (int)keyBackward);
+		map.put(KEY_KEY_LEFT, (int)keyLeft);
+		map.put(KEY_KEY_RIGHT, (int)keyRight);
+		map.put(KEY_KEY_HOP, (int)keyHop);
+		return map;
+	}
+	
+	public Map<String,Integer> getKeycodeMap()
+	{
+		Map<String,Integer> map=new HashMap<>();
+		map.put(KEY_KEY_FORWARD, (int)InputCharacter.arduinoToKeycode(keyForward));
+		map.put(KEY_KEY_BACKWARD, (int)InputCharacter.arduinoToKeycode(keyBackward));
+		map.put(KEY_KEY_LEFT, (int)InputCharacter.arduinoToKeycode(keyLeft));
+		map.put(KEY_KEY_RIGHT, (int)InputCharacter.arduinoToKeycode(keyRight));
+		map.put(KEY_KEY_HOP, (int)InputCharacter.arduinoToKeycode(keyHop));
+		return map;
+	}
+	
+	public void setKey(String name, char c)
+	{
+		try {
+			MethodHandles.lookup().findSetter(this.getClass(), name, char.class).invokeExact(this,c);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
 	public char getKeyForward() {
 		return keyForward;
 	}
@@ -148,29 +185,4 @@ public class GameControllerProperties {
 	public void setProperties(Properties properties) {
 		this.properties = properties;
 	}
-}
-
-class GameControllerPropertiesConstants
-{
-	static final String KEY_KEY_FORWARD="keyForward";
-	static final String KEY_KEY_BACKWARD="keyBackward";
-	static final String KEY_KEY_LEFT="keyLeft";
-	static final String KEY_KEY_RIGHT="keyRight";
-	static final String KEY_DIRECTION_CONTROLS_SIDEWAYS_THRESHOLD_VALUE="directionControlsSwThresholdValue";
-	static final String KEY_DIRECTION_CONTROLS_FORWARD_AND_BACKWARD_THRESHOLD_VALUE="directionControlsFbThresholdValue";
-	static final String KEY_GAME_CONTROLLER_HOST="gcHost";
-	static final String KEY_GAME_CONTROLLER_PORT="gcPort";
-	static final String KEY_KEY_HOP="keyHop";
-	
-	static final String DEFVAL_KEY_FORWARD="ARROW_UP";
-	static final String DEFVAL_KEY_BACKWARD="ARROW_DOWN";
-	static final String DEFVAL_KEY_LEFT="ARROW_LEFT";
-	static final String DEFVAL_KEY_RIGHT="ARROW_RIGHT";
-	static final String DEFVAL_DIRECTION_CONTROLS_SIDEWAYS_THRESHOLD_VALUE="150";
-	static final String DEFVAL_DIRECTION_CONTROLS_FORWARD_AND_BACKWARD_THRESHOLD_VALUE="150";
-	static final String DEFVAL_GAME_CONTROLLER_HOST="127.0.0.1";
-	static final String DEFVAL_GAME_CONTROLLER_PORT="6524";
-	static final String DEFVAL_KEY_HOP="SPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACE";
-	
-	
 }
