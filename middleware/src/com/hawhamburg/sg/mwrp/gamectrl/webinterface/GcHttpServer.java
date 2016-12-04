@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hawhamburg.sg.mwrp.MwrpConstants;
 import com.hawhamburg.sg.mwrp.gamectrl.GameControllerProperties;
 import com.hawhamburg.sg.mwrp.gamectrl.GameControllerPropertiesConstants;
 import com.hawhamburg.sg.mwrp.gamectrl.InputCharacter;
@@ -34,6 +36,7 @@ public class GcHttpServer extends NanoHTTPD {
 		dynContent.put("keymapping.html", handlers);
 
 		restHandlers.put("keys", this::apiKeys);
+		restHandlers.put("save", this::apiSave);
 	}
 
 	private GameControllerProperties properties;
@@ -58,7 +61,7 @@ public class GcHttpServer extends NanoHTTPD {
 		else if ((session.getMethod() == Method.GET || session.getMethod() == Method.POST)
 				&& session.getUri().startsWith("/api/"))
 			return serveRest(session);
-		return newFixedLengthResponse(Status.OK, "text/html",
+		return newFixedLengthResponse(Status.NOT_FOUND, "text/html",
 				"<html><title>404!!1</title><body><h1>for oh for</h1></body></html>");
 	}
 
@@ -66,7 +69,7 @@ public class GcHttpServer extends NanoHTTPD {
 		String path = session.getUri().substring("/api/".length());
 		RestHandler h = restHandlers.get(path);
 		if (h == null)
-			return newFixedLengthResponse(Status.NOT_FOUND, "text/html", "V.V");
+			return newFixedLengthResponse(Status.NOT_FOUND, "application/json", "V.V");
 		return h.invoke(session);
 	}
 
@@ -85,7 +88,7 @@ public class GcHttpServer extends NanoHTTPD {
 					file = file.replace(String.format("${%s}", handler.getKey()),
 							handler.getValue().invoke(handler.getKey()));
 
-			return newFixedLengthResponse(Status.OK, "text/html", file);
+			return newFixedLengthResponse(Status.OK, MimeType.valueOf(filename.substring(filename.lastIndexOf('.')+1)).getMimeType(), file);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return newFixedLengthResponse(Status.NOT_FOUND, "text/html", "File not found");
@@ -111,8 +114,8 @@ public class GcHttpServer extends NanoHTTPD {
 			ch = c == null ? ch : c.getKeyCode();
 
 			sb.append(String.format(
-					"<div class=\"midalign keyButton\" id=\"%s\">%s：<input value=\"%s\" readonly></input></div>\n",
-					entry.getKey(), GameControllerPropertiesConstants.MAPPING_KEY_NAME.get(entry.getKey()),
+					"<div class=\"midalign keyButton\">%s：<input id=\"%s\" value=\"%s\" ></input></div>\n",
+					 GameControllerPropertiesConstants.MAPPING_KEY_NAME.get(entry.getKey()),entry.getKey(),
 					KeyEvent.getKeyText(ch)));
 		}
 
@@ -121,9 +124,11 @@ public class GcHttpServer extends NanoHTTPD {
 
 	private Response apiKeys(IHTTPSession session) {
 		switch (session.getMethod()) {
+		default:
+			return newFixedLengthResponse(Status.METHOD_NOT_ALLOWED,MimeType.html.getMimeType(),"Method not allowed");
 		case GET:
 			try {
-				return newFixedLengthResponse(jsonMapper.writeValueAsString(properties.getKeycodeMap()));
+				return newFixedLengthResponse(Status.OK,MimeType.json.getMimeType(),jsonMapper.writeValueAsString(properties.getKeycodeMap()));
 			} catch (JsonProcessingException e) {
 				return newFixedLengthResponse("{}");
 			}
@@ -146,8 +151,20 @@ public class GcHttpServer extends NanoHTTPD {
 			} catch (IOException|ResponseException e) {
 				return newFixedLengthResponse(Status.INTERNAL_ERROR,"","");
 			}
+		}
+	}
+
+	private Response apiSave(IHTTPSession session) {
+		switch (session.getMethod()) {
 		default:
-			return newFixedLengthResponse(Status.METHOD_NOT_ALLOWED, "", "");
+			return newFixedLengthResponse(Status.METHOD_NOT_ALLOWED,MimeType.html.getMimeType(),"Method not allowed");
+		case POST:
+			try {
+				properties.save(Paths.get(MwrpConstants.GAME_CONTROLLER_PROPERTIES_FILENAME));
+				return newFixedLengthResponse(Status.OK,"application/json","\"Success!\"");
+			} catch (IOException e) {
+				return newFixedLengthResponse(Status.INTERNAL_ERROR,"","");
+			}
 		}
 	}
 }

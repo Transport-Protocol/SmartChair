@@ -2,13 +2,15 @@
   <head>
     <title>Keymapping ${hostname}</title>
     <meta content="">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="keymapping.js"></script>
   </head>
-  <body>
+  <body onload="init()">
   	<div class="maindiv">
   		<h1 class="midalign">${hostname} game controller configuration</h1>
-  		<div class="midalign"><button disabled> test </button></div>
   		${keyUi}
-  	<div>
+  		<div class="midalign"><button onclick="saveConfig()">Save Configuration</button></div>
+  		<div class="midalign"><p id="responseLabel"></p></div>
+  	</div>
   </body>
 </html>
