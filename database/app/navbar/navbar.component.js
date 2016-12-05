@@ -13,6 +13,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var chair_service_1 = require('../shared/chair.service');
+var chair_1 = require("../shared/chair");
 var NavbarComponent = (function () {
     function NavbarComponent(chairService) {
         this.chairService = chairService;
@@ -22,8 +23,9 @@ var NavbarComponent = (function () {
     NavbarComponent.prototype.getChairs = function () {
         var _this = this;
         this.connection = this.chairService.getChairs().subscribe(function (chairs) {
-            for (var i in chairs) {
-                _this.chairs[i] = { uuid: chairs[i] };
+            var chairJSON = JSON.parse('' + chairs);
+            for (var i in chairJSON.cid) {
+                _this.chairs[i] = new chair_1.Chair(chairJSON.cid[i]);
             }
         });
     };
