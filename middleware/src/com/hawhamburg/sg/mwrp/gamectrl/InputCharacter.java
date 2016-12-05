@@ -106,7 +106,7 @@ public enum InputCharacter {
 	public static char keycodeToArduino(char kc)
 	{
 		InputCharacter ic=charMap.get(kc);
-		return ic==null?kc:ic.arduinoCode;
+		return Character.toLowerCase(ic==null?kc:ic.arduinoCode);
 	}
 	
 	public static char arduinoToKeycode(char ard)
