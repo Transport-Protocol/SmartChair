@@ -186,18 +186,20 @@ function sendChairs(socket) {
     })
 }
 */
+
+/*
 function sendChairs(socket) {
     const query = 'SHOW TAG VALUES FROM pressure WITH KEY = ChairUUID';
     dbClient.query(query).then(result => {
         //receive data and format it
         var chairsString = [];
         for(var i = 0; i < result.length; i++) {
-        if(result.empty) {
-            i = result.length;
-        } else {
-            chairsString[i] = result[i].value;
+            if (result.empty) {
+                i = result.length;
+            } else {
+                chairsString[i] = result[i].value;
+            }
         }
-    }
     //and then send it
     socket.emit('chairs', chairsString);
 
@@ -206,3 +208,32 @@ function sendChairs(socket) {
     res.status(500).send(err.stack)
 })
 }
+*/
+
+ function sendChairs(socket) {
+    const query = 'SHOW TAG VALUES FROM pressure WITH KEY = ChairUUID';
+    dbClient.query(query).then(result => {
+    //receive data and format it
+        var data = {
+                cid: {},
+                time: {}
+        }
+        for(var i = 0; i < result.length; i++) {
+         console.log(result[i].value);
+            data.cid[i] = result[i].value;
+            const query = 'select * from pressure where ChairUUID = \'' + result[i].value + '\' order by desc limit 1';
+            dbClient.query(query).then(result2 => {
+                data.time[i] = new Date(result2.time);
+            }).catch(err => {
+                    console.log("sendChairs: " + err);
+                res.status(500).send(err.stack)
+            })
+        }
+    //and then send it
+    socket.emit('chairs', JSON.stringify(data));
+
+    }).catch(err => {
+    console.log("sendChairs: " + err);
+    res.status(500).send(err.stack)
+    })
+ }

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var chair_service_1 = require("../shared/chair.service");
+var chair_1 = require("../shared/chair");
 var DashboardComponent = (function () {
     function DashboardComponent(chairService) {
         this.chairService = chairService;
@@ -18,8 +19,16 @@ var DashboardComponent = (function () {
     DashboardComponent.prototype.getChairs = function () {
         var _this = this;
         this.connection = this.chairService.getChairs().subscribe(function (chairs) {
-            for (var i in chairs) {
-                _this.chairs[i] = { uuid: chairs[i] };
+            var chairJSON = JSON.parse('' + chairs);
+            console.log(new Date().getTime());
+            for (var i in chairJSON.cid) {
+                _this.chairs[i] = new chair_1.Chair(chairJSON.cid[i]);
+                if (new Date().getTime() - new Date(chairJSON.time[i]).getTime() < 300000) {
+                    _this.chairs[i].active = true;
+                }
+                else {
+                    _this.chairs[i].active = false;
+                }
             }
         });
     };
