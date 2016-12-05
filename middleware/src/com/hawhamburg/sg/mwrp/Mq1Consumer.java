@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.SensorMessage;
+import com.hawhamburg.sg.data.SensorType;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -53,14 +54,13 @@ public class Mq1Consumer implements Consumer {
 		System.out.println("Cancel: " + consumerTag);
 
 	}
-
+	private long lastTime=0;
 	@Override
 	public void handleDelivery(String arg0, Envelope arg1, BasicProperties arg2, byte[] arg3) throws IOException {
-		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
+		//System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
 
 		try {
 			SensorMessage msg = SensorMessage.parseJson(arg3);
-
 			for (int i = 0; i < msgHandlers.size(); i++)
 				msgHandlers.get(i).messageReceived(msg);
 			channel.basicAck(arg1.getDeliveryTag(), false);

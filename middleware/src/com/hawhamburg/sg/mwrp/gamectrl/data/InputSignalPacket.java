@@ -42,18 +42,23 @@ public class InputSignalPacket implements IDataPacket {
 	{
 		return values;
 	}
-	
+	private static long lastTime=0;
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
+		long t=System.currentTimeMillis();
+		System.out.printf("TimeDelta: %d, SessionId: %d, PacketId: %d, Devices.length: %d, [",t-lastTime,sessionId,packetId,devices.length);
+		lastTime=t;
 		stream.writeShort(sessionId);
 		stream.writeShort(packetId>>8);
 		stream.writeByte(packetId);
 		stream.writeByte(devices.length);
 		for(int i=0;i<Math.min(devices.length,values.length);i++)
 		{
+			System.out.printf("%s%x:%d",i==0?"":", ",devices[i],values[i]);
 			stream.writeShort(devices[i]);
 			stream.writeShort(values[i]);
 		}
+		System.out.println("]");
 	}
 
 	@Override

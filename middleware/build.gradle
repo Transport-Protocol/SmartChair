@@ -69,12 +69,15 @@ dependencies {
     
     // https://mvnrepository.com/artifact/com.ullink.slack/simpleslackapi
 	compile group: 'com.ullink.slack', name: 'simpleslackapi', version: '0.6.0'
+	
+	//
+	compile group: 'org.nanohttpd', name: 'nanohttpd', version: '2.2.0'
 
 }
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
 }
-
+compileJava.options.encoding = 'UTF-8'
 task showPlatformVersion << {
     println ssh.version
     ssh.run {
@@ -111,7 +114,7 @@ task deployMwrp(dependsOn: buildMwrp) << {
     }
 }
 
-task deployMwrpToChair2(dependsOn: buildMwrp) << {
+task deployMwrpToChairAndStart2(dependsOn: buildMwrp) << {
 	ssh.run {
         session(remotes.chair2) {
 			def deployPath = '/home/chair/'
@@ -124,6 +127,18 @@ task deployMwrpToChair2(dependsOn: buildMwrp) << {
 			println ""
 			println result
 			println ""
+        }
+    }
+}
+
+task deployMwrpToChair2(dependsOn: buildMwrp) << {
+	ssh.run {
+        session(remotes.chair2) {
+			def deployPath = '/home/chair/'
+			jar.baseName = 'mwrp'
+			execute 'pkill -f ' + jar.archiveName + " < /dev/null > /dev/null 2> /dev/null", ignoreError: true
+			execute 'mkdir -p ' + deployPath+ " < /dev/null > /dev/null 2> /dev/null"
+			put from: jar.archivePath.path , into: deployPath + jar.archiveName
         }
     }
 }
