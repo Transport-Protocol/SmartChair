@@ -38,18 +38,6 @@ public class DBConnector {
 		influxDB.write(dbName, "autogen", chairMessageToPoint(msg));
 	}
 	
-	public static void main(String... args){
-		DBProperties props;
-		try {
-			props = new DBProperties(false);
-		    DBConnector connector = new DBConnector(props);
-		    new MqConsumer(connector);
-		    new Slackconsumer(props);
-		    new Twitterconsumer();
-		    new ChatConsumer();
-		} catch (IOException e) {e.printStackTrace();}
-	}
-	
 	 @SuppressWarnings("rawtypes")
 	private Point chairMessageToPoint(ChairMessage msg){
 //		 System.out.println("writing msg to db: " + msg.getSensortype());
