@@ -4,6 +4,7 @@
 
 export class Chair {
     uuid: string
+    active: boolean
 
     constructor(uuid: string) {
         this.uuid = uuid;

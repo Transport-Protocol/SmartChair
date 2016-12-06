@@ -7,7 +7,7 @@ import {Observable} from "rxjs/Observable";
 @Component({
     selector: 'pressure',
     template: `
-        <canvas class="canvas" #pressureCanvas width="150" height="300"></canvas>
+        <canvas class="canvas" #pressureCanvas width="100%" height="100%"></canvas>
     `,
     styles: [`
         .canvas {

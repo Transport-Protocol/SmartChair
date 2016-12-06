@@ -22,8 +22,9 @@ export class NavbarComponent implements OnInit {
 
     getChairs() {
         this.connection = this.chairService.getChairs().subscribe(chairs => {
-            for(var i in chairs) {
-                this.chairs[i] = { uuid: chairs[i] };
+            let chairJSON = JSON.parse('' + chairs);
+            for(var i in chairJSON.cid) {
+                this.chairs[i] = new Chair(chairJSON.cid[i]);
             }
         });
     }

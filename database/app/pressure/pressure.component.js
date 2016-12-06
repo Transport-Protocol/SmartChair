@@ -151,7 +151,7 @@ var PressureComponent = (function () {
     PressureComponent = __decorate([
         core_1.Component({
             selector: 'pressure',
-            template: "\n        <canvas class=\"canvas\" #pressureCanvas width=\"150\" height=\"300\"></canvas>\n    ",
+            template: "\n        <canvas class=\"canvas\" #pressureCanvas width=\"100%\" height=\"100%\"></canvas>\n    ",
             styles: ["\n        .canvas {\n          border: 1px solid black;\n          padding-left: 15px;\n          padding-right: 15px;\n        }\n        img {\n            display: none;\n        }\n    "],
             providers: [chair_service_1.ChairService]
         }), 

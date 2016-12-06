@@ -6,8 +6,8 @@
     </div>
 </div>
 <div class="row">
-    <div>
-        <a *ngFor="let chair of chairs" class="quick-btn" style="height: 160px; width: 200px;" routerLink="/chair/{{chair.uuid}}">
+    <div *ngFor="let chair of chairs" class="col-lg-2 col-md-6 col-xs-12" style="padding-bottom: 10px; margin-right: 30px;">
+        <a class="quick-btn" style="height: 160px; width: 200px;" routerLink="/chair/{{chair.uuid}}">
             <img border="0" alt="Chair" src="../../images/chair.png" height="70%" width="50%">
             <span style="overflow:hidden;">{{chair.uuid}}</span>
         </a>
