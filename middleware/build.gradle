@@ -145,7 +145,7 @@ task deployMwrpToChair2(dependsOn: buildMwrp) << {
 
 task buildDBConnect(type: Jar) {
     manifest { 
-    	attributes "Main-Class": "de.hawhamburg.sg.db.DBConnector"
+    	attributes "Main-Class": "de.hawhamburg.sg.db.Main"
   	}  
 	baseName = 'DBConnect'
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

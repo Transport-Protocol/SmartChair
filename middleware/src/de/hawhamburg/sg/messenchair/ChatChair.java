@@ -17,10 +17,11 @@ public class ChatChair {
 	private final String hostname;
 	private int mannedCounter = 0;
 	
-	public ChatChair(ChatPublisher publisher, String hostname)
+	public ChatChair(ChatPublisher publisher, String hostname, int mannedCounter)
 	{
 		this.publisher = publisher;
 		this.hostname = hostname;
+		this.mannedCounter = mannedCounter;
 	}
 	
 	void newMessage(ChairMessage<SensorValue> msg)
@@ -102,9 +103,9 @@ public class ChatChair {
 		}
 		else
 		{
-			
+			long timeInSeconds = timestamp - firstMannedTimestamp / 1000;
 			text = "Der Benutzer des Stuhls ist aufgestanden.\n"
-					+ "Er hat " + ((timestamp - firstMannedTimestamp)/60000) + " Minuten auf dem Stuhl gesessen.";
+					+ "Er hat " + (timeInSeconds/60) + " Minuten und " + (timeInSeconds%60) + " auf dem Stuhl gesessen.";
 			// /1000 -> s /60 -> min
 		}
 		

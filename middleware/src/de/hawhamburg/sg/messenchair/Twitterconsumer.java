@@ -54,10 +54,11 @@ public class Twitterconsumer implements Consumer{
 			else postToTwitter(msg.getMessage());
 			
 //			System.out.println(msg);
-			channel.basicAck(arg1.getDeliveryTag(), false);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		channel.basicAck(arg1.getDeliveryTag(), false);
 
 	}
 
