@@ -9,6 +9,7 @@ function init()
 		elem.addEventListener("keydown",handleKey);
 		keyElems.push(elem);
 	}
+	keyElems[0].focus();
 }
 
 function handleKey(event)
@@ -24,7 +25,8 @@ function handleKey(event)
 		    }
 		}
 		let v={};
-		v[event.target.id]=String.fromCharCode(event.keyCode).toUpperCase().charCodeAt(0);
+		//v[event.target.id]=event.key.length==1?event.key.charCodeAt(0):event.keyCode;
+		v[event.target.id]=event.keyCode;
 		xhr.send(JSON.stringify(v));
 	}
 }

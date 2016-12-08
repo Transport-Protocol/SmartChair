@@ -111,11 +111,11 @@ public class GameControllerProperties {
 
 	public Map<String, Integer> getKeycodeMap() {
 		Map<String, Integer> map = new HashMap<>();
-		map.put(KEY_KEY_FORWARD, (int) InputCharacter.arduinoToKeycode(keyForward));
-		map.put(KEY_KEY_BACKWARD, (int) InputCharacter.arduinoToKeycode(keyBackward));
-		map.put(KEY_KEY_LEFT, (int) InputCharacter.arduinoToKeycode(keyLeft));
-		map.put(KEY_KEY_RIGHT, (int) InputCharacter.arduinoToKeycode(keyRight));
-		map.put(KEY_KEY_HOP, (int) InputCharacter.arduinoToKeycode(keyHop));
+		map.put(KEY_KEY_FORWARD, (int) Character.toUpperCase(InputCharacter.arduinoToKeycode(keyForward)));
+		map.put(KEY_KEY_BACKWARD, (int) Character.toUpperCase(InputCharacter.arduinoToKeycode(keyBackward)));
+		map.put(KEY_KEY_LEFT, (int) Character.toUpperCase(InputCharacter.arduinoToKeycode(keyLeft)));
+		map.put(KEY_KEY_RIGHT, (int) Character.toUpperCase(InputCharacter.arduinoToKeycode(keyRight)));
+		map.put(KEY_KEY_HOP, (int) Character.toUpperCase(InputCharacter.arduinoToKeycode(keyHop)));
 		return map;
 	}
 
