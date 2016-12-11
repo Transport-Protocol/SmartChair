@@ -63,11 +63,11 @@ public class ChairFileHandler {
 			if(chairNumber == 1)
 			{
 				fw.writeUTF("chair1:" + counter);
-				fw.writeUTF("chair2:" + chair2.charAt(chair2.length()-2));
+				fw.writeUTF("chair2:" + chair2.charAt(chair2.length()-1));
 			}
 			else if(chairNumber == 2)
 			{
-				fw.writeUTF("chair1:" + chair1.charAt(chair1.length()-2));
+				fw.writeUTF("chair1:" + chair1.charAt(chair1.length()-1));
 				fw.writeUTF("chair2:" + counter);
 			}
 			fw.flush();
