@@ -1,5 +1,4 @@
 package de.hawhamburg.sg.db;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -8,10 +7,12 @@ import org.influxdb.dto.Point.Builder;
 
 import com.hawhamburg.sg.data.ChairMessage;
 
-import de.hawhamburg.sg.messenchair.ChatConsumer;
-import de.hawhamburg.sg.messenchair.Slackconsumer;
-import de.hawhamburg.sg.messenchair.Twitterconsumer;
-
+/**
+ * DBConnector converts a Chairmessage to a DataPoint
+ * and inserts it into the Influx-Database 
+ * Needs to be configured in
+ * db.properties
+ */
 public class DBConnector {
 	
 	private InfluxDB influxDB;

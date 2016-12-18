@@ -19,6 +19,12 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
+/**
+ * Twitterconsumer consumes a ChatMessage
+ * and posts the Message to Twitter
+ * Twitter needs to be configured in 
+ * twitter4j.properties
+ */
 public class Twitterconsumer implements Consumer{
 	private Connection connection;
 	private Channel channel;

@@ -2,12 +2,9 @@ package de.hawhamburg.sg.db;
 
 import java.io.IOException;
 
-import com.hawhamburg.sg.data.SensorType;
-
 import de.hawhamburg.sg.messenchair.ChatConsumer;
 import de.hawhamburg.sg.messenchair.Slackconsumer;
 import de.hawhamburg.sg.messenchair.Twitterconsumer;
-import twitter4j.TwitterAPIConfiguration;
 
 public class Main {
 	
@@ -70,10 +67,6 @@ public class Main {
 	    {
 	    	new ChatConsumer();
 	    }
-	    
-	    
-		
-		
 	}
 	
 	
