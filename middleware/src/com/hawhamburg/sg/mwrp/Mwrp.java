@@ -3,6 +3,7 @@ package com.hawhamburg.sg.mwrp;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeoutException;
 
 import javax.swing.BoxLayout;
@@ -11,6 +12,8 @@ import javax.swing.JFrame;
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorMessage;
 import com.hawhamburg.sg.mwrp.gamectrl.GameController;
+import com.hawhamburg.sg.mwrp.gamectrl.GameControllerProperties;
+import com.hawhamburg.sg.mwrp.gamectrl.webinterface.GcHttpServer;
 import com.hawhamburg.sg.mwrp.gui.MwrpFrame;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -23,6 +26,7 @@ public class Mwrp {
 		boolean useGui = false;
 		boolean noServer = false;
 		boolean gameController = false;
+		boolean gameControllerWww = false;
 		
 		for (String s : args) {
 			switch (s) {
@@ -35,6 +39,9 @@ public class Mwrp {
 			case "-gctrl":
 				gameController = true;
 				break;
+			case "-gctrlwww":
+				gameControllerWww = true;
+				break;
 			default:
 				System.out.println("Unrecognized arg: " + s);
 			}
@@ -43,30 +50,37 @@ public class Mwrp {
 
 		System.out.println("DeviceId: " + props.getChairId());
 
-		new Mwrp(props, useGui, noServer,gameController);
+		new Mwrp(props, useGui, noServer,gameController,gameControllerWww);
 	}
 
 	private Connection mq1Connection;
 	private Connection mq2Connection;
 	private Mq1Consumer mq1Consumer;
 	private Mq2Publisher mq2Publisher;
+	private GameController gameController;
 	private MwrpProperties properties;
-	private boolean useGui, winCtrl, noServer,gameController;
+	private boolean useGui, winCtrl, noServer,useGameController,useGameControllerWebInterface;
 	private MwrpFrame frame;
 	private DataProvider dataProvider;
 
-	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean gameController) throws IOException, TimeoutException {
+	private Mwrp(MwrpProperties props, boolean useGui, boolean noServer, boolean useGameController, boolean gameControllerWww) throws IOException, TimeoutException {
 		this.useGui = useGui;
 		this.noServer = noServer;
-		this.gameController=gameController;
-		dataProvider=new DataProvider();
+		this.useGameController=useGameController=useGameController|gameControllerWww;
+		this.useGameControllerWebInterface=gameControllerWww;
+		properties = props;
+		ConnectionFactory factory = new ConnectionFactory();
+		mq1Connection = factory.newConnection();
+		mq1Consumer = new Mq1Consumer(mq1Connection);
+		mq1Consumer.addMessageHandler(this::consume);
+		mq1Consumer.start();
+		if(useGui||useGameController)
+			dataProvider=new DataProvider();
+		
 		if (useGui) {
 			frame = new MwrpFrame(dataProvider);
 			frame.setVisible(true);
 		}
-		properties = props;
-		ConnectionFactory factory = new ConnectionFactory();
-		mq1Connection = factory.newConnection();
 		if (!noServer) {
 			ConnectionFactory factory2 = new ConnectionFactory();
 			factory2.setHost(props.getMqHost());
@@ -80,34 +94,28 @@ public class Mwrp {
 				this.noServer=noServer = true;
 			}
 		}
-		mq1Consumer = new Mq1Consumer(mq1Connection);
-		mq1Consumer.addMessageHandler(this::consume);
-		mq1Consumer.start();
 		if (!noServer) {
 			mq2Publisher = new Mq2Publisher(mq2Connection);
 			mq2Publisher.start();
 		}
 		
-		if(gameController)
+		if(useGameController)
 		{
-			System.out.println("Connecting to NodeMCU.");
-			GameController gctrl=new GameController("192.168.188.41",23);
-			gctrl.connect();
+			GameControllerProperties gcProps=new GameControllerProperties();
+			gcProps.readFromFile(Paths.get(MwrpConstants.GAME_CONTROLLER_PROPERTIES_FILENAME));
+			gameController=new GameController(dataProvider, gcProps);
+			if(gameControllerWww)
+				new GcHttpServer(gcProps);
+			gameController.connect();
+			mq1Consumer.addMessageHandler(gameController::sensorMessageReceived);
 			
 		}
 
 	}
 
 	private void consume(SensorMessage sensm) {
-		ChairMessage chm = new ChairMessage(properties.getChairId(), sensm.getSensortype(), sensm.getValues(),sensm.getTimestamp());
-		try {
-			if (!noServer) {
-				mq2Publisher.publish(chm);
-			}
-			if(useGui)
-				dataProvider.addValues(sensm);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		SensorTypeBehavior.getSensorTypeBehavior(sensm.getSensortype()).invoke(sensm, properties, dataProvider, mq2Publisher, gameController);
+
 	}
 }

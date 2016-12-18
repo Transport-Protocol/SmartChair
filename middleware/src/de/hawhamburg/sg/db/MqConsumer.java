@@ -1,7 +1,6 @@
 package de.hawhamburg.sg.db;
 
 import java.io.IOException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.mwrp.RabbitMqConstants;
 import com.rabbitmq.client.AMQP.BasicProperties;
@@ -16,9 +15,6 @@ public class MqConsumer implements Consumer {
 	private Connection connection;
 	private Channel channel;
 	private DBConnector dbConnector;
-
-	
-	private ObjectMapper mapper = new ObjectMapper();
 
 	public MqConsumer(DBConnector db) {
 		this.dbConnector = db;

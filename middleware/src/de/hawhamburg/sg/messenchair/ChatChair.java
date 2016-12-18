@@ -16,11 +16,14 @@ public class ChatChair {
 	private ChatPublisher publisher;
 	private final String hostname;
 	private int mannedCounter = 0;
+	private int chairNumber;
 	
-	public ChatChair(ChatPublisher publisher, String hostname)
+	public ChatChair(ChatPublisher publisher, String hostname, int chairNumber)
 	{
 		this.publisher = publisher;
 		this.hostname = hostname;
+		this.chairNumber = chairNumber;
+		this.mannedCounter = ChairFileHandler.readCounter(chairNumber);
 	}
 	
 	void newMessage(ChairMessage<SensorValue> msg)
@@ -58,6 +61,7 @@ public class ChatChair {
 				{
 					manned = !manned;
 					mannedCounter++;
+					ChairFileHandler.writeCounter(chairNumber, mannedCounter);
 					firstMannedTimestamp = msg.getTimestamp();
 					firstMeasurementTimestamp = 0;
 					if(averageSeatPressure(msg.getValues()) > 700)
@@ -102,15 +106,15 @@ public class ChatChair {
 		}
 		else
 		{
-			
+			long timeInSeconds = timestamp - firstMannedTimestamp / 1000;
 			text = "Der Benutzer des Stuhls ist aufgestanden.\n"
-					+ "Er hat " + ((timestamp - firstMannedTimestamp)/60000) + " Minuten auf dem Stuhl gesessen.";
+					+ "Er hat " + (timeInSeconds/60) + " Minuten und " + (timeInSeconds%60) + " auf dem Stuhl gesessen.";
 			// /1000 -> s /60 -> min
 		}
 		
 		if(secret)
 		{
-			text = text + "/n PS: Der Dünnste ist der Benutzer nicht!";
+			//text = text + "/n PS: Der Dünnste ist der Benutzer nicht!";
 		}
 		
 		ChatMessage msg = new ChatMessage(text, hostname);

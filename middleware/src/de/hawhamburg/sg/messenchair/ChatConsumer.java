@@ -1,8 +1,6 @@
 package de.hawhamburg.sg.messenchair;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.data.SensorType;
 import com.hawhamburg.sg.data.SensorValue;
@@ -15,11 +13,16 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 
+/**
+ * ChatConsumer consumes a ChairMessage
+ * and creates Messages for Twitter-/SlackConsumers
+ */
 public class ChatConsumer implements Consumer {
 	
 	private Connection connection;
 	private Channel channel;
 	private final ChatPublisher publisher;
+	
 	
 	public ChatConsumer() {
 		ConnectionFactory factory = new ConnectionFactory();
@@ -45,11 +48,11 @@ public class ChatConsumer implements Consumer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void handleDelivery(String arg0, Envelope arg1, BasicProperties arg2, byte[] arg3) throws IOException {
-		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
+//		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
 
 		try {
 			ChairMessage<?> msg = ChairMessage.parseJson(arg3);
-			System.out.println(msg.toString());
+//			System.out.println(msg.toString());
 			//only pressure for twitter
 			if ((!msg.getValues().isEmpty()) && (msg.getSensortype() == SensorType.pressure)){
 				publisher.newMessage((ChairMessage<SensorValue>)msg);

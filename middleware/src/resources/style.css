@@ -1,0 +1,18 @@
+.maindiv
+{
+	margin: auto;
+	background-color: #fdffc6;
+	max-width: 800px;
+}
+
+.midalign
+{
+	margin: auto;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	text-align: center;
+}
+#responseLabel
+{
+	color:#00aa00;
+}

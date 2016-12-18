@@ -21,6 +21,12 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import de.hawhamburg.sg.db.DBConstants;
 import de.hawhamburg.sg.db.DBProperties;
 
+/**
+ * Slackconsumer consumes a ChatMessage
+ * and posts the Message into the configured Slack-Channel
+ * Slack needs to be configured in 
+ * db.properties
+ */
 public class Slackconsumer implements Consumer{
 	private Connection connection;
 	private Channel channel;
