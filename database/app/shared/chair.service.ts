@@ -9,11 +9,13 @@ import * as io from "socket.io-client";
 @Injectable()
 export class ChairService {
 
-    private socket = io('http://localhost:8000');
+    private serverIP = 'http://localhost:8000';
+
+    private socket = io(this.serverIP);
 
     getChairs() {
         this.socket.disconnect()
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         let observable = new Observable(observer => {
             this.socket.emit('getChairs', '');
 
@@ -29,7 +31,7 @@ export class ChairService {
 
     getPressure(whereUUID) {
         this.socket.disconnect()
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         let observable = new Observable(observer => {
             this.socket.emit('getPressure', whereUUID);
 
@@ -46,7 +48,7 @@ export class ChairService {
 
     getTemperature(whereUUID) {
         this.socket.disconnect()
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         let observable = new Observable(observer => {
             this.socket.emit('getTemperature', whereUUID);
 
@@ -61,9 +63,11 @@ export class ChairService {
         return observable;
     }
 
+
+    // Needs to be fully implemented in the future (see server/app.js)
     getFirstXTemperatures(amount, whereUUID) {
         this.socket.disconnect()
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         let observable = new Observable(observer => {
             this.socket.emit('getFirstXTemperatures', amount, whereUUID);
 
