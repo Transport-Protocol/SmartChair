@@ -1,0 +1,51 @@
+<div id="left">
+    <ul id="menu" class="bg-dark dker">
+        <li>
+            <a routerLink="/dashboard">Dashboard</a>
+        </li>
+        <li class="nav-divider"></li>
+        <li class="nav-header">Available Chairs</li>
+        <li class="nav-divider"></li>
+        <li *ngFor="let chair of chairs">
+            <a routerLink="/chair/{{chair.uuid}}">{{chair.uuid}}</a>
+        </li>
+        <li class="nav-divider"></li>
+    </ul>
+</div>
+
+
+<!--<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">Project CLARC</a>
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+        <li>
+            <a href="http://www.twitter.com">
+                <img border="0" alt="Twitter" src="../../images/twitter-bird.png" height="24" width="24">
+            </a>
+        </li>
+    </ul>
+    <div class="navbar-default sidebar" role="navigation" style="min-height: 1000px;">
+        <div class="sidebar-nav navbar-collapse">
+            <br>
+            <div class="container">
+                <a href="http://www.scimbe.de">
+                    <img border="0" alt="CaDS" align="center" src="../../images/logo.png" width="210" height="99">
+                </a>
+            </div>
+
+            <br>
+            <br>
+            <ul class="nav in" id="side-menu">
+                <li></li>
+                <li *ngFor="let chair of chairs">
+                    <a routerLink="/chair/{{chair.uuid}}">{{chair.uuid}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+    </div>
+</nav>-->

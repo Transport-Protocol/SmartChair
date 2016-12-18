@@ -26,4 +26,8 @@ public final class DBConstants {
 	public static final String DEFVAL_DB_USER="guest";
 	public static final String DEFVAL_DB_PASSW="guest";
 	public static final String DEFVAL_DB_NAME = "clarc_sensor";
+	
+	public static final String DEFVAL_SLACK_CHANNEL="clarcbot";
+	public static final String SLACK_AUTH_TOKEN_KEY="slackAuthToken";
+	public static final String DEFVAL_SLACK_AUTH_TOKEN="";
 }

@@ -21,9 +21,8 @@ hs_err_pid*
 
 
 #Config Files
-/mwrp.properties
-db.properties
 remotes
+*.properties
 
 #linux
 .directory
