@@ -43,15 +43,16 @@ class Session {
 
   private:
 
-    ArduinoKeyboard *ak;
 
-    uint16_t version   = PROTOCOLL_VERSION ;
-    uint16_t MagicNum  = PROTOCOLL_MAGIC;
+    ArduinoKeyboard *ak;                      /**< @brief An Instance of an arduino Keyboard class, used for interacting with the Lenove, and the Keyboard Devices */
 
-    uint16_t sessionId = 0;
+    uint16_t version   = PROTOCOLL_VERSION ;  /**< @brief The version number ot this Protokoll Implementation */
+    uint16_t MagicNum  = PROTOCOLL_MAGIC;     /**< @brief The Magic Number of this Protokoll Implementation */
 
-    uint8_t  avaitingFields = 0;      /**< The number of fields, still to receavce */
-    uint32_t currentPaketID   = 0;    /**< The curent package ID, can be used to reprot problems with devices */
+    uint16_t sessionId = 0;                   /**< @brief The ID of the Current Session */
+
+    uint8_t  avaitingFields = 0;              /**< @brief The number of fields, still to receavce */
+    uint32_t currentPaketID   = 0;            /**< @brief The curent package ID, can be used to reprot problems with devices */
 
 };
 

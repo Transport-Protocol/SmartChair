@@ -68,6 +68,18 @@ void Session::process(WiFiClient *client){
       if((d&0xFF00) == 0x0100){
         this->ak->setState((uint8_t)d, t);
         LOG("send key to keyboard")
+      }else if((d&0xFF00) == 0x0200){
+        switch((uint8_t)d){
+          case 0:
+            digitalWrite(0,t);
+            break;
+          case 1:
+            digitalWrite(4,t);
+            break;
+          case 2:
+            digitalWrite(5,t);
+            break;
+        }
       }
       LOG("Befehl erhalten , device: ")LOG(d)LOG(" data:")LOGLN(t)
     }

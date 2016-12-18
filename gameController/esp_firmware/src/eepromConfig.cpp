@@ -9,26 +9,26 @@ char *gpwd;
 #ifdef INIT_CONFIG
   char *initSsid = (char*)WLAN_AP;
   char *initPassword=(char*)WLAN_PW;
-
-  void INIT_CONFIG_FROM_STRING(char *nSsid,char *nPwd){
-    LOG("Writing Config [ '")LOG(nSsid)LOG("' - '")LOG(nPwd)LOG("']. . . ")
-    int i;
-    int addr=0;
-    while(*nSsid){
-      EEPROM.write(addr,*nSsid);
-      addr++; nSsid++;
-    }
-    EEPROM.write(addr,*nSsid);
-    addr++;
-    while(*nPwd){
-      EEPROM.write(addr,*nPwd);
-      addr++; nPwd++;
-    }
-    EEPROM.write(addr,*nPwd);
-    EEPROM.commit();
-    LOGLN("[OK]")
-  }
 #endif
+
+void INIT_CONFIG_FROM_STRING(char *nSsid,char *nPwd){
+  LOG("Writing Config [ '")LOG(nSsid)LOG("' - '")LOG(nPwd)LOG("']. . . ")
+  int i;
+  int addr=0;
+  while(*nSsid){
+    EEPROM.write(addr,*nSsid);
+    addr++; nSsid++;
+  }
+  EEPROM.write(addr,*nSsid);
+  addr++;
+  while(*nPwd){
+    EEPROM.write(addr,*nPwd);
+    addr++; nPwd++;
+  }
+  EEPROM.write(addr,*nPwd);
+  EEPROM.commit();
+  LOGLN("[OK]")
+}
 
 
 void readConfig(){

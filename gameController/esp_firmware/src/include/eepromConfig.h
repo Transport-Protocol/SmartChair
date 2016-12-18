@@ -28,5 +28,10 @@ const char *getSSID();
 const char *getPWD();
 
 
+void INIT_CONFIG_FROM_STRING(char *nSsid,char *nPwd);
+
+
+void readConfig();
+
 
 #endif

@@ -42,11 +42,13 @@ void ArduinoKeyboard::update(uint16_t timePassed){
 void ArduinoKeyboard::setState(uint8_t ascii,uint16_t time){
 
   if(0 == this->timer[ascii+1]){
-    LOGLN("ACTIVATION");
-    Serial1.write(0x01);
-    Serial1.write(ascii);
-    this->active[activeCount]=ascii;
-    activeCount++;
+    if(0!=time){
+      LOGLN("ACTIVATION");
+      Serial1.write(0x01);
+      Serial1.write(ascii);
+      this->active[activeCount]=ascii;
+      activeCount++;
+    }
   }
   this->timer[ascii+1] = time;
 }

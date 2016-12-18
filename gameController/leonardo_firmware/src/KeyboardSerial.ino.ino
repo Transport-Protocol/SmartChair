@@ -4,7 +4,7 @@
  Keyboard to serial Application
  */
 
-#include "Keyboard.h"
+#include "MyKeyboard.h"
 #include "SoftwareSerial.h"
 
 SoftwareSerial mySerial(10, 11); // RX, TX
