@@ -16,12 +16,13 @@ var Observable_1 = require('rxjs/Observable');
 var io = require("socket.io-client");
 var ChairService = (function () {
     function ChairService() {
-        this.socket = io('http://localhost:8000');
+        this.serverIP = 'http://localhost:8000';
+        this.socket = io(this.serverIP);
     }
     ChairService.prototype.getChairs = function () {
         var _this = this;
         this.socket.disconnect();
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         var observable = new Observable_1.Observable(function (observer) {
             _this.socket.emit('getChairs', '');
             _this.socket.on('chairs', function (data) {
@@ -36,7 +37,7 @@ var ChairService = (function () {
     ChairService.prototype.getPressure = function (whereUUID) {
         var _this = this;
         this.socket.disconnect();
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         var observable = new Observable_1.Observable(function (observer) {
             _this.socket.emit('getPressure', whereUUID);
             _this.socket.on('pressure', function (data) {
@@ -52,7 +53,7 @@ var ChairService = (function () {
     ChairService.prototype.getTemperature = function (whereUUID) {
         var _this = this;
         this.socket.disconnect();
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         var observable = new Observable_1.Observable(function (observer) {
             _this.socket.emit('getTemperature', whereUUID);
             _this.socket.on('temperature', function (data) {
@@ -65,10 +66,11 @@ var ChairService = (function () {
         });
         return observable;
     };
+    // Needs to be fully implemented in the future (see server/app.js)
     ChairService.prototype.getFirstXTemperatures = function (amount, whereUUID) {
         var _this = this;
         this.socket.disconnect();
-        this.socket = io('http://localhost:8000');
+        this.socket = io(this.serverIP);
         var observable = new Observable_1.Observable(function (observer) {
             _this.socket.emit('getFirstXTemperatures', amount, whereUUID);
             _this.socket.on('firstTemperature', function (data) {
