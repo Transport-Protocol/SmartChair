@@ -1,4 +1,4 @@
-## Protokoll Team Middleware Meeting #6
+## Protokoll Team Middleware Meeting #9
 
 Datum: 21.11.2016
 
@@ -7,10 +7,10 @@ Nico, Fabian, Michel
 
 ### Agenda
 
-1. Review 14.10.
+1. Review 14.11.
 2. Zeitplan
 
-### 9.1 Review 14.10
+### 9.1 Review 14.11
 - Stuhl  twittert jetzt wie häufig und lange sich jemand drauf setzt
 - Gamecontroller funktioniert mit einer Taste
 - Posterinhalte werden weiter gesammelt

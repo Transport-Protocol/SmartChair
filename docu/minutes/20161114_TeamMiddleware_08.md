@@ -1,4 +1,4 @@
-## Protokoll Team Middleware Meeting #6
+## Protokoll Team Middleware Meeting #8
 
 Datum: 14.11.2016
 
@@ -7,10 +7,10 @@ Nico, Fabian, Michel
 
 ### Agenda
 
-1. Review 07.10.
+1. Review 07.11.
 2. Zeitplan
 
-### 8.1 Review 07.10
+### 8.1 Review 07.11
 - Slackbot kann Textnachrichten veröffentlichen
 - Twitteraccount wurde wiederhergestellt
 - Software für Gamecontroller funktioniert teilweise
