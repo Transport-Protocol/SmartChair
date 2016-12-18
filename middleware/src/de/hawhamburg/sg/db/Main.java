@@ -76,7 +76,7 @@ public class Main {
 				+ "No Parameters: Only the database modul starts. If you specify the moduls, only the specific moduls will start."
 				+ "twitter: The twittermodul starts."
 				+ "slack: The slackmodul starts."
-				+ "DBConnect: the databasemodul starts.");
+				+ "DBConnector: the databasemodul starts.");
 	}
 
 }
