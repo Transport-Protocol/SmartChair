@@ -1,30 +1,43 @@
-//server settings
-var express = require('express')
-var app = express();
-var path = require('path');
+//some imports of libraries
+const Influx = require('influx')
+const express = require('express')
+const path = require('path');
 
-var __projectRoot = __dirname + '/../';
-
-app.use(express.static(__projectRoot));
-
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__projectRoot + '/index.html'));
-});
-
-//database variables
-var influx = require('influx')
-var username = 'root'
-var password = 'root'
-var database = 'clarc_s'
-
-var dbClient = influx({host: 'localhost', username: username, password: password, database: database})
+const app = express()
+var favicon = require('serve-favicon');
 
 //some constants
 const PORT = 8000;
 const PRESSURE_INTERVAL = 500;
 const TEMPERATURE_INTERVAL = 500;
+//database constants
+const dbUsername = 'root'
+const dbPassword = 'root'
+const database = 'clarc_s'
 
-//server starts listening
+app.use(favicon(path.join(__dirname,'favicon.ico')));
+
+//rootfolder of our project
+const __projectRoot = __dirname + '/../';
+app.use(express.static(__projectRoot));
+//send index.html, when a client connects
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__projectRoot + '/index.html'));
+});
+
+/**
+ * Create a new Influx client. it uses the settings defined above.
+ */
+const dbClient = new Influx.InfluxDB({
+  host: 'localhost',
+  database: database,
+  username: dbUsername,
+  password: dbPassword
+})
+
+/**
+ * start serving our app to clients
+ */
 var server = app.listen(PORT, function () {
 
     var host = server.address().address
@@ -33,83 +46,194 @@ var server = app.listen(PORT, function () {
     console.log('Express app listening at http://%s:%s', host, port)
 })
 
-//socket connection
+/**
+ * import socket-io
+ */
 var io = require('socket.io').listen(server);
 
-io.sockets.on('connection', function(socket) {
-    console.log('[socket.io] Ein neuer Client (Browser) hat sich verbunden.\n');
-    socket.emit('message', "hello Client, How are you?")
+/**
+ * when a client connects we currently just push all data, no matter to which chair they belong or what kind of data it is
+ */
+io.on('connection', function(socket) {
 
-    socket.on('message', function(message) {
-        console.log(message);
+    console.log('[socket.io] Ein neuer Client (Browser) hat sich verbunden.\n');
+
+   socket.on('message', function(data) {
+        console.log(data);
+   });
+
+    socket.on('getChairs', function(data) {
+        sendChairs(socket)
     });
 
-    var pressureIntervalID = setInterval(function() {
-        socket.emit('pressure', JSON.stringify(getPressure()));
-    }, PRESSURE_INTERVAL);
+    socket.on('getPressure', function(whereUUID) {
+        var pressureIntervalID = setInterval(function() {
+            sendPressure(socket, whereUUID);
+        }, PRESSURE_INTERVAL);
+    })
 
-    var temperatureIntervalID = setInterval(function() {
-        socket.emit('temperature', JSON.stringify(getTemperature()));
-    }, TEMPERATURE_INTERVAL);
-    
+    socket.on('getTemperature', function(whereUUID) {
+        var temperatureIntervalID = setInterval(function() {
+            sendTemperature(socket, whereUUID);
+        }, TEMPERATURE_INTERVAL);
+    })
+
+    socket.on('getFirstXTemperatures', function(amount, whereUUID) {
+        sendFirstXTemperature(socket, amount, whereUUID);
+    })
 });
 
-
-var lastPressure, lastTemperature;
-function getPressure() {
-    var query = 'select * from pressure group by * order by desc limit 1';
-    dbClient.query(query, function (err, result) {
-        result = result[0][0];
-        var data =
-        {
-            cid: result.ChairUUID,
-            time: result.time,
-            p: {}
-        }
-        for(var i = 0; i < 10; i++) {
-            data.p[i] = result[i];
-        }
-
-        lastPressure = data;
-
+/** 
+ * querries the for the newest pressure data (ignoring to which chair it belongs) database 
+ * and sends the data over a socket to the client
+ */
+function sendPressure(socket, whereUUID) {
+    const query = 'select * from pressure where ChairUUID = \'' + whereUUID + '\' order by desc limit 1';
+    dbClient.query(query).then(result => {
+      //receive data and format it
+      result = result[0];
+      var data =
+      {
+          cid: result.ChairUUID,
+          time: result.time,
+          p: {}
+      }
+      for(var i = 0; i < 10; i++) {
+          data.p[i] = result[i];
+      }
+      //and then send it
+    /*
+      console.log('sendPressure: data: ' + data);
+      console.log('sendPressure: JSON.stringify(data): ' + JSON.stringify(data));
+     */
+      socket.emit('pressure', JSON.stringify(data));
+      console.log('Pressure sent');
+    }).catch(err => {
+      console.log("sendPressure: " + err);
+      res.status(500).send(err.stack)
     })
-    return lastPressure;
 }
 
-function getTemperature() {
-    var query = 'select * from temperature group by * order by desc limit 1';
-    dbClient.query(query, function (err, result) {
-        result = result[0][0];
-        var data =
-        {
-            cid: result.ChairUUID,
-            time: result.time,
-            t: {}
-        }
-        for(var i = 0; i < 1; i++) {
-            data.t[i] = result.temp;
-        }
-
-        lastTemperature = data;
-
+function sendFirstXTemperature(socket, amount, whereUUID) {
+    const query = 'select * from temperature where ChairUUID = \'' + whereUUID + '\' order by desc limit ' + amount;
+    dbClient.query(query).then(result => {
+      //receive data and format it
+      result = result[0];
+      var data =
+      {
+          cid: result.ChairUUID,
+          time: result.time,
+          t: {}
+      }
+      for(var i = 0; i < 1; i++) {
+          data.t[i] = result.temp;
+      }
+      //and then send it
+      socket.emit('temperature', JSON.stringify(data));
+    }).catch(err => {
+      console.log("sendTemperature: " + err);
+      res.status(500).send(err.stack)
     })
-    return lastTemperature;
 }
 
-
-/* generate testdata, if no db is available */
-/*
-function generatePressure() {
-    var pressure = { p: {} };
-    for(var i = 0; i < 10; i++) {
-        pressure.p[i] = Math.random();
+function sendTemperature(socket, whereUUID) {
+    const query = 'select * from temperature where ChairUUID = \'' + whereUUID + '\' order by desc limit 1';
+    dbClient.query(query).then(result => {
+        //receive data and format it
+        result = result[0];
+    var data =
+    {
+        cid: result.ChairUUID,
+        time: new Date(result.time),
+        t: {}
     }
-    return pressure;
+    for(var i = 0; i < 1; i++) {
+        data.t[i] = result.temp;
+    }
+    //and then send it
+    socket.emit('temperature', JSON.stringify(data));
+}).catch(err => {
+        console.log("sendTemperature: " + err);
+    res.status(500).send(err.stack)
+})
 }
 
-function generateTemperature() {
-    temperature = { t: {}};
-    temperature.t[0] = Math.floor(Math.random()*(20-5+1)+5);
-    return temperature;
+/*
+JSON format
+ */
+/*
+function sendChairs(socket) {
+    const query = 'SHOW TAG VALUES FROM temperature WITH KEY = ChairUUID';
+    dbClient.query(query).then(result => {
+        //receive data and format it
+        var data =
+        {
+            c: {}
+        }
+        for(var i = 0; i < result.length; i++) {
+            if(result.empty) {
+                i = result.length;
+            } else {
+                data.c[i] = result[i].ChairUUID;
+            }
+        }
+        //and then send it
+        socket.emit('chairs', JSON.stringify(data));
+
+    }).catch(err => {
+            console.log("sendChairs: " + err);
+        res.status(500).send(err.stack)
+    })
 }
 */
+
+/*
+function sendChairs(socket) {
+    const query = 'SHOW TAG VALUES FROM pressure WITH KEY = ChairUUID';
+    dbClient.query(query).then(result => {
+        //receive data and format it
+        var chairsString = [];
+        for(var i = 0; i < result.length; i++) {
+            if (result.empty) {
+                i = result.length;
+            } else {
+                chairsString[i] = result[i].value;
+            }
+        }
+    //and then send it
+    socket.emit('chairs', chairsString);
+
+}).catch(err => {
+        console.log("sendChairs: " + err);
+    res.status(500).send(err.stack)
+})
+}
+*/
+
+ function sendChairs(socket) {
+    const query = 'SHOW TAG VALUES FROM pressure WITH KEY = ChairUUID';
+    dbClient.query(query).then(result => {
+    //receive data and format it
+        var data = {
+                cid: {},
+                time: {}
+        }
+        for(var i = 0; i < result.length; i++) {
+         console.log(result[i].value);
+            data.cid[i] = result[i].value;
+            const query = 'select * from pressure where ChairUUID = \'' + result[i].value + '\' order by desc limit 1';
+            dbClient.query(query).then(result2 => {
+                data.time[i] = new Date(result2.time);
+            }).catch(err => {
+                    console.log("sendChairs: " + err);
+                res.status(500).send(err.stack)
+            })
+        }
+    //and then send it
+    socket.emit('chairs', JSON.stringify(data));
+
+    }).catch(err => {
+    console.log("sendChairs: " + err);
+    res.status(500).send(err.stack)
+    })
+ }
