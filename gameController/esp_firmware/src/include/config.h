@@ -1,3 +1,11 @@
+/** @file config.h
+ *  @brief Defines some Controll Values.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
+
 #ifndef __CTRL_DATA_H__
 #define __CTRL_DATA_H__
 

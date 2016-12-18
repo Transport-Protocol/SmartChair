@@ -1,3 +1,10 @@
+/** @file protocoll.cpp
+ *  @brief Implementation of the Protocoll Implementation class.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
 #include "include/protocoll.hpp"
 
 Session::Session(ArduinoKeyboard *ak){

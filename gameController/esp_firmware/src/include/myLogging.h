@@ -1,3 +1,12 @@
+/** @file myLogging.h
+ *  @brief Defines Macros for Logging.
+ *
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs
+ *  @todo find a nicer way for logging
+ */
+
 #ifndef __MY_LOGGING_H__
 #define  __MY_LOGGING_H__
 

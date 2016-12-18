@@ -1,4 +1,11 @@
-#include "include/messages.hpp"
+/** @file messages.cpp
+ *  @brief implements function for Package creation .
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
+ #include "include/messages.hpp"
 
 connectionMsg createConnectionMsg(uint16_t version,uint16_t magicNumber){
   connectionMsg msg;

@@ -1,3 +1,13 @@
+/** @file arduinoKeyboard.hpp
+ *  @brief Prototypes fot the Arduino Keyboard controll class.
+ *
+ *  This contains the prototypes for the Arduino Keyboard controll class
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
+
 #ifndef __ARDUINO_KEYBOARD_H_
 #define __ARDUINO_KEYBOARD_H_
 

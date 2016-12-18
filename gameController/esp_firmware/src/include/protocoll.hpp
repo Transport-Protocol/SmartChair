@@ -1,3 +1,10 @@
+/** @file protocoll.hpp
+ *  @brief Prototypes for the Protocoll Implementation class.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
 #ifndef __PROTOCOLL_H__
 #define __PROTOCOLL_H__
 #include <ESP8266WiFi.h>

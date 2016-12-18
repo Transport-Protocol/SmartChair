@@ -1,4 +1,13 @@
-#include "include/eepromConfig.h"
+/** @file eepromConfig.cpp
+ *  @brief implementation of the eeprom reader and writer functions .
+ *  @note not Object oriented
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ *  @todo Write a Objecct oriented more generic version ?
+ */
+
+ #include "include/eepromConfig.h"
 
 #define MEMORY_SIZE 128
 

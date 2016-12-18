@@ -1,3 +1,12 @@
+/** @file eepromConfig.h
+ *  @brief Prototypes fot the eeprom reader and writer functions .
+ *  @note not Object oriented 
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ *  @todo Write a Objecct oriented more generic version ?
+ */
+
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 

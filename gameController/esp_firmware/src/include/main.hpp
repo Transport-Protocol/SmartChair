@@ -1,3 +1,11 @@
+/** @file main.hpp
+ *  @brief Prototypes for the Main Controll File.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ *  @todo Aceppt Multiple Clients ? the implementation is prepered for multiple clients, but still some changes are nessesary
+ */
+
 #ifndef __MAIN_H__
 #define __MAIN_H__
 #include <Arduino.h>

@@ -1,4 +1,12 @@
-#include "include/main.hpp"
+/** @file main.hpp
+ *  @brief implementation of the Main Controll File.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ *  @todo Aceppt Multiple Clients ? the implementation is prepered for multiple clients, but still some changes are nessesary
+ */
+
+ #include "include/main.hpp"
 
 ArduinoKeyboard ak;
 

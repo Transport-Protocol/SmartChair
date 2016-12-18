@@ -1,3 +1,11 @@
+/** @file endianUtil.hpp
+ *  @brief Prototypes for Host to Network Byte order Conversion and the Other way around.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
+
 #ifndef __PACKAGE_UTIL_H__
 #define __PACKAGE_UTIL_H__
 

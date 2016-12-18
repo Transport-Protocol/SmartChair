@@ -1,3 +1,10 @@
+/** @file endianUtil.cpp
+ *  @brief implemetation of Host to Network Byte order Conversion and the Other way around.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
 #include "include/endianUtil.hpp"
 
 uint16_t toUint16(uint8_t*p){

@@ -1,3 +1,10 @@
+/** @file arduinoKeyboard.cpp
+ *  @brief implementation of the Arduino Keyboard controll class.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
 #include "include/ArduinoKeyboard.hpp"
 
 

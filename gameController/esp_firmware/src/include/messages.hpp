@@ -1,3 +1,10 @@
+/** @file messages.hpp
+ *  @brief defines Packages as transfered ofer the network.
+ *
+ *  @author Lukas Lühr (hexagon2206)
+ *  @bug No known bugs.
+ */
+
 #ifndef __MESSAGES_H__
 #define __MESSAGES_H__
 
