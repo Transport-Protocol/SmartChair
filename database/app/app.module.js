@@ -10,29 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
-var chair_component_1 = require('./chair/chair.component');
-var pressure_component_1 = require('./pressure/pressure.component');
-var linechart_component_1 = require('./charts/linechart.component');
-var app_component_1 = require("./app.component");
-var header_1 = require("./header/header");
-var footer_1 = require("./footer/footer");
-var navbar_component_1 = require("./navbar/navbar.component");
-var dashboard_component_1 = require("./dashboard/dashboard.component");
-var app_routing_1 = require("./app.routing");
-var chair_service_1 = require("./shared/chair.service");
+var app_component_1 = require('./pressure.component.ts');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [
-                platform_browser_1.BrowserModule,
-                app_routing_1.AppRoutingModule
-            ],
-            declarations: [app_component_1.AppComponent, dashboard_component_1.DashboardComponent, header_1.Header, footer_1.Footer, navbar_component_1.NavbarComponent,
-                chair_component_1.ChairComponent, pressure_component_1.PressureComponent, linechart_component_1.LineChartComponent],
-            providers: [chair_service_1.ChairService],
-            bootstrap: [app_component_1.AppComponent]
+            imports: [platform_browser_1.BrowserModule],
+            declarations: [app_component_1.PressureComponent, app_component_1.AppComponentTemperature],
+            bootstrap: [app_component_1.PressureComponent, app_component_1.AppComponentTemperature]
         }), 
         __metadata('design:paramtypes', [])
     ], AppModule);

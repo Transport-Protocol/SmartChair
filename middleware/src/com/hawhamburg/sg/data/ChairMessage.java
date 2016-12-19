@@ -34,11 +34,10 @@ public class ChairMessage<T extends AbstractValue> {
 		this.timestamp=timestamp;
 	}
 	
-	public ChairMessage(String deviceUuid, SensorType sensortype, List<T> values, long timestamp) {
+	public ChairMessage(String deviceUuid, SensorType sensortype, List<T> values) {
 		this.sensortype = sensortype;
 		this.values = values;
 		this.deviceUuid = deviceUuid;
-		this.timestamp=timestamp;
 		this.version = DATA_VERSION;
 	}
 
@@ -67,7 +66,7 @@ public class ChairMessage<T extends AbstractValue> {
 	{
 		JsonNode node=mapper.readTree(b);
 		SensorType sensorType= SensorType.valueOf(node.get("sensortype").asText());
-		JavaType t=mapper.getTypeFactory().constructParametricType(ChairMessage.class, sensorType.getSensorValueClass());
+		JavaType t=mapper.getTypeFactory().constructParametricType(ChairMessage.class, sensorType.getChairValueClass());
 		
 		return mapper.convertValue(node, t);
 		

@@ -84,37 +84,19 @@ public class LocationView implements IView {
 			}
 			distance[i]=abs((int)vals[i].getValue()+MIN_DB_VALUE);
 		}
-		Point p=triangulate(vals,g,fm,width,height);
-		g.drawString("x: "+p.x, 190, 5+fm.getHeight());
-		g.drawString("y: "+p.y, 190, 5+fm.getHeight()*2);
-	}
-	
-	private Point triangulate(LocationValue[] vals, Graphics2D g, FontMetrics fm, int width, int height)
-	{
-
-		int[] distance=new int[vals.length];
-		for(int i=0;i<distance.length;i++)
-		{
-			if(vals[i]==null)
-			{
-				g.setColor(Color.red);
-				g.drawString(String.format(ERROR_NO_SIGNAL,i+1),width/2-fm.stringWidth(ERROR_NO_SIGNAL)/2,height/2-fm.getHeight()/2);
-				return null;
-			}
-			distance[i]=abs((int)vals[i].getValue()+MIN_DB_VALUE);
-		}
 		
 		Point p1=calcPoint(distance[0],distance[1],distance[2]);
 		
 		Point p2=calcPoint(distance[3],distance[2],distance[1]);
 
-
-		double x=(p1.getX()+(MAX_DB_DIFF-p2.getX()))/2;
-		double y=(p1.getY()+(MAX_DB_DIFF-p2.getY()))/2;
+		double x=p1.getX();
+		double y=p1.getY();
+		
+		g.drawString("x: "+(int)x, 190, 5+fm.getHeight());
+		g.drawString("y: "+(int)y, 190, 5+fm.getHeight()*2);
 		
 		g.setColor(Color.magenta);
 		g.fillRect(FRAME_X+(int)(x/MAX_DB_DIFF*(width-FRAME_X*2)), FRAME_Y+(int)(y/MAX_DB_DIFF*(height-FRAME_Y-FRAME_X)), 3, 3);
-		return new Point((int)x,(int)y);
 	}
 	
 	private Point calcPoint(int d1,int d2, int d3)

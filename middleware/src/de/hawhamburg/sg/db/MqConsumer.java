@@ -1,6 +1,7 @@
 package de.hawhamburg.sg.db;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hawhamburg.sg.data.ChairMessage;
 import com.hawhamburg.sg.mwrp.RabbitMqConstants;
@@ -45,12 +46,11 @@ public class MqConsumer implements Consumer {
 
 	@Override
 	public void handleDelivery(String arg0, Envelope arg1, BasicProperties arg2, byte[] arg3) throws IOException {
-//		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
+		System.out.println("Delivery: " + arg0 + "; " + arg1 + "; " + new String(arg3, Charset.forName("UTF-8")));
 
 		try {
-			ChairMessage<?> msg = ChairMessage.parseJson(arg3);
-//				System.out.println(msg.toString());
-//				System.out.println(System.currentTimeMillis()-msg.getTimestamp());
+			ChairMessage msg = mapper.readValue(arg3, ChairMessage.class);
+				System.out.println(msg.toString());
 			if (!msg.getValues().isEmpty()){
 				dbConnector.write(msg);
 			} else{
